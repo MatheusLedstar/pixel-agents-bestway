@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Box, useApp, useInput } from 'ink';
-import type { ViewType } from './core/types.js';
+import type { ViewType, TeamSessionData } from './core/types.js';
 import { useGlobalData } from './hooks/useGlobalData.js';
 import Header from './components/Header.js';
 import Footer from './components/Footer.js';
@@ -22,7 +22,7 @@ export default function App({ filterTeam }: AppProps) {
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const { teams, allTasks, allMessages, loading } = useGlobalData();
+  const { teams, allTasks, allMessages, allTokens, allSessions, loading, spinnerFrame } = useGlobalData();
 
   const filteredTeams = useMemo(() => {
     if (filterTeam) return teams.filter((t) => t.name === filterTeam);
@@ -39,6 +39,19 @@ export default function App({ filterTeam }: AppProps) {
     for (const t of allTasks.values()) count += t.length;
     return count;
   }, [allTasks]);
+
+  const totalTokens = useMemo(() => {
+    let count = 0;
+    for (const t of allTokens.values()) count += t.totalTokens;
+    return count;
+  }, [allTokens]);
+
+  const hasRealTokens = useMemo(() => {
+    for (const t of allTokens.values()) {
+      if (t.isReal) return true;
+    }
+    return false;
+  }, [allTokens]);
 
   const selectedTeamTasks = useMemo(
     () => (selectedTeam ? allTasks.get(selectedTeam) ?? [] : []),
@@ -113,9 +126,17 @@ export default function App({ filterTeam }: AppProps) {
   if (loading) {
     return (
       <Box flexDirection="column">
-        <Header currentView={currentView} teamCount={0} agentCount={0} taskCount={0} />
+        <Header
+          currentView={currentView}
+          teamCount={0}
+          agentCount={0}
+          taskCount={0}
+          totalTokens={0}
+          isRealTokens={false}
+          spinnerFrame={spinnerFrame}
+        />
         <Box padding={1}>
-          <Spinner label="Loading teams..." />
+          <Spinner label="Loading teams..." frame={spinnerFrame} />
         </Box>
       </Box>
     );
@@ -132,8 +153,11 @@ export default function App({ filterTeam }: AppProps) {
             teams={filteredTeams}
             allTasks={allTasks}
             allMessages={allMessages}
+            allTokens={allTokens}
+            allSessions={allSessions}
             selectedIndex={selectedIndex}
             onSelectTeam={handleSelectTeam}
+            spinnerFrame={spinnerFrame}
           />
         );
 
@@ -147,6 +171,9 @@ export default function App({ filterTeam }: AppProps) {
             team={selectedTeamObj}
             tasks={selectedTeamTasks}
             messages={selectedTeamMessages}
+            tokens={allTokens.get(selectedTeamObj.name)}
+            session={allSessions.get(selectedTeamObj.name)}
+            spinnerFrame={spinnerFrame}
           />
         );
 
@@ -176,6 +203,8 @@ export default function App({ filterTeam }: AppProps) {
             agent={selectedAgentObj}
             tasks={selectedTeamTasks}
             messages={selectedTeamMessages}
+            session={selectedTeam ? allSessions.get(selectedTeam) : undefined}
+            spinnerFrame={spinnerFrame}
           />
         );
 
@@ -191,6 +220,9 @@ export default function App({ filterTeam }: AppProps) {
         teamCount={filteredTeams.length}
         agentCount={totalAgents}
         taskCount={totalTasks}
+        totalTokens={totalTokens}
+        isRealTokens={hasRealTokens}
+        spinnerFrame={spinnerFrame}
       />
       <Box flexDirection="column" flexGrow={1} paddingX={1} paddingY={1}>
         {renderView()}

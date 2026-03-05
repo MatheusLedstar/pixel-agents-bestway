@@ -40,6 +40,16 @@ export interface Message {
 
 export type ViewType = 'dashboard' | 'team-detail' | 'task-board' | 'messages' | 'agent-detail';
 
+export interface TeamTokens {
+  inputTokens: number;
+  outputTokens: number;
+  cacheReadTokens: number;
+  totalTokens: number;       // input + output
+  isReal: boolean;           // true if from JSONL, false if estimated
+}
+
+export { type AgentActivity, type TeamSessionData } from './sessionParser.js';
+
 export interface AppState {
   currentView: ViewType;
   selectedTeam: string | null;

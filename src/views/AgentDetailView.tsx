@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
 import { Box, Text } from 'ink';
 import type { Agent, Task, Message } from '../core/types.js';
+import type { TeamSessionData } from '../core/sessionParser.js';
 import { getAgentColor } from '../utils/colors.js';
-import { SECTION_ICONS } from '../utils/icons.js';
+import { SECTION_ICONS, SPINNER_FRAMES } from '../utils/icons.js';
+import { formatTokens } from '../utils/format.js';
 import { filterMessages } from '../utils/messageFilter.js';
-import StatusIndicator from '../components/StatusIndicator.js';
 import TaskRow from '../components/TaskRow.js';
 import MessageRow from '../components/MessageRow.js';
 
@@ -12,9 +13,11 @@ interface AgentDetailViewProps {
   agent: Agent;
   tasks: Task[];
   messages: Message[];
+  session?: TeamSessionData;
+  spinnerFrame: number;
 }
 
-export default function AgentDetailView({ agent, tasks, messages }: AgentDetailViewProps) {
+export default function AgentDetailView({ agent, tasks, messages, session, spinnerFrame }: AgentDetailViewProps) {
   const agentTasks = tasks.filter((t) => t.owner === agent.name);
   const color = getAgentColor(agent.name);
 
@@ -25,12 +28,20 @@ export default function AgentDetailView({ agent, tasks, messages }: AgentDetailV
     return filterMessages(relevant);
   }, [messages, agent.name]);
 
+  const statusIcon = agent.isActive ? SPINNER_FRAMES[spinnerFrame] : '○';
+  const statusColor = agent.isActive ? 'greenBright' : 'gray';
+  const statusLabel = agent.isActive ? 'Active' : 'Idle';
+
+  // Get activity and tokens from session
+  const activity = session?.agentActivity.get(agent.name);
+  const agentTokens = session?.agentTokens.get(agent.name);
+
   return (
     <Box flexDirection="column" flexGrow={1}>
       {/* Agent header */}
       <Box borderStyle="bold" borderColor={color} paddingX={1} flexDirection="column">
         <Box gap={1}>
-          <StatusIndicator status={agent.isActive ? 'active' : 'idle'} />
+          <Text color={statusColor}>{statusIcon}</Text>
           <Text bold color={color}>
             {agent.name}
           </Text>
@@ -48,9 +59,25 @@ export default function AgentDetailView({ agent, tasks, messages }: AgentDetailV
           )}
           <Text>
             <Text dimColor>Status </Text>
-            <StatusIndicator status={agent.isActive ? 'active' : 'idle'} showLabel />
+            <Text color={statusColor}>{statusIcon} {statusLabel}</Text>
           </Text>
+          {agentTokens && agentTokens.totalTokens > 0 && (
+            <Text>
+              <Text dimColor>Tokens </Text>
+              <Text color="yellow">{formatTokens(agentTokens.totalTokens, true)}</Text>
+            </Text>
+          )}
         </Box>
+        {/* Live activity */}
+        {activity && agent.isActive && (
+          <Box marginTop={1}>
+            <Text dimColor>Activity </Text>
+            <Text>
+              {activity.lastActionIcon} {activity.lastAction}
+              {activity.isThinking && <Text color="yellow"> 💭</Text>}
+            </Text>
+          </Box>
+        )}
       </Box>
 
       {/* Tasks */}

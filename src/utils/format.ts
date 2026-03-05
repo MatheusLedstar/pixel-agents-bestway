@@ -38,3 +38,14 @@ export function relativeTime(iso: string): string {
     return '';
   }
 }
+
+export function formatTokens(tokens: number, isReal = false): string {
+  const prefix = isReal ? '' : '~';
+  if (tokens >= 1_000_000) {
+    return `${prefix}${(tokens / 1_000_000).toFixed(1)}M`;
+  }
+  if (tokens >= 1_000) {
+    return `${prefix}${(tokens / 1_000).toFixed(0)}K`;
+  }
+  return `${prefix}${String(tokens)}`;
+}

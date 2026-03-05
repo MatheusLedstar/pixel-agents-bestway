@@ -1,42 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Box, Text } from 'ink';
 import type { Agent, Task } from '../core/types.js';
+import type { AgentActivity } from '../core/sessionParser.js';
 import { getAgentColor } from '../utils/colors.js';
 import { getActionIcon, SPINNER_FRAMES } from '../utils/icons.js';
 
 interface AgentBadgeProps {
   agent: Agent;
   currentTask?: Task;
-  compact?: boolean;
+  activity?: AgentActivity;
+  spinnerFrame: number;
 }
 
-export default function AgentBadge({ agent, currentTask, compact = false }: AgentBadgeProps) {
-  const [frame, setFrame] = useState(0);
+export default function AgentBadge({ agent, currentTask, activity, spinnerFrame }: AgentBadgeProps) {
   const isActive = agent.isActive;
-
-  useEffect(() => {
-    if (!isActive) return;
-    const timer = setInterval(() => {
-      setFrame((prev) => (prev + 1) % SPINNER_FRAMES.length);
-    }, 80);
-    return () => clearInterval(timer);
-  }, [isActive]);
-
-  // Determine action icon from task activeForm or status
-  const actionText = currentTask?.activeForm ?? currentTask?.subject ?? '';
-  const actionIcon = isActive && actionText ? getActionIcon(actionText) : '';
-
-  const statusIcon = isActive ? SPINNER_FRAMES[frame] : '󰏤';
+  const statusIcon = isActive ? SPINNER_FRAMES[spinnerFrame] : '○';
   const statusColor = isActive ? 'greenBright' : 'gray';
 
-  if (compact) {
-    return (
-      <Box gap={1}>
-        <Text color={statusColor}>{statusIcon}</Text>
-        <Text bold color={getAgentColor(agent.name)}>{agent.name}</Text>
-        {actionIcon && <Text>{actionIcon}</Text>}
-      </Box>
-    );
+  // Use JSONL activity when available, fall back to task-based activity
+  let actionDisplay = '';
+  let actionIcon = '';
+
+  if (activity && isActive) {
+    actionIcon = activity.lastActionIcon;
+    actionDisplay = activity.lastAction;
+  } else if (isActive && currentTask) {
+    const actionText = currentTask.activeForm ?? currentTask.subject ?? '';
+    actionIcon = getActionIcon(actionText);
+    actionDisplay = actionText;
   }
 
   return (
@@ -45,14 +36,17 @@ export default function AgentBadge({ agent, currentTask, compact = false }: Agen
       <Text bold color={getAgentColor(agent.name)}>
         {agent.name}
       </Text>
-      {isActive && currentTask ? (
+      {isActive && actionDisplay ? (
         <Text dimColor>
-          {actionIcon} {currentTask.activeForm ?? currentTask.subject}
+          {actionIcon} {actionDisplay}
         </Text>
       ) : isActive ? (
-        <Text color="greenBright"> active</Text>
+        <Text color="greenBright">● active</Text>
       ) : (
-        <Text dimColor>󰏤 idle</Text>
+        <Text dimColor>○ idle</Text>
+      )}
+      {activity?.isThinking && isActive && (
+        <Text color="yellow"> 💭</Text>
       )}
     </Box>
   );

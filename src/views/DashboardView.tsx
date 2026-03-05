@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Box, Text, useInput } from 'ink';
-import type { Team, Task, Message } from '../core/types.js';
+import type { Team, Task, Message, TeamTokens } from '../core/types.js';
+import type { TeamSessionData } from '../core/sessionParser.js';
 import { SECTION_ICONS } from '../utils/icons.js';
 import { filterMessages } from '../utils/messageFilter.js';
 import TeamCard from '../components/TeamCard.js';
@@ -10,26 +11,29 @@ interface DashboardViewProps {
   teams: Team[];
   allTasks: Map<string, Task[]>;
   allMessages: Map<string, Message[]>;
+  allTokens: Map<string, TeamTokens>;
+  allSessions: Map<string, TeamSessionData>;
   selectedIndex: number;
   onSelectTeam: (name: string) => void;
+  spinnerFrame: number;
 }
 
 export default function DashboardView({
   teams,
   allTasks,
   allMessages,
+  allTokens,
+  allSessions,
   selectedIndex,
   onSelectTeam,
+  spinnerFrame,
 }: DashboardViewProps) {
-  // Collect and filter messages across all teams
   const latestMessages = useMemo(() => {
     const allMsgs: Message[] = [];
     for (const msgs of allMessages.values()) {
       allMsgs.push(...msgs);
     }
-    // Sort newest first
     allMsgs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-    // Filter out system/JSON noise, take top 8
     return filterMessages(allMsgs).slice(0, 8);
   }, [allMessages]);
 
@@ -56,7 +60,9 @@ export default function DashboardView({
               team={team}
               tasks={allTasks.get(team.name) ?? []}
               isSelected={idx === selectedIndex}
-              teamIndex={idx}
+              tokens={allTokens.get(team.name)}
+              session={allSessions.get(team.name)}
+              spinnerFrame={spinnerFrame}
             />
           ))}
           {teams.length === 0 && (
@@ -67,7 +73,7 @@ export default function DashboardView({
         </Box>
       </Box>
 
-      {/* Messages section - only show if there are messages */}
+      {/* Messages section */}
       {latestMessages.length > 0 && (
         <Box flexDirection="column" marginTop={1}>
           <Box gap={1}>
