@@ -24,11 +24,3 @@ export function getAgentColor(agentName: string): AgentColor {
   return color;
 }
 
-export const STATUS_COLORS = {
-  pending: 'gray',
-  in_progress: 'yellow',
-  completed: 'green',
-  blocked: 'red',
-  active: 'green',
-  idle: 'gray',
-} as const;
