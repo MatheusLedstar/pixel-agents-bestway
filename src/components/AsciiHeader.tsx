@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Box, Text } from 'ink';
-import { glitchText, shiftPattern, shouldFlicker } from '../utils/glitch.js';
+import { glitchText, shiftPattern } from '../utils/glitch.js';
 import { formatTokens } from '../utils/format.js';
 import { SECTION_ICONS } from '../utils/icons.js';
 
@@ -55,31 +55,30 @@ export default function AsciiHeader({
   crossTeamCount,
   termWidth,
 }: AsciiHeaderProps) {
-  const flickering = shouldFlicker(spinnerFrame, 77);
   const hasActivity = agentCount > 0;
 
   const borderLine = useMemo(() => {
-    const inner = shiftPattern(BORDER_PATTERN, Math.max(10, termWidth - 4), spinnerFrame);
+    const inner = shiftPattern(BORDER_PATTERN, Math.max(10, termWidth - 4), Math.floor(spinnerFrame / 4));
     return inner;
   }, [termWidth, spinnerFrame]);
 
   const logoLines = useMemo(() => getLogoLines(termWidth), [termWidth]);
 
-  // Apply glitch to logo text
+  // Apply glitch to logo text — reduced frequency
   const glitchedLogo = useMemo(() => {
     const intensity = hasActivity ? 0.04 : 0.02;
-    return logoLines.map((line, i) => glitchText(line, spinnerFrame, intensity, 1337 + i));
+    return logoLines.map((line, i) => glitchText(line, Math.floor(spinnerFrame / 8), intensity, 1337 + i));
   }, [logoLines, spinnerFrame, hasActivity]);
 
   return (
     <Box flexDirection="column">
       {/* Top neon border */}
-      <Text color="cyan" dimColor={flickering}>{borderLine}</Text>
+      <Text color="cyan">{borderLine}</Text>
 
       {/* ASCII Logo */}
       {glitchedLogo.map((line, i) => (
         <Box key={i} justifyContent="center">
-          <Text bold color={flickering ? 'gray' : 'cyanBright'}>{line}</Text>
+          <Text bold color="cyanBright">{line}</Text>
         </Box>
       ))}
 
@@ -117,7 +116,7 @@ export default function AsciiHeader({
       </Box>
 
       {/* Bottom neon border */}
-      <Text color="cyan" dimColor={flickering}>{borderLine}</Text>
+      <Text color="cyan">{borderLine}</Text>
     </Box>
   );
 }

@@ -147,10 +147,10 @@ export function useGlobalData(filterTeam?: string): GlobalData {
       void refreshAll();
     }, 3000);
 
-    // Global animation timer (100ms = ~10fps, smooth animations)
+    // Global animation timer (200ms = ~5fps, smooth without flickering)
     const spinnerInterval = setInterval(() => {
       setSpinnerFrame((prev) => (prev + 1) % 256);
-    }, 100);
+    }, 200);
 
     return () => {
       clearInterval(dataInterval);

@@ -61,7 +61,7 @@ export default function AgentBadge({ agent, currentTask, activity, spinnerFrame 
     actionDisplay = actionText;
   }
 
-  const monitor = miniMonitor(activity, !!isActive, spinnerFrame);
+  const monitor = miniMonitor(activity, !!isActive, Math.floor(spinnerFrame / 2));
 
   return (
     <Box gap={1}>

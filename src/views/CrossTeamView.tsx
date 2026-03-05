@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Box, Text, useInput } from 'ink';
 import type { CrossTeamData } from '../core/types.js';
 import { formatTimestamp, truncate, relativeTime } from '../utils/format.js';
-import { glitchText, shouldFlicker } from '../utils/glitch.js';
+import { glitchText } from '../utils/glitch.js';
 import NetworkTopology from '../components/NetworkTopology.js';
 
 interface CrossTeamViewProps {
@@ -51,14 +51,13 @@ export default function CrossTeamView({ crossTeam, spinnerFrame }: CrossTeamView
     }
   };
 
-  const flickering = shouldFlicker(spinnerFrame, 55);
-  const headerText = glitchText('◈ CROSS-TEAM NETWORK ◈', spinnerFrame, 0.06, 55);
+  const headerText = glitchText('◈ CROSS-TEAM NETWORK ◈', Math.floor(spinnerFrame / 8), 0.06, 55);
 
   return (
     <Box flexDirection="column" flexGrow={1}>
       {/* Header with glitch */}
       <Box borderStyle="double" borderColor="#CC6600" paddingX={1} justifyContent="space-between">
-        <Text color="#CC6600" bold dimColor={flickering}>{headerText}</Text>
+        <Text color="#CC6600" bold>{headerText}</Text>
         <Text dimColor>{registry.length} team{registry.length !== 1 ? 's' : ''}</Text>
       </Box>
 

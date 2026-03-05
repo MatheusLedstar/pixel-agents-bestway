@@ -102,7 +102,7 @@ export default function NetworkTopology({ registry, spinnerFrame, width = 80 }: 
     }
 
     // Draw edges between adjacent nodes (horizontal)
-    const edgeStr = EDGE_FRAMES[spinnerFrame % EDGE_FRAMES.length]!;
+    const edgeStr = EDGE_FRAMES[Math.floor(spinnerFrame / 4) % EDGE_FRAMES.length]!;
     for (let i = 0; i < positions.length - 1; i++) {
       const a = positions[i]!;
       const b = positions[i + 1]!;
@@ -113,7 +113,7 @@ export default function NetworkTopology({ registry, spinnerFrame, width = 80 }: 
         const endX = b.x;
         if (edgeY < bufH && startX < endX) {
           for (let ex = startX; ex < endX && ex < bufW; ex++) {
-            const edgeChar = edgeStr[(ex - startX + spinnerFrame) % edgeStr.length]!;
+            const edgeChar = edgeStr[(ex - startX + Math.floor(spinnerFrame / 4)) % edgeStr.length]!;
             buf[edgeY]![ex] = edgeChar;
           }
         }
@@ -128,7 +128,7 @@ export default function NetworkTopology({ registry, spinnerFrame, width = 80 }: 
       if (below) {
         const connX = a.x + Math.floor(NODE_W / 2);
         for (let cy = a.y + NODE_H + 1; cy < below.y && cy < bufH; cy++) {
-          if (connX < bufW) buf[cy]![connX] = spinnerFrame % 2 === 0 ? '│' : '┃';
+          if (connX < bufW) buf[cy]![connX] = Math.floor(spinnerFrame / 8) % 2 === 0 ? '│' : '┃';
         }
       }
     }

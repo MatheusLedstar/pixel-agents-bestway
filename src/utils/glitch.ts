@@ -38,7 +38,7 @@ export function glitchText(text: string, frame: number, intensity = 0.1, seed = 
  * ~5% chance per frame, deterministic per seed
  */
 export function shouldFlicker(frame: number, seed = 0): boolean {
-  return (hash(seed, frame) % 100) < 5;
+  return (hash(seed, frame) % 100) < 2;
 }
 
 /**
