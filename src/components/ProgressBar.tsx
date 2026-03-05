@@ -8,16 +8,15 @@ interface ProgressBarProps {
   width?: number;
 }
 
-export default function ProgressBar({ completed, total, width = 20 }: ProgressBarProps) {
+export default function ProgressBar({ completed, total, width = 30 }: ProgressBarProps) {
   const pct = progressPercent(completed, total);
   const filled = total === 0 ? 0 : Math.round((completed / total) * width);
   const empty = width - filled;
 
-  // Modern block characters for smoother bar
+  // Use block chars for filled, light shade for empty
   const filledStr = '━'.repeat(filled);
-  const emptyStr = '╌'.repeat(empty);
+  const emptyStr = '─'.repeat(empty);
 
-  // Color based on progress
   const barColor = pct >= 100 ? 'green' : pct >= 60 ? 'yellow' : 'cyan';
 
   return (

@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { Box, useApp, useInput } from 'ink';
 import type { ViewType, TeamSessionData } from './core/types.js';
 import { useGlobalData } from './hooks/useGlobalData.js';
+import { useTerminalSize } from './hooks/useTerminalSize.js';
 import Header from './components/Header.js';
 import Footer from './components/Footer.js';
 import Spinner from './components/Spinner.js';
@@ -23,6 +24,7 @@ export default function App({ filterTeam }: AppProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const { teams, allTasks, allMessages, allTokens, allSessions, loading, spinnerFrame } = useGlobalData();
+  const termSize = useTerminalSize();
 
   const filteredTeams = useMemo(() => {
     if (filterTeam) return teams.filter((t) => t.name === filterTeam);
@@ -174,6 +176,7 @@ export default function App({ filterTeam }: AppProps) {
             tokens={allTokens.get(selectedTeamObj.name)}
             session={allSessions.get(selectedTeamObj.name)}
             spinnerFrame={spinnerFrame}
+            termSize={termSize}
           />
         );
 

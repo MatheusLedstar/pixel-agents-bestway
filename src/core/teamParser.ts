@@ -1,8 +1,11 @@
-import { readFile, readdir } from 'node:fs/promises';
+import { readFile, readdir, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { TEAMS_DIR } from './watcher.js';
 import type { Team, Agent } from './types.js';
+
+// A team is "live" if its config.json was modified within this window
+const MAX_STALE_AGE_MS = 2 * 60 * 60 * 1000; // 2 hours
 
 export async function parseTeamConfig(filePath: string): Promise<Team | null> {
   try {
@@ -32,6 +35,21 @@ export async function parseTeamConfig(filePath: string): Promise<Team | null> {
   }
 }
 
+/**
+ * A team is "live" only if its config.json was modified recently.
+ * When agents join/leave, Claude Code updates config.json, so mtime
+ * is the most reliable indicator of activity.
+ * Member lists and task statuses persist after teams die - not reliable.
+ */
+async function isTeamLive(configPath: string): Promise<boolean> {
+  try {
+    const stats = await stat(configPath);
+    return Date.now() - stats.mtimeMs < MAX_STALE_AGE_MS;
+  } catch {
+    return false;
+  }
+}
+
 export async function loadAllTeams(): Promise<Team[]> {
   if (!existsSync(TEAMS_DIR)) return [];
 
@@ -43,6 +61,9 @@ export async function loadAllTeams(): Promise<Team[]> {
       if (!entry.isDirectory()) continue;
       const configPath = join(TEAMS_DIR, entry.name, 'config.json');
       if (!existsSync(configPath)) continue;
+
+      // Skip stale teams
+      if (!(await isTeamLive(configPath))) continue;
 
       const team = await parseTeamConfig(configPath);
       if (team) teams.push(team);

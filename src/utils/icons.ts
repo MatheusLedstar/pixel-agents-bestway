@@ -1,33 +1,34 @@
-// Nerd Font icons (requires a Nerd Font like FiraCode NF, JetBrains Mono NF, etc.)
-// Fallbacks to Unicode symbols if Nerd Font not available
+// Terminal-safe icons - ONLY emoji + basic Unicode
+// Works on ALL terminals (macOS Terminal, iTerm2, VS Code, etc.)
+// NO Nerd Font codepoints (private use area)
 
 // Agent action icons based on tool/activity keywords
 const ACTION_MAP: [RegExp, string][] = [
-  [/read|lendo|reading/i, '󰈙'],        // nf-md-file_document_outline
-  [/write|escrev|writing|criando/i, '󰏫'],  // nf-md-pencil
-  [/edit|editando|editing|modific/i, ''],  // nf-cod-tools
-  [/grep|search|busca|procur/i, ''],     // nf-cod-search
-  [/glob|finding|arquivos/i, ''],        // nf-cod-files
-  [/bash|execut|running|command|terminal|dotnet|swift|npm/i, ''], // nf-cod-terminal
-  [/build|compil|bundl/i, ''],           // nf-oct-package
-  [/test|testa|testing|xunit|vitest/i, '󰙨'], // nf-md-test_tube
-  [/review|revis|analis/i, ''],          // nf-cod-eye
-  [/plan|planej|design/i, ''],           // nf-cod-layout
-  [/debug|investig|diagnos/i, ''],       // nf-cod-bug
-  [/deploy|push|publish/i, ''],          // nf-cod-rocket
-  [/security|segur|audit/i, '󰒃'],        // nf-md-shield_check
-  [/refactor|refator/i, ''],             // nf-cod-references
-  [/fix|corrig|fixing/i, ''],            // nf-cod-wrench
-  [/implement|implemen/i, ''],           // nf-cod-gear
-  [/consolidar|relat|report/i, ''],      // nf-cod-graph
-  [/docker|container/i, ''],             // nf-dev-docker (fallback)
-  [/git|commit|branch/i, ''],           // nf-cod-git_branch
-  [/api|endpoint|rest/i, ''],            // nf-cod-globe
-  [/database|sql|query/i, ''],           // nf-cod-database
-  [/ui|view|component|frontend/i, ''],   // nf-cod-paintcan
-  [/message|send|chat|inbox/i, '󰍡'],     // nf-md-message_text
-  [/idle|waiting|aguard/i, '󰏤'],         // nf-md-pause
-  [/complet|done|finish|conclu/i, ''],   // nf-cod-check
+  [/read|lendo|reading/i, '📖'],
+  [/write|escrev|writing|criando/i, '✏️'],
+  [/edit|editando|editing|modific/i, '🔧'],
+  [/grep|search|busca|procur/i, '🔍'],
+  [/glob|finding|arquivos/i, '📁'],
+  [/bash|execut|running|command|terminal|dotnet|swift|npm/i, '⚡'],
+  [/build|compil|bundl/i, '🏗️'],
+  [/test|testa|testing|xunit|vitest/i, '🧪'],
+  [/review|revis|analis/i, '👁️'],
+  [/plan|planej|design/i, '📐'],
+  [/debug|investig|diagnos/i, '🐛'],
+  [/deploy|push|publish/i, '🚀'],
+  [/security|segur|audit/i, '🛡️'],
+  [/refactor|refator/i, '♻️'],
+  [/fix|corrig|fixing/i, '🔨'],
+  [/implement|implemen/i, '⚙️'],
+  [/consolidar|relat|report/i, '📊'],
+  [/docker|container/i, '🐳'],
+  [/git|commit|branch/i, '🌿'],
+  [/api|endpoint|rest/i, '🌐'],
+  [/database|sql|query/i, '🗄️'],
+  [/ui|view|component|frontend/i, '🎨'],
+  [/message|send|chat|inbox/i, '💬'],
+  [/idle|waiting|aguard/i, '⏸️'],
+  [/complet|done|finish|conclu/i, '✅'],
 ];
 
 export function getActionIcon(text: string): string {
@@ -37,21 +38,21 @@ export function getActionIcon(text: string): string {
   return '▸';
 }
 
-// Spinner frames for active agents (braille dots - smooth animation)
+// Spinner frames - braille dots (universally supported)
 export const SPINNER_FRAMES = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
 
-// Alternative spinner - dots expanding
-export const PULSE_FRAMES = ['⠁', '⠂', '⠄', '⡀', '⢀', '⠠', '⠐', '⠈'];
+// Large spinner frames (more visible)
+export const LARGE_SPINNER_FRAMES = ['◐', '◓', '◑', '◒'];
 
-// Status icons (Nerd Font preferred, Unicode fallback)
+// Status icons - basic Unicode only
 export const STATUS_ICONS: Record<string, string> = {
-  completed: '',   // nf-cod-check
-  in_progress: '', // nf-cod-loading (or use spinner)
-  pending: '',     // nf-cod-circle_outline
-  blocked: '',     // nf-cod-error
-  active: '',      // nf-cod-pulse
-  idle: '󰏤',       // nf-md-pause
-  done: '',        // nf-cod-check_all
+  completed: '✓',
+  in_progress: '●',
+  pending: '○',
+  blocked: '✗',
+  active: '●',
+  idle: '○',
+  done: '✓',
 };
 
 // Status colors
@@ -65,18 +66,11 @@ export const STATUS_COLORS: Record<string, string> = {
   done: 'green',
 };
 
-// Team icons (rotating per team index)
-export const TEAM_ICONS = ['⬡', '◈', '⬢', '◆', '❖', '✦'];
-
-export function getTeamIcon(index: number): string {
-  return TEAM_ICONS[index % TEAM_ICONS.length];
-}
-
-// Section headers
+// Section headers - basic Unicode
 export const SECTION_ICONS = {
-  teams: '⊞',
-  agents: '⊛',
-  tasks: '⊡',
-  messages: '⊜',
-  progress: '◔',
+  teams: '■',
+  agents: '●',
+  tasks: '□',
+  messages: '◆',
+  tokens: '◇',
 };
