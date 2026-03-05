@@ -3,6 +3,8 @@ import { Box, useApp, useInput } from 'ink';
 import type { ViewType, TeamSessionData } from './core/types.js';
 import { useGlobalData } from './hooks/useGlobalData.js';
 import { useTerminalSize } from './hooks/useTerminalSize.js';
+import { useActivityHistory } from './hooks/useActivityHistory.js';
+import { useActivityLog } from './hooks/useActivityLog.js';
 import Header from './components/Header.js';
 import Footer from './components/Footer.js';
 import Spinner from './components/Spinner.js';
@@ -33,6 +35,12 @@ export default function App({ filterTeam }: AppProps) {
   const { usage, refreshUsage } = useUsageData();
   const { crossTeam } = useCrossTeamData();
   const [prevView, setPrevView] = useState<ViewType>('dashboard');
+
+  // Activity history for sparklines
+  const activityHistory = useActivityHistory(teams, allTasks, allMessages);
+
+  // Activity log for timeline
+  const activityEvents = useActivityLog(allTasks, allMessages);
 
   const filteredTeams = useMemo(() => {
     if (filterTeam) return teams.filter((t) => t.name === filterTeam);
@@ -72,6 +80,16 @@ export default function App({ filterTeam }: AppProps) {
     () => (selectedTeam ? allMessages.get(selectedTeam) ?? [] : []),
     [allMessages, selectedTeam],
   );
+
+  // Build per-team activity data for sparklines
+  const teamActivityData = useMemo(() => {
+    const map = new Map<string, number[]>();
+    // Use agent series as proxy for all teams (global activity)
+    for (const team of filteredTeams) {
+      map.set(team.name, activityHistory.agentSeries);
+    }
+    return map;
+  }, [filteredTeams, activityHistory.agentSeries]);
 
   const handleSelectTeam = useCallback((name: string) => {
     setSelectedTeam(name);
@@ -192,6 +210,8 @@ export default function App({ filterTeam }: AppProps) {
             selectedIndex={selectedIndex}
             onSelectTeam={handleSelectTeam}
             spinnerFrame={spinnerFrame}
+            teamActivityData={teamActivityData}
+            activityEvents={activityEvents}
           />
         );
 

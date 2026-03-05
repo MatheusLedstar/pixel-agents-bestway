@@ -1,7 +1,9 @@
-import React, { useMemo } from 'react';
-import { Box, Text } from 'ink';
+import React, { useState, useMemo } from 'react';
+import { Box, Text, useInput } from 'ink';
 import type { CrossTeamData } from '../core/types.js';
 import { formatTimestamp, truncate, relativeTime } from '../utils/format.js';
+import { glitchText, shouldFlicker } from '../utils/glitch.js';
+import NetworkTopology from '../components/NetworkTopology.js';
 
 interface CrossTeamViewProps {
   crossTeam: CrossTeamData;
@@ -20,6 +22,18 @@ function buildProgressBar(completed: number, total: number, width: number): stri
 
 export default function CrossTeamView({ crossTeam, spinnerFrame }: CrossTeamViewProps) {
   const { registry, messages, activeCall } = crossTeam;
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  // Total scrollable items: teams + messages
+  const totalItems = registry.length + messages.length;
+
+  useInput((_input, key) => {
+    if (key.upArrow) {
+      setSelectedIndex((prev) => Math.max(0, prev - 1));
+    } else if (key.downArrow) {
+      setSelectedIndex((prev) => Math.min(totalItems - 1, prev + 1));
+    }
+  });
 
   const particleLine = useMemo(() => {
     const offset = spinnerFrame % PARTICLES.length;
@@ -37,13 +51,23 @@ export default function CrossTeamView({ crossTeam, spinnerFrame }: CrossTeamView
     }
   };
 
+  const flickering = shouldFlicker(spinnerFrame, 55);
+  const headerText = glitchText('◈ CROSS-TEAM NETWORK ◈', spinnerFrame, 0.06, 55);
+
   return (
     <Box flexDirection="column" flexGrow={1}>
-      {/* Header */}
-      <Box borderStyle="double" borderColor="magentaBright" paddingX={1} justifyContent="space-between">
-        <Text color="magentaBright" bold>◈ CROSS-TEAM NETWORK ◈</Text>
+      {/* Header with glitch */}
+      <Box borderStyle="double" borderColor="#CC6600" paddingX={1} justifyContent="space-between">
+        <Text color="#CC6600" bold dimColor={flickering}>{headerText}</Text>
         <Text dimColor>{registry.length} team{registry.length !== 1 ? 's' : ''}</Text>
       </Box>
+
+      {/* Network Topology Graph */}
+      {registry.length > 1 && (
+        <Box marginTop={1}>
+          <NetworkTopology registry={registry} spinnerFrame={spinnerFrame} />
+        </Box>
+      )}
 
       {/* Teams Registry */}
       <Box marginTop={1} flexDirection="column">
@@ -52,19 +76,20 @@ export default function CrossTeamView({ crossTeam, spinnerFrame }: CrossTeamView
           {registry.length === 0 ? (
             <Text dimColor>No teams registered. Start pixel-agents with --team to register.</Text>
           ) : (
-            registry.map((card) => {
+            registry.map((card, idx) => {
               const total = card.tasksSummary.pending + card.tasksSummary.in_progress + card.tasksSummary.completed;
               const done = card.tasksSummary.completed;
               const barWidth = 10;
               const bar = buildProgressBar(done, total, barWidth);
               const sl = statusLabel(card.status);
+              const isSelected = idx === selectedIndex;
 
               return (
                 <Box key={card.teamName} gap={1}>
-                  <Text color={card.status === 'active' ? 'greenBright' : 'gray'}>
-                    {card.status === 'active' ? '●' : '○'}
+                  <Text color={isSelected ? 'yellowBright' : (card.status === 'active' ? 'greenBright' : 'gray')}>
+                    {isSelected ? '▸' : (card.status === 'active' ? '●' : '○')}
                   </Text>
-                  <Text color="white" bold>{truncate(card.teamName, 20).padEnd(20)}</Text>
+                  <Text color={isSelected ? 'yellowBright' : 'white'} bold>{truncate(card.teamName, 20).padEnd(20)}</Text>
                   <Text dimColor>{String(card.memberCount).padStart(2)} agents</Text>
                   <Text color={done === total && total > 0 ? 'greenBright' : 'cyanBright'}>{bar}</Text>
                   <Text dimColor>{total > 0 ? `${done}/${total} tasks` : 'no tasks'}</Text>
@@ -102,7 +127,9 @@ export default function CrossTeamView({ crossTeam, spinnerFrame }: CrossTeamView
           {messages.length === 0 ? (
             <Text dimColor>No cross-team messages yet.</Text>
           ) : (
-            messages.slice(0, 15).map((msg) => {
+            messages.slice(0, 15).map((msg, idx) => {
+              const msgIdx = registry.length + idx;
+              const isSelected = msgIdx === selectedIndex;
               const time = formatTimestamp(msg.timestamp);
               const target = msg.toTeam ? msg.toTeam : 'ALL';
               const typeIcon = msg.type === 'call_invite' ? '📞'
@@ -113,11 +140,12 @@ export default function CrossTeamView({ crossTeam, spinnerFrame }: CrossTeamView
 
               return (
                 <Box key={msg.id} gap={1}>
+                  <Text color={isSelected ? 'yellowBright' : 'gray'}>{isSelected ? '▸' : ' '}</Text>
                   <Text dimColor>{time}</Text>
                   <Text color="cyanBright">{truncate(msg.fromTeam, 15)}</Text>
                   <Text dimColor>{typeIcon}</Text>
-                  <Text color="magentaBright">{truncate(target, 15)}</Text>
-                  <Text>{truncate(msg.content, 50)}</Text>
+                  <Text color="#90EE90">{truncate(target, 15)}</Text>
+                  <Text color={isSelected ? 'white' : undefined}>{truncate(msg.content, 50)}</Text>
                 </Box>
               );
             })
@@ -127,7 +155,7 @@ export default function CrossTeamView({ crossTeam, spinnerFrame }: CrossTeamView
 
       {/* Animated particles footer */}
       <Box justifyContent="center" marginTop={1}>
-        <Text color="magentaBright" dimColor>{particleLine}</Text>
+        <Text color="#CC6600" dimColor>{particleLine}</Text>
       </Box>
     </Box>
   );

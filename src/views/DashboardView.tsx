@@ -2,10 +2,12 @@ import React, { useMemo } from 'react';
 import { Box, Text, useInput } from 'ink';
 import type { Team, Task, Message, TeamTokens } from '../core/types.js';
 import type { TeamSessionData } from '../core/sessionParser.js';
+import type { ActivityEvent } from '../hooks/useActivityLog.js';
 import { SECTION_ICONS } from '../utils/icons.js';
 import { filterMessages } from '../utils/messageFilter.js';
 import TeamCard from '../components/TeamCard.js';
 import MessageRow from '../components/MessageRow.js';
+import ActivityTimeline from '../components/ActivityTimeline.js';
 
 interface DashboardViewProps {
   teams: Team[];
@@ -16,6 +18,10 @@ interface DashboardViewProps {
   selectedIndex: number;
   onSelectTeam: (name: string) => void;
   spinnerFrame: number;
+  /** Activity series per team for sparklines (normalized 0..1) */
+  teamActivityData?: Map<string, number[]>;
+  /** Activity events for timeline */
+  activityEvents?: ActivityEvent[];
 }
 
 export default function DashboardView({
@@ -27,6 +33,8 @@ export default function DashboardView({
   selectedIndex,
   onSelectTeam,
   spinnerFrame,
+  teamActivityData,
+  activityEvents,
 }: DashboardViewProps) {
   const latestMessages = useMemo(() => {
     const allMsgs: Message[] = [];
@@ -63,6 +71,7 @@ export default function DashboardView({
               tokens={allTokens.get(team.name)}
               session={allSessions.get(team.name)}
               spinnerFrame={spinnerFrame}
+              activityData={teamActivityData?.get(team.name)}
             />
           ))}
           {teams.length === 0 && (
@@ -89,6 +98,11 @@ export default function DashboardView({
             ))}
           </Box>
         </Box>
+      )}
+
+      {/* Activity Timeline */}
+      {activityEvents && activityEvents.length > 0 && (
+        <ActivityTimeline events={activityEvents} spinnerFrame={spinnerFrame} />
       )}
     </Box>
   );

@@ -4,6 +4,7 @@ import type { Message } from '../core/types.js';
 import { filterMessages } from '../utils/messageFilter.js';
 import { truncate, formatTimestamp } from '../utils/format.js';
 import { getAgentColor } from '../utils/colors.js';
+import { glitchText, shouldFlicker } from '../utils/glitch.js';
 
 interface MeetingRoomProps {
   messages: Message[];
@@ -38,7 +39,9 @@ export default function MeetingRoom({ messages, maxMessages = 5, width = 40, spi
       <Box width={width} justifyContent="center">
         <Text bold color="cyanBright">║</Text>
         <Box flexGrow={1} justifyContent="center">
-          <Text bold color="cyanBright"> ◈ MEETING TABLE ◈ </Text>
+          <Text bold color="cyanBright" dimColor={shouldFlicker(spinnerFrame, 99)}>
+          {glitchText(' ◈ MEETING TABLE ◈ ', spinnerFrame, 0.05, 99)}
+        </Text>
         </Box>
         <Text bold color="cyanBright">║</Text>
       </Box>

@@ -6,6 +6,7 @@ import { SECTION_ICONS } from '../utils/icons.js';
 import { formatTokens } from '../utils/format.js';
 import ProgressBar from './ProgressBar.js';
 import AgentBadge from './AgentBadge.js';
+import Sparkline from './Sparkline.js';
 
 interface TeamCardProps {
   team: Team;
@@ -14,9 +15,11 @@ interface TeamCardProps {
   tokens?: TeamTokens;
   session?: TeamSessionData;
   spinnerFrame: number;
+  /** Normalized activity data for sparkline */
+  activityData?: number[];
 }
 
-export default function TeamCard({ team, tasks, isSelected, tokens, session, spinnerFrame }: TeamCardProps) {
+export default function TeamCard({ team, tasks, isSelected, tokens, session, spinnerFrame, activityData }: TeamCardProps) {
   const completedTasks = tasks.filter((t) => t.status === 'completed').length;
   const activeTasks = tasks.filter((t) => t.status === 'in_progress').length;
 
@@ -54,15 +57,23 @@ export default function TeamCard({ team, tasks, isSelected, tokens, session, spi
         </Box>
       </Box>
 
-      {/* Progress bar */}
+      {/* Progress bar + sparkline side by side */}
       {tasks.length > 0 && (
-        <Box marginTop={1}>
-          <ProgressBar completed={completedTasks} total={tasks.length} width={30} />
+        <Box marginTop={1} gap={2}>
+          <ProgressBar completed={completedTasks} total={tasks.length} width={30} spinnerFrame={spinnerFrame} />
+          {activityData && activityData.length > 1 && (
+            <Sparkline data={activityData} width={10} color="greenBright" spinnerFrame={spinnerFrame} />
+          )}
         </Box>
       )}
 
+      {/* Separator */}
+      <Box marginTop={0}>
+        <Text dimColor>╠{'──'.repeat(8)}╣</Text>
+      </Box>
+
       {/* Agent list with live activity */}
-      <Box marginTop={1} flexDirection="column">
+      <Box flexDirection="column">
         {team.members.map((agent) => {
           const agentTask = tasks.find(
             (t) => t.owner === agent.name && t.status === 'in_progress',
