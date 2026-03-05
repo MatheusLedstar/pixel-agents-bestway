@@ -11,7 +11,8 @@ interface NetworkTopologyProps {
 // Node rendering constants
 const NODE_W = 22;
 const NODE_H = 3;
-const EDGE_FRAMES = ['─⟩─⟩─⟩', '⟩─⟩─⟩─', '─⟩─⟩─⟩'];
+// Particle-based edge animation using dots for smooth movement
+const EDGE_FRAMES = [' · ·•● ', '· ·•●  ', ' · ·•● ', '  · ·•●'];
 
 interface NodePos {
   x: number;
@@ -128,7 +129,10 @@ export default function NetworkTopology({ registry, spinnerFrame, width = 80 }: 
       if (below) {
         const connX = a.x + Math.floor(NODE_W / 2);
         for (let cy = a.y + NODE_H + 1; cy < below.y && cy < bufH; cy++) {
-          if (connX < bufW) buf[cy]![connX] = Math.floor(spinnerFrame / 8) % 2 === 0 ? '│' : '┃';
+          // Vertical particle: dot travels down
+          const vPhase = (cy + Math.floor(spinnerFrame / 4)) % 4;
+          const vChar = vPhase === 0 ? '●' : vPhase === 1 ? '•' : vPhase === 2 ? '·' : ' ';
+          if (connX < bufW) buf[cy]![connX] = vChar;
         }
       }
     }

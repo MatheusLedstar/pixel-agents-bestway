@@ -8,6 +8,7 @@ import { formatTokens } from '../utils/format.js';
 import TaskRow from '../components/TaskRow.js';
 import ProgressBar from '../components/ProgressBar.js';
 import OfficeMap from '../map/OfficeMap.js';
+import AgentTopology from '../components/AgentTopology.js';
 
 interface TeamDetailViewProps {
   team: Team;
@@ -71,6 +72,20 @@ export default function TeamDetailView({ team, tasks, messages, tokens, session,
           />
         </Box>
       </Box>
+
+      {/* Agent Topology — communication flow */}
+      {team.members.length >= 2 && (
+        <Box marginTop={1} flexDirection="column">
+          <AgentTopology
+            agents={team.members}
+            messages={messages}
+            tasks={tasks}
+            leadAgent={team.leadAgentId?.split('@')[0]}
+            spinnerFrame={spinnerFrame}
+            width={Math.min(termSize.cols - 6, 100)}
+          />
+        </Box>
+      )}
 
       {/* Tasks */}
       {tasks.length > 0 && (
