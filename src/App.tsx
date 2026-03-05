@@ -1,0 +1,201 @@
+import React, { useState, useCallback, useMemo } from 'react';
+import { Box, useApp, useInput } from 'ink';
+import type { ViewType } from './core/types.js';
+import { useGlobalData } from './hooks/useGlobalData.js';
+import Header from './components/Header.js';
+import Footer from './components/Footer.js';
+import Spinner from './components/Spinner.js';
+import DashboardView from './views/DashboardView.js';
+import TeamDetailView from './views/TeamDetailView.js';
+import TaskBoardView from './views/TaskBoardView.js';
+import MessagesView from './views/MessagesView.js';
+import AgentDetailView from './views/AgentDetailView.js';
+
+interface AppProps {
+  filterTeam?: string;
+}
+
+export default function App({ filterTeam }: AppProps) {
+  const { exit } = useApp();
+  const [currentView, setCurrentView] = useState<ViewType>(filterTeam ? 'team-detail' : 'dashboard');
+  const [selectedTeam, setSelectedTeam] = useState<string | null>(filterTeam ?? null);
+  const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const { teams, allTasks, allMessages, loading } = useGlobalData();
+
+  const filteredTeams = useMemo(() => {
+    if (filterTeam) return teams.filter((t) => t.name === filterTeam);
+    return teams;
+  }, [teams, filterTeam]);
+
+  const totalAgents = useMemo(
+    () => filteredTeams.reduce((sum, t) => sum + t.members.length, 0),
+    [filteredTeams],
+  );
+
+  const totalTasks = useMemo(() => {
+    let count = 0;
+    for (const t of allTasks.values()) count += t.length;
+    return count;
+  }, [allTasks]);
+
+  const selectedTeamTasks = useMemo(
+    () => (selectedTeam ? allTasks.get(selectedTeam) ?? [] : []),
+    [allTasks, selectedTeam],
+  );
+
+  const selectedTeamMessages = useMemo(
+    () => (selectedTeam ? allMessages.get(selectedTeam) ?? [] : []),
+    [allMessages, selectedTeam],
+  );
+
+  const handleSelectTeam = useCallback((name: string) => {
+    setSelectedTeam(name);
+    setSelectedIndex(0);
+    setCurrentView('team-detail');
+  }, []);
+
+  const handleBack = useCallback(() => {
+    if (currentView === 'agent-detail') {
+      setSelectedAgent(null);
+      setCurrentView('team-detail');
+    } else if (currentView !== 'dashboard') {
+      if (filterTeam) return;
+      setSelectedTeam(null);
+      setSelectedAgent(null);
+      setSelectedIndex(0);
+      setCurrentView('dashboard');
+    }
+  }, [currentView, filterTeam]);
+
+  useInput((input, key) => {
+    if (input === 'q') {
+      exit();
+      return;
+    }
+
+    if (key.escape) {
+      handleBack();
+      return;
+    }
+
+    if (currentView === 'dashboard') {
+      if (key.upArrow) {
+        setSelectedIndex((prev) => Math.max(0, prev - 1));
+      } else if (key.downArrow) {
+        setSelectedIndex((prev) => Math.min(filteredTeams.length - 1, prev + 1));
+      }
+    }
+
+    if (currentView === 'team-detail') {
+      if (input === 'm') {
+        setCurrentView('messages');
+      } else if (input === 't') {
+        setCurrentView('task-board');
+      } else if (key.upArrow) {
+        setSelectedIndex((prev) => Math.max(0, prev - 1));
+      } else if (key.downArrow) {
+        const team = filteredTeams.find((t) => t.name === selectedTeam);
+        const maxIdx = (team?.members.length ?? 1) - 1;
+        setSelectedIndex((prev) => Math.min(maxIdx, prev + 1));
+      } else if (key.return) {
+        const team = filteredTeams.find((t) => t.name === selectedTeam);
+        if (team && team.members[selectedIndex]) {
+          setSelectedAgent(team.members[selectedIndex].name);
+          setCurrentView('agent-detail');
+          setSelectedIndex(0);
+        }
+      }
+    }
+  });
+
+  if (loading) {
+    return (
+      <Box flexDirection="column">
+        <Header currentView={currentView} teamCount={0} agentCount={0} taskCount={0} />
+        <Box padding={1}>
+          <Spinner label="Loading teams..." />
+        </Box>
+      </Box>
+    );
+  }
+
+  const selectedTeamObj = filteredTeams.find((t) => t.name === selectedTeam);
+  const selectedAgentObj = selectedTeamObj?.members.find((a) => a.name === selectedAgent);
+
+  const renderView = () => {
+    switch (currentView) {
+      case 'dashboard':
+        return (
+          <DashboardView
+            teams={filteredTeams}
+            allTasks={allTasks}
+            allMessages={allMessages}
+            selectedIndex={selectedIndex}
+            onSelectTeam={handleSelectTeam}
+          />
+        );
+
+      case 'team-detail':
+        if (!selectedTeamObj) {
+          handleBack();
+          return null;
+        }
+        return (
+          <TeamDetailView
+            team={selectedTeamObj}
+            tasks={selectedTeamTasks}
+            messages={selectedTeamMessages}
+          />
+        );
+
+      case 'task-board':
+        return (
+          <TaskBoardView
+            tasks={selectedTeamTasks}
+            teamName={selectedTeam ?? 'all'}
+          />
+        );
+
+      case 'messages':
+        return (
+          <MessagesView
+            messages={selectedTeamMessages}
+            teamName={selectedTeam ?? 'all'}
+          />
+        );
+
+      case 'agent-detail':
+        if (!selectedAgentObj) {
+          handleBack();
+          return null;
+        }
+        return (
+          <AgentDetailView
+            agent={selectedAgentObj}
+            tasks={selectedTeamTasks}
+            messages={selectedTeamMessages}
+          />
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <Box flexDirection="column" minHeight={20}>
+      <Header
+        currentView={currentView}
+        teamCount={filteredTeams.length}
+        agentCount={totalAgents}
+        taskCount={totalTasks}
+      />
+      <Box flexDirection="column" flexGrow={1} paddingX={1} paddingY={1}>
+        {renderView()}
+      </Box>
+      <Footer view={currentView} />
+    </Box>
+  );
+}

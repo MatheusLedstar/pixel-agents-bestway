@@ -1,0 +1,42 @@
+{
+  "name": "pixel-agents-bestway",
+  "version": "1.0.0",
+  "description": "TUI dashboard for Claude Code Agent Teams - monitor teams, tasks and messages in real-time",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "pixel-agents-bestway": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "claude",
+    "agent",
+    "tui",
+    "terminal",
+    "dashboard",
+    "ink"
+  ],
+  "author": "Matheus Venancio",
+  "license": "MIT",
+  "dependencies": {
+    "chokidar": "^4.0.3",
+    "ink": "^5.1.0",
+    "ink-spinner": "^5.0.0",
+    "meow": "^13.0.0",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "@types/react": "^18.3.18",
+    "tsup": "^8.4.0",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
