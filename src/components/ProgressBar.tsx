@@ -6,23 +6,45 @@ interface ProgressBarProps {
   completed: number;
   total: number;
   width?: number;
+  spinnerFrame?: number;
 }
 
-export default function ProgressBar({ completed, total, width = 30 }: ProgressBarProps) {
+// Shimmer chars for animated highlight moving across the bar
+const SHIMMER = ['░', '▒', '▓', '█', '▓', '▒', '░'];
+
+export default function ProgressBar({ completed, total, width = 30, spinnerFrame = 0 }: ProgressBarProps) {
   const pct = progressPercent(completed, total);
   const filled = total === 0 ? 0 : Math.round((completed / total) * width);
   const empty = width - filled;
 
-  // Use block chars for filled, light shade for empty
-  const filledStr = '━'.repeat(filled);
-  const emptyStr = '─'.repeat(empty);
+  const barColor = pct >= 100 ? 'greenBright' : pct >= 60 ? 'yellowBright' : 'cyanBright';
 
-  const barColor = pct >= 100 ? 'green' : pct >= 60 ? 'yellow' : 'cyan';
+  // Build bar with shimmer effect on the filled portion
+  let bar = '';
+  const shimmerPos = spinnerFrame % (width + SHIMMER.length);
+
+  for (let i = 0; i < width; i++) {
+    if (i < filled) {
+      // Check if shimmer passes over this position
+      const shimmerIdx = i - shimmerPos + SHIMMER.length;
+      if (shimmerIdx >= 0 && shimmerIdx < SHIMMER.length && pct < 100) {
+        bar += SHIMMER[shimmerIdx] ?? '━';
+      } else {
+        bar += '━';
+      }
+    } else {
+      bar += '─';
+    }
+  }
+
+  // Split bar into filled and empty parts for coloring
+  const filledPart = bar.slice(0, filled);
+  const emptyPart = bar.slice(filled);
 
   return (
     <Text>
-      <Text color={barColor}>{filledStr}</Text>
-      <Text dimColor>{emptyStr}</Text>
+      <Text color={barColor}>{filledPart}</Text>
+      <Text dimColor>{emptyPart}</Text>
       <Text color={barColor}> {pct}%</Text>
       <Text dimColor> ({completed}/{total})</Text>
     </Text>

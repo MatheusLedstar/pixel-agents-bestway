@@ -5,9 +5,7 @@ import type { TeamSessionData } from '../core/sessionParser.js';
 import type { TerminalSize } from '../hooks/useTerminalSize.js';
 import { calculateLayout } from '../hooks/useTerminalSize.js';
 import { formatTokens } from '../utils/format.js';
-import { filterMessages } from '../utils/messageFilter.js';
 import TaskRow from '../components/TaskRow.js';
-import MessageRow from '../components/MessageRow.js';
 import ProgressBar from '../components/ProgressBar.js';
 import OfficeMap from '../map/OfficeMap.js';
 
@@ -29,13 +27,6 @@ export default function TeamDetailView({ team, tasks, messages, tokens, session,
     [termSize, team.members.length],
   );
 
-  const recentMessages = useMemo(() => {
-    const sorted = [...messages].sort(
-      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
-    );
-    return filterMessages(sorted).slice(0, layout.maxMsgRows);
-  }, [messages, layout.maxMsgRows]);
-
   const visibleTasks = useMemo(
     () => tasks.slice(0, layout.maxTaskRows),
     [tasks, layout.maxTaskRows],
@@ -50,7 +41,7 @@ export default function TeamDetailView({ team, tasks, messages, tokens, session,
         <Box gap={2}>
           <Text bold color="cyanBright">⟨ {team.name} ⟩</Text>
           {tasks.length > 0 && (
-            <ProgressBar completed={completedTasks} total={tasks.length} width={progressWidth} />
+            <ProgressBar completed={completedTasks} total={tasks.length} width={progressWidth} spinnerFrame={spinnerFrame} />
           )}
         </Box>
         <Box gap={2}>
@@ -100,20 +91,6 @@ export default function TeamDetailView({ team, tasks, messages, tokens, session,
         </Box>
       )}
 
-      {/* Feed */}
-      {recentMessages.length > 0 && (
-        <Box marginTop={1} flexDirection="column">
-          <Box gap={1}>
-            <Text color="greenBright" bold>⟫</Text>
-            <Text bold color="greenBright">FEED</Text>
-          </Box>
-          <Box flexDirection="column" paddingX={1} marginTop={1}>
-            {recentMessages.map((msg, idx) => (
-              <MessageRow key={`${msg.timestamp}-${idx}`} message={msg as Message} />
-            ))}
-          </Box>
-        </Box>
-      )}
     </Box>
   );
 }

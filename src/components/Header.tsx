@@ -12,6 +12,9 @@ interface HeaderProps {
   totalTokens: number;
   isRealTokens: boolean;
   spinnerFrame: number;
+  filterTeam?: string;
+  hasActiveCall?: boolean;
+  crossTeamCount?: number;
 }
 
 const VIEW_LABELS: Record<ViewType, string> = {
@@ -20,7 +23,11 @@ const VIEW_LABELS: Record<ViewType, string> = {
   'task-board': 'Task Board',
   messages: 'Messages',
   'agent-detail': 'Agent Detail',
+  usage: 'Usage',
+  'cross-team': 'Cross-Team',
 };
+
+const CALL_PULSE = ['◈', '◇', '◈', '◆'];
 
 export default function Header({
   currentView,
@@ -30,6 +37,9 @@ export default function Header({
   totalTokens,
   isRealTokens,
   spinnerFrame,
+  filterTeam,
+  hasActiveCall,
+  crossTeamCount,
 }: HeaderProps) {
   const hasActivity = agentCount > 0;
 
@@ -40,6 +50,16 @@ export default function Header({
         <Text bold color="cyan">
           PIXEL AGENTS
         </Text>
+        {filterTeam && (
+          <Text color="yellowBright" bold>
+            [{filterTeam}]
+          </Text>
+        )}
+        {hasActiveCall && (
+          <Text color="yellowBright" bold>
+            {CALL_PULSE[spinnerFrame % CALL_PULSE.length]} CALL
+          </Text>
+        )}
       </Box>
       <Box gap={2}>
         <Text>
@@ -55,6 +75,11 @@ export default function Header({
           <Text>
             <Text color="yellow">{SECTION_ICONS.tokens}</Text>{' '}
             <Text color="yellow">{formatTokens(totalTokens, isRealTokens)}</Text>
+          </Text>
+        )}
+        {(crossTeamCount ?? 0) > 0 && (
+          <Text>
+            <Text color="magentaBright">◈</Text> <Text color="magentaBright">{crossTeamCount}</Text>
           </Text>
         )}
       </Box>

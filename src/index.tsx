@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'ink';
 import meow from 'meow';
 import App from './App.js';
+import { ensureCrossTeamDirs } from './core/crossTeamParser.js';
 
 const cli = meow(
   `
@@ -26,6 +27,9 @@ const cli = meow(
     },
   },
 );
+
+// Ensure cross-team directories exist
+void ensureCrossTeamDirs();
 
 // Enter alternate screen buffer (like Gemini CLI)
 // This prevents flickering by giving us a dedicated screen

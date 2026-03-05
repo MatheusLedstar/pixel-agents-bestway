@@ -70,6 +70,10 @@ export function calculateLayout(termSize: TerminalSize, agentCount: number): Gri
     deskWidth = 12;
     compact = true;
   } else if (termCols >= 160) {
+    deskWidth = 28;
+  } else if (termCols >= 130) {
+    deskWidth = 24;
+  } else if (termCols >= 100) {
     deskWidth = 20;
   }
 
@@ -84,8 +88,8 @@ export function calculateLayout(termSize: TerminalSize, agentCount: number): Gri
     gridCols = Math.min(maxCols, Math.max(2, Math.ceil(Math.sqrt(agentCount))));
   }
 
-  // COMMS panel width
-  const commsWidth = Math.min(50, Math.max(30, termCols - 20));
+  // COMMS panel width — use most of terminal width
+  const commsWidth = Math.min(termCols - 10, Math.max(40, Math.floor(termCols * 0.7)));
 
   // Vertical space: rows available for tasks/messages below the grid
   const gridRows = Math.ceil(agentCount / gridCols);

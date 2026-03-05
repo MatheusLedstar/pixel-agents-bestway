@@ -8,6 +8,7 @@ export type WatchCallback = (event: WatchEvent, path: string) => void;
 const CLAUDE_DIR = join(homedir(), '.claude');
 const TEAMS_DIR = join(CLAUDE_DIR, 'teams');
 const TASKS_DIR = join(CLAUDE_DIR, 'tasks');
+const CROSS_TEAM_DIR = join(CLAUDE_DIR, 'cross-team');
 
 const DEBOUNCE_MS = 500;
 
@@ -81,10 +82,24 @@ export class FileWatcher {
     this.watchers.push(watcher);
   }
 
+  watchCrossTeam(): void {
+    const pattern = join(CROSS_TEAM_DIR, '**/*.json');
+    const watcher = watch(pattern, {
+      ignoreInitial: true,
+      persistent: true,
+      awaitWriteFinish: { stabilityThreshold: 300, pollInterval: 100 },
+    });
+    watcher.on('add', (p) => this.notify('add', p));
+    watcher.on('change', (p) => this.notify('change', p));
+    watcher.on('unlink', (p) => this.notify('unlink', p));
+    this.watchers.push(watcher);
+  }
+
   watchAll(): void {
     this.watchTeams();
     this.watchTasks();
     this.watchInboxes();
+    this.watchCrossTeam();
   }
 
   async close(): Promise<void> {
@@ -98,4 +113,4 @@ export class FileWatcher {
   }
 }
 
-export { CLAUDE_DIR, TEAMS_DIR, TASKS_DIR };
+export { CLAUDE_DIR, TEAMS_DIR, TASKS_DIR, CROSS_TEAM_DIR };

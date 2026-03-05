@@ -4,7 +4,8 @@ import { loadAllTeams } from '../core/teamParser.js';
 import { loadAllTeamsTasks } from '../core/taskParser.js';
 import { loadAllTeamsMessages } from '../core/inboxParser.js';
 import { loadAllTeamsSessions } from '../core/sessionParser.js';
-import type { Team, Task, Message, TeamTokens } from '../core/types.js';
+import { registerTeam } from '../core/crossTeamParser.js';
+import type { Team, Task, Message, TeamTokens, TeamCard } from '../core/types.js';
 import type { TeamSessionData } from '../core/sessionParser.js';
 import { SPINNER_FRAMES } from '../utils/icons.js';
 
@@ -55,7 +56,7 @@ interface GlobalData {
   spinnerFrame: number;
 }
 
-export function useGlobalData(): GlobalData {
+export function useGlobalData(filterTeam?: string): GlobalData {
   const [teams, setTeams] = useState<Team[]>([]);
   const [allTasks, setAllTasks] = useState<Map<string, Task[]>>(new Map());
   const [allMessages, setAllMessages] = useState<Map<string, Message[]>>(new Map());
@@ -64,10 +65,14 @@ export function useGlobalData(): GlobalData {
   const [loading, setLoading] = useState(true);
   const [spinnerFrame, setSpinnerFrame] = useState(0);
   const watcherRef = useRef<FileWatcher | null>(null);
+  const lastRegistryUpdate = useRef(0);
 
   const refreshAll = useCallback(async () => {
     try {
-      const loadedTeams = await loadAllTeams();
+      let loadedTeams = await loadAllTeams();
+      if (filterTeam) {
+        loadedTeams = loadedTeams.filter((t) => t.name === filterTeam);
+      }
       setTeams(loadedTeams);
 
       const names = loadedTeams.map((t) => t.name);
@@ -95,11 +100,36 @@ export function useGlobalData(): GlobalData {
       }
       setAllTokens(tokensMap);
 
+      // Auto-register teams in cross-team registry (throttled to every 30s — W3)
+      const now = Date.now();
+      if (now - lastRegistryUpdate.current > 30_000) {
+        lastRegistryUpdate.current = now;
+        for (const team of loadedTeams) {
+          const teamTasks = tasksMap.get(team.name) ?? [];
+          const lead = team.members.find((m) => m.name.includes('lead')) ?? team.members[0];
+          const card: TeamCard = {
+            teamName: team.name,
+            description: team.description,
+            leadAgent: lead?.name ?? '',
+            memberCount: team.members.length,
+            tasksSummary: {
+              pending: teamTasks.filter((t) => t.status === 'pending').length,
+              in_progress: teamTasks.filter((t) => t.status === 'in_progress').length,
+              completed: teamTasks.filter((t) => t.status === 'completed').length,
+            },
+            status: 'active',
+            registeredAt: team.createdAt ?? Date.now(),
+            lastHeartbeat: Date.now(),
+          };
+          registerTeam(card).catch(() => {});
+        }
+      }
+
       setLoading(false);
     } catch {
       setLoading(false);
     }
-  }, []);
+  }, [filterTeam]);
 
   useEffect(() => {
     const watcher = new FileWatcher();
@@ -117,10 +147,10 @@ export function useGlobalData(): GlobalData {
       void refreshAll();
     }, 3000);
 
-    // Single global spinner timer (150ms = smooth but fewer re-renders)
+    // Global animation timer (100ms = ~10fps, smooth animations)
     const spinnerInterval = setInterval(() => {
-      setSpinnerFrame((prev) => (prev + 1) % SPINNER_FRAMES.length);
-    }, 150);
+      setSpinnerFrame((prev) => (prev + 1) % 256);
+    }, 100);
 
     return () => {
       clearInterval(dataInterval);

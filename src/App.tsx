@@ -11,6 +11,11 @@ import TeamDetailView from './views/TeamDetailView.js';
 import TaskBoardView from './views/TaskBoardView.js';
 import MessagesView from './views/MessagesView.js';
 import AgentDetailView from './views/AgentDetailView.js';
+import UsageView from './views/UsageView.js';
+import CrossTeamView from './views/CrossTeamView.js';
+import CrossTeamCallPanel from './components/CrossTeamCallPanel.js';
+import { useUsageData } from './hooks/useUsageData.js';
+import { useCrossTeamData } from './hooks/useCrossTeamData.js';
 
 interface AppProps {
   filterTeam?: string;
@@ -23,8 +28,11 @@ export default function App({ filterTeam }: AppProps) {
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const { teams, allTasks, allMessages, allTokens, allSessions, loading, spinnerFrame } = useGlobalData();
+  const { teams, allTasks, allMessages, allTokens, allSessions, loading, spinnerFrame } = useGlobalData(filterTeam);
   const termSize = useTerminalSize();
+  const { usage, refreshUsage } = useUsageData();
+  const { crossTeam } = useCrossTeamData();
+  const [prevView, setPrevView] = useState<ViewType>('dashboard');
 
   const filteredTeams = useMemo(() => {
     if (filterTeam) return teams.filter((t) => t.name === filterTeam);
@@ -72,7 +80,9 @@ export default function App({ filterTeam }: AppProps) {
   }, []);
 
   const handleBack = useCallback(() => {
-    if (currentView === 'agent-detail') {
+    if (currentView === 'usage' || currentView === 'cross-team') {
+      setCurrentView(prevView);
+    } else if (currentView === 'agent-detail') {
       setSelectedAgent(null);
       setCurrentView('team-detail');
     } else if (currentView !== 'dashboard') {
@@ -82,7 +92,7 @@ export default function App({ filterTeam }: AppProps) {
       setSelectedIndex(0);
       setCurrentView('dashboard');
     }
-  }, [currentView, filterTeam]);
+  }, [currentView, filterTeam, prevView]);
 
   useInput((input, key) => {
     if (input === 'q') {
@@ -92,6 +102,25 @@ export default function App({ filterTeam }: AppProps) {
 
     if (key.escape) {
       handleBack();
+      return;
+    }
+
+    if (currentView === 'usage') {
+      if (input === 'r') {
+        refreshUsage();
+      }
+      return;
+    }
+
+    if (input === 'u') {
+      setPrevView(currentView);
+      setCurrentView('usage');
+      return;
+    }
+
+    if (input === 'c' && (currentView === 'dashboard' || currentView === 'team-detail')) {
+      setPrevView(currentView);
+      setCurrentView('cross-team');
       return;
     }
 
@@ -136,6 +165,9 @@ export default function App({ filterTeam }: AppProps) {
           totalTokens={0}
           isRealTokens={false}
           spinnerFrame={spinnerFrame}
+          filterTeam={filterTeam}
+          hasActiveCall={false}
+          crossTeamCount={0}
         />
         <Box padding={1}>
           <Spinner label="Loading teams..." frame={spinnerFrame} />
@@ -169,15 +201,22 @@ export default function App({ filterTeam }: AppProps) {
           return null;
         }
         return (
-          <TeamDetailView
-            team={selectedTeamObj}
-            tasks={selectedTeamTasks}
-            messages={selectedTeamMessages}
-            tokens={allTokens.get(selectedTeamObj.name)}
-            session={allSessions.get(selectedTeamObj.name)}
-            spinnerFrame={spinnerFrame}
-            termSize={termSize}
-          />
+          <>
+            <CrossTeamCallPanel
+              crossTeam={crossTeam}
+              currentTeamName={selectedTeamObj.name}
+              spinnerFrame={spinnerFrame}
+            />
+            <TeamDetailView
+              team={selectedTeamObj}
+              tasks={selectedTeamTasks}
+              messages={selectedTeamMessages}
+              tokens={allTokens.get(selectedTeamObj.name)}
+              session={allSessions.get(selectedTeamObj.name)}
+              spinnerFrame={spinnerFrame}
+              termSize={termSize}
+            />
+          </>
         );
 
       case 'task-board':
@@ -211,6 +250,23 @@ export default function App({ filterTeam }: AppProps) {
           />
         );
 
+      case 'usage':
+        return (
+          <UsageView
+            usage={usage}
+            spinnerFrame={spinnerFrame}
+            termSize={termSize}
+          />
+        );
+
+      case 'cross-team':
+        return (
+          <CrossTeamView
+            crossTeam={crossTeam}
+            spinnerFrame={spinnerFrame}
+          />
+        );
+
       default:
         return null;
     }
@@ -226,6 +282,9 @@ export default function App({ filterTeam }: AppProps) {
         totalTokens={totalTokens}
         isRealTokens={hasRealTokens}
         spinnerFrame={spinnerFrame}
+        filterTeam={filterTeam}
+        hasActiveCall={crossTeam.activeCall !== null}
+        crossTeamCount={crossTeam.registry.length}
       />
       <Box flexDirection="column" flexGrow={1} paddingX={1} paddingY={1}>
         {renderView()}

@@ -15,14 +15,17 @@ interface AgentDeskProps {
   compact?: boolean;
 }
 
+// Pulse effect: border alternates brightness with spinnerFrame
+const PULSE_CHARS = ['░', '▒', '▓', '█', '▓', '▒', '░', ' '];
+
 export default function AgentDesk({ agent, activity, task, spinnerFrame, deskWidth, compact }: AgentDeskProps) {
-  const config = getAvatarConfig(agent.agentType);
+  const config = getAvatarConfig(agent.agentType, agent.name);
   const visual = mapActivity(activity);
 
   const isActive = visual.state !== 'idle';
   const isDone = task?.status === 'completed';
 
-  // Neon border: green (done) > red (error) > agent color (active) > gray (idle)
+  // Neon border color
   let borderColor = 'gray';
   if (isDone || visual.state === 'celebrating') borderColor = 'greenBright';
   else if (visual.state === 'error') borderColor = 'redBright';
@@ -31,7 +34,6 @@ export default function AgentDesk({ agent, activity, task, spinnerFrame, deskWid
   // Monitor bar: scale to desk width
   const barLen = Math.max(4, deskWidth - 4);
   const rawFrame = visual.monitorFrames[spinnerFrame % visual.monitorFrames.length] ?? '';
-  // Scale monitor bar to fit desk width
   const monitorBar = rawFrame.length >= barLen
     ? rawFrame.slice(0, barLen)
     : rawFrame + '▱'.repeat(Math.max(0, barLen - rawFrame.length));
@@ -56,6 +58,9 @@ export default function AgentDesk({ agent, activity, task, spinnerFrame, deskWid
     activityColor = 'greenBright';
   }
 
+  // Pulse indicator for active agents
+  const pulse = isActive ? PULSE_CHARS[spinnerFrame % PULSE_CHARS.length] : '';
+
   const nameMaxLen = compact ? 8 : deskWidth;
 
   return (
@@ -63,7 +68,7 @@ export default function AgentDesk({ agent, activity, task, spinnerFrame, deskWid
       {/* Activity label above desk */}
       {activityText ? (
         <Text color={activityColor} bold wrap="truncate">
-          {activityIcon} <Text color={activityColor}>{activityText}</Text>
+          {activityIcon} {activityText}
         </Text>
       ) : (
         <Text> </Text>
@@ -77,11 +82,12 @@ export default function AgentDesk({ agent, activity, task, spinnerFrame, deskWid
         flexDirection="column"
         alignItems="center"
       >
-        {/* Agent icon + role tag */}
+        {/* Agent icon + role tag + pulse */}
         <Text>
           <Text color={config.color} bold>{config.icon}</Text>
           <Text color="gray">:</Text>
           <Text color={config.color}>{config.tag}</Text>
+          {pulse ? <Text color={borderColor}> {pulse}</Text> : null}
         </Text>
 
         {/* Monitor bar — animated */}
@@ -91,7 +97,7 @@ export default function AgentDesk({ agent, activity, task, spinnerFrame, deskWid
       </Box>
 
       {/* Agent name */}
-      <Text color={config.color} bold dimColor={!isActive}>
+      <Text color={config.color} bold dimColor={!isActive && !isDone}>
         {truncate(agent.name, nameMaxLen)}
       </Text>
     </Box>
