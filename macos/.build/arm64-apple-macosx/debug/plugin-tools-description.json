@@ -1,0 +1,1298 @@
+{
+  "builtTestProducts" : [
+    {
+      "binaryPath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.xctest/Contents/MacOS/PixelAgentsPackageTests",
+      "packagePath" : "/Users/matheus.venancio/pixel-agents-bestway/macos",
+      "productName" : "PixelAgentsPackageTests"
+    }
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.PixelAgents-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/sources",
+      "importPath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/App/AppIcon.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/App/PixelAgentsApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/ActivityType.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/AgentActivity.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/AgentTask.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/DiffData.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/InboxMessage.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/SessionEntry.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/TeamConfig.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/TeamTelemetry.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/ClaudeDataService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/FileWatcher.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/SessionParser.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/TokenTracker.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Theme/PixelTheme.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Components/DiffViewerOverlay.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Components/PixelAvatar.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Components/TeamChatRoom.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/ActivityFeed.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/AgentCardsSection.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/DashboardView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/MainContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/MetricCard.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/TeamHeader.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Sidebar/TeamsSidebar.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/swift-version--27E705A18C1EE0AC.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "PixelAgents",
+      "moduleOutputPath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/Modules/PixelAgents.swiftmodule",
+      "objects" : [
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AppIcon.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/PixelAgentsApp.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/ActivityType.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AgentActivity.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AgentTask.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/DiffData.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/InboxMessage.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/SessionEntry.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamConfig.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamTelemetry.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/ClaudeDataService.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/FileWatcher.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/SessionParser.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TokenTracker.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/PixelTheme.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/DiffViewerOverlay.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/PixelAvatar.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamChatRoom.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/ActivityFeed.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AgentCardsSection.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/DashboardView.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/MainContentView.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/MetricCard.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamHeader.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamsSidebar.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "PixelAgents_main",
+        "-swift-version",
+        "5",
+        "-I",
+        "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/macosx/testing",
+        "-L",
+        "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/macosx/testing",
+        "-plugin-path",
+        "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "macos"
+      ],
+      "outputFileMapPath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AppIcon.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/PixelAgentsApp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/ActivityType.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AgentActivity.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AgentTask.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/DiffData.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/InboxMessage.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/SessionEntry.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamConfig.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamTelemetry.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/ClaudeDataService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/FileWatcher.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/SessionParser.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TokenTracker.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/PixelTheme.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/DiffViewerOverlay.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/PixelAvatar.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamChatRoom.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/ActivityFeed.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AgentCardsSection.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/DashboardView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/MainContentView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/MetricCard.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamHeader.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamsSidebar.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/Modules/PixelAgents.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/App/AppIcon.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/App/PixelAgentsApp.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/ActivityType.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/AgentActivity.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/AgentTask.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/DiffData.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/InboxMessage.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/SessionEntry.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/TeamConfig.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/TeamTelemetry.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/ClaudeDataService.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/FileWatcher.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/SessionParser.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/TokenTracker.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Theme/PixelTheme.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Components/DiffViewerOverlay.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Components/PixelAvatar.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Components/TeamChatRoom.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/ActivityFeed.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/AgentCardsSection.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/DashboardView.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/MainContentView.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/MetricCard.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/TeamHeader.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Sidebar/TeamsSidebar.swift"
+      ],
+      "tempsPath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.PixelAgentsPackageTests-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.build/sources",
+      "importPath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.derived/runner.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/swift-version--27E705A18C1EE0AC.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/Modules/PixelAgentsTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "PixelAgentsPackageTests",
+      "moduleOutputPath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/Modules/PixelAgentsPackageTests.swiftmodule",
+      "objects" : [
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.build/runner.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.build/include/PixelAgentsPackageTests-Swift.h",
+        "-I",
+        "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/macosx/testing",
+        "-L",
+        "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/macosx/testing",
+        "-plugin-path",
+        "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "macos"
+      ],
+      "outputFileMapPath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.build/runner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/Modules/PixelAgentsPackageTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.derived/runner.swift"
+      ],
+      "tempsPath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.PixelAgentsTests-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/sources",
+      "importPath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/AgentColorPaletteTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/ClaudeDataServiceTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/DiffDataTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/FileWatcherTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/ModelTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/PixelAgentsTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/PixelThemeTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/SessionParserTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/StressTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/swift-version--27E705A18C1EE0AC.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "PixelAgentsTests",
+      "moduleOutputPath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/Modules/PixelAgentsTests.swiftmodule",
+      "objects" : [
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/AgentColorPaletteTests.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/ClaudeDataServiceTests.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/DiffDataTests.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/FileWatcherTests.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/ModelTests.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/PixelAgentsTests.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/PixelThemeTests.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/SessionParserTests.swift.o",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/StressTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-swift-version",
+        "5",
+        "-I",
+        "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/macosx/testing",
+        "-L",
+        "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/macosx/testing",
+        "-plugin-path",
+        "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "macos"
+      ],
+      "outputFileMapPath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/AgentColorPaletteTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/ClaudeDataServiceTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/DiffDataTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/FileWatcherTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/ModelTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/PixelAgentsTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/PixelThemeTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/SessionParserTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/StressTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/Modules/PixelAgentsTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/AgentColorPaletteTests.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/ClaudeDataServiceTests.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/DiffDataTests.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/FileWatcherTests.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/ModelTests.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/PixelAgentsTests.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/PixelThemeTests.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/SessionParserTests.swift",
+        "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/StressTests.swift"
+      ],
+      "tempsPath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "PixelAgents" : [
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "PixelAgents",
+      "-package-name",
+      "macos",
+      "-c",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/App/AppIcon.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/App/PixelAgentsApp.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/ActivityType.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/AgentActivity.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/AgentTask.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/DiffData.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/InboxMessage.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/SessionEntry.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/TeamConfig.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/TeamTelemetry.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/ClaudeDataService.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/FileWatcher.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/SessionParser.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/TokenTracker.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Theme/PixelTheme.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Components/DiffViewerOverlay.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Components/PixelAvatar.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Components/TeamChatRoom.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/ActivityFeed.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/AgentCardsSection.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/DashboardView.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/MainContentView.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/MetricCard.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/TeamHeader.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Sidebar/TeamsSidebar.swift",
+      "-I",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "PixelAgents_main",
+      "-swift-version",
+      "5",
+      "-I",
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/macosx/testing",
+      "-L",
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/macosx/testing",
+      "-plugin-path",
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "macos",
+      "-driver-use-frontend-path",
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/bin/swiftc"
+    ],
+    "PixelAgentsPackageTests" : [
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "PixelAgentsPackageTests",
+      "-package-name",
+      "macos",
+      "-c",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.derived/runner.swift",
+      "-I",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.build/include/PixelAgentsPackageTests-Swift.h",
+      "-I",
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/macosx/testing",
+      "-L",
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/macosx/testing",
+      "-plugin-path",
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "macos",
+      "-driver-use-frontend-path",
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/bin/swiftc"
+    ],
+    "PixelAgentsTests" : [
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "PixelAgentsTests",
+      "-package-name",
+      "macos",
+      "-c",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/AgentColorPaletteTests.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/ClaudeDataServiceTests.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/DiffDataTests.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/FileWatcherTests.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/ModelTests.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/PixelAgentsTests.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/PixelThemeTests.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/SessionParserTests.swift",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/StressTests.swift",
+      "-I",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-swift-version",
+      "5",
+      "-I",
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/macosx/testing",
+      "-L",
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/macosx/testing",
+      "-plugin-path",
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "macos",
+      "-driver-use-frontend-path",
+      "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "PixelAgents" : [
+
+    ],
+    "PixelAgentsPackageTests" : [
+      "PixelAgentsTests",
+      "PixelAgents"
+    ],
+    "PixelAgentsTests" : [
+      "PixelAgents"
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+    "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.derived/runner.swift" : {
+      "inputs" : [
+
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.derived/runner.swift"
+        }
+      ]
+    }
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents-entitlement.plist" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<entitlement-plist>"
+        },
+        {
+          "kind" : "virtual",
+          "name" : "<com.apple.security.get-task-allow>"
+        }
+      ],
+      "outputFilePath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents-entitlement.plist"
+    },
+    "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/App/AppIcon.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/App/PixelAgentsApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/ActivityType.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/AgentActivity.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/AgentTask.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/DiffData.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/InboxMessage.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/SessionEntry.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/TeamConfig.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Models/TeamTelemetry.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/ClaudeDataService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/FileWatcher.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/SessionParser.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Services/TokenTracker.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Theme/PixelTheme.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Components/DiffViewerOverlay.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Components/PixelAvatar.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Components/TeamChatRoom.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/ActivityFeed.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/AgentCardsSection.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/DashboardView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/MainContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/MetricCard.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Dashboard/TeamHeader.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Sources/PixelAgents/Views/Sidebar/TeamsSidebar.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/sources"
+    },
+    "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/ActivityFeed.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/ActivityType.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AgentActivity.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AgentCardsSection.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AgentTask.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AppIcon.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/ClaudeDataService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/DashboardView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/DiffData.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/DiffViewerOverlay.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/FileWatcher.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/InboxMessage.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/MainContentView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/MetricCard.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/PixelAgentsApp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/PixelAvatar.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/PixelTheme.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/SessionEntry.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/SessionParser.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamChatRoom.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamConfig.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamHeader.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamTelemetry.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamsSidebar.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TokenTracker.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.product/Objects.LinkFileList"
+    },
+    "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.derived/runner.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.build/sources"
+    },
+    "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/ActivityFeed.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/ActivityType.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AgentActivity.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AgentCardsSection.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AgentTask.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/AppIcon.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/ClaudeDataService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/DashboardView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/DiffData.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/DiffViewerOverlay.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/FileWatcher.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/InboxMessage.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/MainContentView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/MetricCard.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/PixelAgentsApp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/PixelAvatar.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/PixelTheme.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/SessionEntry.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/SessionParser.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamChatRoom.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamConfig.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamHeader.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamTelemetry.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TeamsSidebar.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgents.build/TokenTracker.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.build/runner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/AgentColorPaletteTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/ClaudeDataServiceTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/DiffDataTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/FileWatcherTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/ModelTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/PixelAgentsTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/PixelThemeTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/SessionParserTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/StressTests.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsPackageTests.product/Objects.LinkFileList"
+    },
+    "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/AgentColorPaletteTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/ClaudeDataServiceTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/DiffDataTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/FileWatcherTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/ModelTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/PixelAgentsTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/PixelThemeTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/SessionParserTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/pixel-agents-bestway/macos/Tests/PixelAgentsTests/StressTests.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/PixelAgentsTests.build/sources"
+    },
+    "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/swift-version--27E705A18C1EE0AC.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/matheus.venancio/Library/Developer/Toolchains/swift-6.2.3-RELEASE.xctoolchain/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/matheus.venancio/pixel-agents-bestway/macos/.build/arm64-apple-macosx/debug/swift-version--27E705A18C1EE0AC.txt"
+    }
+  }
+}
