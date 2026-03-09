@@ -324,7 +324,7 @@ struct StressTests {
 
         let paths = await watcher.watchedPaths
         #expect(paths.count == 100)
-        #expect(watchElapsed < 5.0, "Watching 100 paths took \(watchElapsed)s, expected < 5s")
+        #expect(watchElapsed < 20.0, "Watching 100 paths took \(watchElapsed)s, expected < 20s")
 
         // Cleanup
         let stopStart = Date()

@@ -57,7 +57,8 @@ struct AgentCardsSection: View {
                                 totalLinesDeleted: 0,
                                 tokensUsed: 0,
                                 tasksCompleted: 0,
-                                tasksTotal: 0
+                                tasksTotal: 0,
+                                lastActivity: nil
                             )
                         let agentTasks = tasks.filter { $0.owner == member.name }
                         let agentEntries = entries.filter { $0.agentName == member.name }
@@ -276,15 +277,17 @@ struct AgentCard: View {
                 Text("·")
                     .foregroundStyle(PixelTheme.textMuted)
 
-                HStack(spacing: 2) {
-                    Text("+\(activity.totalLinesAdded)")
-                        .font(.jetBrainsMono(10, weight: .medium))
-                        .foregroundStyle(PixelTheme.green)
-                    Text("/")
-                        .foregroundStyle(PixelTheme.textMuted)
-                    Text("-\(activity.totalLinesDeleted)")
-                        .font(.jetBrainsMono(10, weight: .medium))
-                        .foregroundStyle(PixelTheme.red)
+                if activity.hasLineData {
+                    HStack(spacing: 2) {
+                        Text("+\(activity.totalLinesAdded)")
+                            .font(.jetBrainsMono(10, weight: .medium))
+                            .foregroundStyle(PixelTheme.green)
+                        Text("/")
+                            .foregroundStyle(PixelTheme.textMuted)
+                        Text("-\(activity.totalLinesDeleted)")
+                            .font(.jetBrainsMono(10, weight: .medium))
+                            .foregroundStyle(PixelTheme.red)
+                    }
                 }
 
                 Spacer()

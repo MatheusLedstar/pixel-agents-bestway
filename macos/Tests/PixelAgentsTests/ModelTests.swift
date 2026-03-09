@@ -346,7 +346,7 @@ struct InboxMessageTests {
             text: "{\"type\": \"task_assignment\", \"subject\": \"Build feature\"}",
             timestamp: Date()
         )
-        #expect(structuredMsg.displayContent == "[task_assignment] Build feature")
+        #expect(structuredMsg.displayContent == "[task assignment] Build feature")
 
         let plainMsg = InboxMessage(
             from: "agent",
@@ -369,14 +369,14 @@ struct InboxMessageTests {
     }
 
     @Test func inboxMessageDisplayContentJsonWithTypeNoSubject() {
-        // JSON with "type" but no "subject" should fall back to raw text
+        // JSON with "type" but no "subject" => displayType is set, displayBody falls back to raw text
         let msg = InboxMessage(
             from: "agent",
             text: "{\"type\": \"status_update\", \"data\": 42}",
             timestamp: Date()
         )
-        // No "subject" key => returns raw text
-        #expect(msg.displayContent == "{\"type\": \"status_update\", \"data\": 42}")
+        #expect(msg.displayType == "status update")
+        #expect(msg.displayContent == "[status update] {\"type\": \"status_update\", \"data\": 42}")
     }
 
     @Test func inboxMessageInvalidTimestampFallsBackToNow() throws {
@@ -674,7 +674,7 @@ struct RealDataValidationTests {
         #expect(message.from == "qa-tester")
         #expect(message.read == false)
         #expect(message.parsedType == "task_assignment")
-        #expect(message.displayContent == "[task_assignment] Validar dados")
+        #expect(message.displayContent == "[task assignment] Validar dados")
     }
 
     @Test func inboxMessageDecodesIdleNotification() throws {
@@ -1112,15 +1112,15 @@ struct AgentActivityTests {
     @Test func agentActivityEquatable() {
         let a1 = AgentActivity(agentName: "a", currentAction: .reading, currentFile: nil,
                                 totalLinesAdded: 10, totalLinesDeleted: 5, tokensUsed: 100,
-                                tasksCompleted: 1, tasksTotal: 3)
+                                tasksCompleted: 1, tasksTotal: 3, lastActivity: nil)
         let a2 = AgentActivity(agentName: "a", currentAction: .reading, currentFile: nil,
                                 totalLinesAdded: 10, totalLinesDeleted: 5, tokensUsed: 100,
-                                tasksCompleted: 1, tasksTotal: 3)
+                                tasksCompleted: 1, tasksTotal: 3, lastActivity: nil)
         #expect(a1 == a2)
 
         let a3 = AgentActivity(agentName: "b", currentAction: .reading, currentFile: nil,
                                 totalLinesAdded: 10, totalLinesDeleted: 5, tokensUsed: 100,
-                                tasksCompleted: 1, tasksTotal: 3)
+                                tasksCompleted: 1, tasksTotal: 3, lastActivity: nil)
         #expect(a1 != a3)
     }
 }

@@ -271,11 +271,18 @@ final class ClaudeDataService {
             }
         }
 
+        // Pre-group messages by sender
+        var messagesByAgent: [String: [InboxMessage]] = [:]
+        for msg in messages {
+            messagesByAgent[msg.from, default: []].append(msg)
+        }
+
         activities = allMembers.map { member in
             AgentActivity.from(
                 agentName: member.name,
                 entries: entriesByAgent[member.name] ?? [],
-                tasks: tasks
+                tasks: tasks,
+                messages: messagesByAgent[member.name] ?? []
             )
         }
     }

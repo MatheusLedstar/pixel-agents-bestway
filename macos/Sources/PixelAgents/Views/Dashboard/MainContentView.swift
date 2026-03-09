@@ -39,6 +39,9 @@ struct MainContentView: View {
                     // Team chat room (fixed or maximized width, scrolls internally)
                     TeamChatRoom(
                         messages: dataService.messages,
+                        tasks: dataService.tasks,
+                        telemetry: dataService.telemetry,
+                        teamName: team.name,
                         onlineCount: dataService.activeAgentCount,
                         isMaximized: $isChatMaximized
                     )

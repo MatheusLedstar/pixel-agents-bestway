@@ -4,8 +4,13 @@ import SwiftUI
 
 struct TeamChatRoom: View {
     let messages: [InboxMessage]
+    let tasks: [AgentTask]
+    let telemetry: TeamTelemetry
+    let teamName: String
     let onlineCount: Int
     @Binding var isMaximized: Bool
+    @State private var showCTOSummary = false
+    @State private var summaryService = CTOSummaryService()
 
     private var visibleMessages: [InboxMessage] {
         messages.filter { !$0.isProtocolMessage }
@@ -20,6 +25,33 @@ struct TeamChatRoom: View {
                     .foregroundStyle(PixelTheme.textPrimary)
 
                 Spacer()
+
+                // CTO Summary button
+                Button {
+                    showCTOSummary = true
+                    Task {
+                        await summaryService.generate(
+                            teamName: teamName,
+                            messages: messages,
+                            tasks: tasks,
+                            telemetry: telemetry
+                        )
+                    }
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "doc.text.magnifyingglass")
+                            .font(.system(size: 9, weight: .medium))
+                        Text("CTO Summary")
+                            .font(.inter(9, weight: .semibold))
+                    }
+                    .foregroundStyle(PixelTheme.accentOrange)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(PixelTheme.accentOrange.opacity(0.12))
+                    .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .help("Gerar resumo executivo para CTO")
 
                 // Online badge
                 HStack(spacing: 4) {
@@ -85,6 +117,222 @@ struct TeamChatRoom: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(PixelTheme.purple.opacity(0.082), lineWidth: 1)
         )
+        .sheet(isPresented: $showCTOSummary) {
+            CTOSummarySheet(service: summaryService, teamName: teamName, isPresented: $showCTOSummary)
+        }
+    }
+}
+
+// MARK: - CTO Summary Sheet
+
+struct CTOSummarySheet: View {
+    let service: CTOSummaryService
+    let teamName: String
+    @Binding var isPresented: Bool
+
+    var body: some View {
+        VStack(spacing: 0) {
+            // Header
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("CTO Executive Summary")
+                        .font(.inter(16, weight: .bold))
+                        .foregroundStyle(PixelTheme.textPrimary)
+                    Text(teamName)
+                        .font(.inter(11, weight: .medium))
+                        .foregroundStyle(PixelTheme.accentOrange)
+                }
+
+                Spacer()
+
+                if service.isGenerating {
+                    ProgressView()
+                        .controlSize(.small)
+                        .padding(.trailing, 8)
+                }
+
+                // Copy button
+                if !service.summary.isEmpty {
+                    Button {
+                        NSPasteboard.general.clearContents()
+                        NSPasteboard.general.setString(service.summary, forType: .string)
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "doc.on.doc")
+                                .font(.system(size: 10))
+                            Text("Copiar")
+                                .font(.inter(10, weight: .medium))
+                        }
+                        .foregroundStyle(PixelTheme.textSecondary)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.white.opacity(0.06))
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                    }
+                    .buttonStyle(.plain)
+                }
+
+                Button {
+                    isPresented = false
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(PixelTheme.textMuted)
+                        .padding(6)
+                        .background(Color.white.opacity(0.06))
+                        .clipShape(Circle())
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(20)
+
+            Rectangle()
+                .fill(Color.white.opacity(0.06))
+                .frame(height: 1)
+
+            // Content
+            ScrollView {
+                if service.isGenerating && service.summary.isEmpty {
+                    SummaryLoadingAnimation()
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 40)
+                } else if let error = service.error {
+                    VStack(spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle")
+                            .font(.system(size: 24))
+                            .foregroundStyle(PixelTheme.red)
+                        Text(error)
+                            .font(.inter(12, weight: .medium))
+                            .foregroundStyle(PixelTheme.textSecondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 60)
+                } else {
+                    VStack(alignment: .leading, spacing: 0) {
+                        if let attributed = try? AttributedString(
+                            markdown: service.summary,
+                            options: .init(interpretedSyntax: .full)
+                        ) {
+                            Text(attributed)
+                                .font(.inter(12, weight: .regular))
+                                .foregroundStyle(PixelTheme.textSecondary)
+                                .lineSpacing(3)
+                                .textSelection(.enabled)
+                        } else {
+                            Text(service.summary)
+                                .font(.inter(12, weight: .regular))
+                                .foregroundStyle(PixelTheme.textSecondary)
+                                .lineSpacing(3)
+                                .textSelection(.enabled)
+                        }
+                    }
+                    .padding(20)
+                }
+            }
+        }
+        .frame(width: 700, height: 600)
+        .background(PixelTheme.bgCard)
+    }
+}
+
+// MARK: - Chat Bubble
+
+// MARK: - Summary Loading Animation
+
+struct SummaryLoadingAnimation: View {
+    @State private var rotation: Double = 0
+    @State private var pulse: Bool = false
+    @State private var dotIndex: Int = 0
+
+    private let orbitColors: [Color] = [
+        PixelTheme.accentOrange,
+        PixelTheme.purple,
+        PixelTheme.green,
+        PixelTheme.blue
+    ]
+
+    private let phases = [
+        "Coletando mensagens dos agentes",
+        "Analisando progresso das tasks",
+        "Identificando padrões de colaboração",
+        "Gerando resumo executivo"
+    ]
+
+    var body: some View {
+        VStack(spacing: 24) {
+            // Orbiting dots animation
+            ZStack {
+                // Outer orbit ring
+                Circle()
+                    .stroke(Color.white.opacity(0.04), lineWidth: 1)
+                    .frame(width: 80, height: 80)
+
+                // Inner orbit ring
+                Circle()
+                    .stroke(Color.white.opacity(0.03), lineWidth: 1)
+                    .frame(width: 48, height: 48)
+
+                // Center pulsing icon
+                Image(systemName: "brain.head.profile")
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundStyle(PixelTheme.accentOrange)
+                    .scaleEffect(pulse ? 1.15 : 0.9)
+                    .opacity(pulse ? 1.0 : 0.6)
+
+                // Orbiting dots (outer)
+                ForEach(0..<4, id: \.self) { i in
+                    Circle()
+                        .fill(orbitColors[i])
+                        .frame(width: 8, height: 8)
+                        .shadow(color: orbitColors[i].opacity(0.5), radius: 4)
+                        .offset(y: -40)
+                        .rotationEffect(.degrees(rotation + Double(i) * 90))
+                }
+
+                // Orbiting dots (inner, reverse)
+                ForEach(0..<3, id: \.self) { i in
+                    Circle()
+                        .fill(Color.white.opacity(0.3))
+                        .frame(width: 5, height: 5)
+                        .offset(y: -24)
+                        .rotationEffect(.degrees(-rotation * 1.5 + Double(i) * 120))
+                }
+            }
+            .frame(width: 100, height: 100)
+
+            // Phase text
+            VStack(spacing: 6) {
+                Text(phases[dotIndex % phases.count])
+                    .font(.inter(12, weight: .medium))
+                    .foregroundStyle(PixelTheme.textSecondary)
+                    .contentTransition(.numericText())
+
+                // Animated dots
+                HStack(spacing: 4) {
+                    ForEach(0..<3, id: \.self) { i in
+                        Circle()
+                            .fill(PixelTheme.accentOrange)
+                            .frame(width: 4, height: 4)
+                            .opacity(dotIndex % 3 >= i ? 1.0 : 0.2)
+                    }
+                }
+            }
+        }
+        .onAppear {
+            withAnimation(.linear(duration: 3).repeatForever(autoreverses: false)) {
+                rotation = 360
+            }
+            withAnimation(.easeInOut(duration: 1.2).repeatForever()) {
+                pulse = true
+            }
+            // Cycle through phases
+            Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true) { _ in
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    dotIndex += 1
+                }
+            }
+        }
     }
 }
 

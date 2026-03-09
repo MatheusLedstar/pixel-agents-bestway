@@ -245,16 +245,16 @@ struct ClaudeDataServiceTests {
         service.activities = [
             AgentActivity(agentName: "a", currentAction: .reading, currentFile: nil,
                           totalLinesAdded: 0, totalLinesDeleted: 0, tokensUsed: 0,
-                          tasksCompleted: 0, tasksTotal: 0),
+                          tasksCompleted: 0, tasksTotal: 0, lastActivity: nil),
             AgentActivity(agentName: "b", currentAction: .idle, currentFile: nil,
                           totalLinesAdded: 0, totalLinesDeleted: 0, tokensUsed: 0,
-                          tasksCompleted: 0, tasksTotal: 0),
+                          tasksCompleted: 0, tasksTotal: 0, lastActivity: nil),
             AgentActivity(agentName: "c", currentAction: .writing, currentFile: nil,
                           totalLinesAdded: 0, totalLinesDeleted: 0, tokensUsed: 0,
-                          tasksCompleted: 0, tasksTotal: 0),
+                          tasksCompleted: 0, tasksTotal: 0, lastActivity: nil),
             AgentActivity(agentName: "d", currentAction: .done, currentFile: nil,
                           totalLinesAdded: 0, totalLinesDeleted: 0, tokensUsed: 0,
-                          tasksCompleted: 0, tasksTotal: 0),
+                          tasksCompleted: 0, tasksTotal: 0, lastActivity: nil),
         ]
 
         #expect(service.activeAgentCount == 2) // reading + writing
@@ -436,8 +436,8 @@ struct ClaudeDataServiceTests {
         defer { cleanup(tmpDir) }
 
         let service = ClaudeDataService(basePath: tmpDir)
-        // No team selected, refresh should still load teams
-        await service.refresh()
+        // No team selected, fullRefresh loads teams
+        await service.fullRefresh()
 
         #expect(service.teams.count == 2)
         #expect(service.selectedTeam == nil)
