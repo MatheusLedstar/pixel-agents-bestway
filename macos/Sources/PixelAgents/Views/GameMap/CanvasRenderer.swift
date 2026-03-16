@@ -315,26 +315,27 @@ struct CanvasRenderer {
     private func renderRoomLabels(_ ctx: inout GraphicsContext) {
         for room in world.rooms {
             let centerX = CGFloat(room.gridX) * tileSize + CGFloat(room.width) * tileSize / 2
+            // Place label INSIDE the room (2 tiles from top/bottom wall, not on the wall)
             let labelY: CGFloat
             if room.doorSide == .down {
-                labelY = CGFloat(room.gridY) * tileSize + 14
+                labelY = CGFloat(room.gridY) * tileSize + 2 * tileSize + 8
             } else {
-                labelY = CGFloat(room.gridY + room.height) * tileSize - 18
+                labelY = CGFloat(room.gridY + room.height) * tileSize - 2 * tileSize - 8
             }
 
-            // Room label with metallic plate background
-            let labelWidth = max(CGFloat(room.name.count) * 7 + 16, 60)
-            let plateBg = CGRect(x: centerX - labelWidth / 2, y: labelY - 8, width: labelWidth, height: 16)
-            let platePath = RoundedRectangle(cornerRadius: 3).path(in: plateBg)
-            ctx.fill(platePath, with: .color(Color(hex: 0xF5F5F5)))
-            ctx.stroke(platePath, with: .color(Color(hex: 0x9CA3AF).opacity(0.6)), lineWidth: 1)
+            // Room label with high-contrast background plate
+            let labelWidth = max(CGFloat(room.name.count) * 8 + 20, 70)
+            let plateBg = CGRect(x: centerX - labelWidth / 2, y: labelY - 10, width: labelWidth, height: 20)
+            let platePath = RoundedRectangle(cornerRadius: 4).path(in: plateBg)
+            ctx.fill(platePath, with: .color(Color(hex: 0x1A1A2E).opacity(0.85)))
+            ctx.stroke(platePath, with: .color(room.ledColor.opacity(0.7)), lineWidth: 1.5)
             // Accent line under label
-            let accentLine = CGRect(x: centerX - labelWidth / 2 + 4, y: labelY + 6, width: labelWidth - 8, height: 1.5)
-            ctx.fill(Path(accentLine), with: .color(room.ledColor.opacity(0.5)))
+            let accentLine = CGRect(x: centerX - labelWidth / 2 + 4, y: labelY + 7, width: labelWidth - 8, height: 2)
+            ctx.fill(Path(accentLine), with: .color(room.ledColor.opacity(0.6)))
 
             let text = Text(room.name)
-                .font(.system(size: 8.5, weight: .bold, design: .monospaced))
-                .foregroundColor(Color(hex: 0x374151))
+                .font(.system(size: 10, weight: .bold, design: .monospaced))
+                .foregroundColor(.white)
             ctx.draw(text, at: CGPoint(x: centerX, y: labelY), anchor: .center)
         }
     }

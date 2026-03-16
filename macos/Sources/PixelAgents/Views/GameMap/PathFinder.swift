@@ -81,13 +81,7 @@ struct PathFinder {
     private static func isWalkable(_ x: Int, _ y: Int, rows: Int, cols: Int, walls: [[Bool]], furniture: [[TileType?]]) -> Bool {
         guard x >= 0 && x < cols && y >= 0 && y < rows else { return false }
         if walls[y][x] { return false }
-        if let furn = furniture[y][x] {
-            switch furn {
-            case .floor, .door: return true
-            case .chair: return true // can walk through chairs
-            default: return false
-            }
-        }
+        // Agents can walk OVER all furniture — only walls block pathfinding
         return true
     }
 

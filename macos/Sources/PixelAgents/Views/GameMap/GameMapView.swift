@@ -155,8 +155,8 @@ struct GameMapView: View {
                 .overlay(PixelTheme.border)
 
             zoomButton(icon: "arrow.counterclockwise") {
-                world.cameraZoom = 1.0
-                world.cameraOffset = .zero
+                world.cameraZoom = 0.55
+                world.cameraOffset = CGPoint(x: 0, y: 0)
             }
         }
         .padding(6)
@@ -273,6 +273,11 @@ struct GameMapView: View {
         spriteSheet.prerender()
         syncAgentsToWorld()
 
+        // Delayed re-sync to pick up data that arrives after initial load
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            syncAgentsToWorld()
+        }
+
         gameTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { _ in
             Task { @MainActor in
                 updateGameState()
@@ -375,19 +380,33 @@ struct GameMapView: View {
         for member in members {
             let name = member.name
 
-            // Bug 2 fix: Infer activity from tasks when activities is empty
+            // Bug 3 fix: Improved activity inference from tasks + agent type
             let currentAction: ActivityType
             if let act = activities.first(where: { $0.agentName == name }) {
                 currentAction = act.currentAction
             } else {
-                // Infer from tasks
+                // Infer from tasks + agent type when no activity reported
                 let agentTasks = tasks.filter { $0.owner == name }
-                if agentTasks.contains(where: { $0.status == .inProgress }) {
-                    currentAction = .writing  // assume coding if has active task
-                } else if agentTasks.contains(where: { $0.status == .completed }) {
+                let hasInProgress = agentTasks.contains { $0.status == .inProgress }
+                let allDone = !agentTasks.isEmpty && agentTasks.allSatisfy { $0.status == .completed }
+
+                if hasInProgress {
+                    // Infer activity based on agent type
+                    switch member.agentType {
+                    case "tester-qa", "qa-reviewer": currentAction = .testing
+                    case "security-expert": currentAction = .reading
+                    case "devops": currentAction = .deploying
+                    case "sql-server-expert": currentAction = .writing
+                    case "tech-lead-gestor", "meta-orchestrator": currentAction = .thinking
+                    case "ux-designer": currentAction = .reading
+                    default: currentAction = .writing
+                    }
+                } else if allDone {
                     currentAction = .done
-                } else {
+                } else if agentTasks.isEmpty {
                     currentAction = .idle
+                } else {
+                    currentAction = .thinking  // has pending tasks, planning
                 }
             }
 
@@ -414,7 +433,7 @@ struct GameMapView: View {
                 character.toolDescription = classified.toolDescription
                 character.visualActivity = classified.visualActivity
 
-                // Check if zone changed
+                // Check if zone changed — only pathfind when MOVING between zones
                 let currentRoom = world.roomAt(gridX: character.gridX, gridY: character.gridY)
                 if currentRoom?.id != targetZone {
                     // Release old seat
@@ -427,7 +446,7 @@ struct GameMapView: View {
                         character.targetX = seat.gridX
                         character.targetY = seat.gridY
 
-                        // Find path
+                        // Pathfind from current position to new seat
                         let path = PathFinder.findPath(
                             from: (character.gridX, character.gridY),
                             to: (seat.gridX, seat.gridY),
@@ -448,81 +467,68 @@ struct GameMapView: View {
                             character.direction = seat.facingDirection
                         }
                     } else {
-                        // No seat available in zone - place in corridor
-                        let corridorX = world.rooms.first(where: { $0.id == targetZone })
-                            .map { $0.gridX + $0.width / 2 } ?? 25
-                        let corridorY = 15
-                        character.gridX = corridorX
-                        character.gridY = corridorY
-                        character.pixelX = CGFloat(corridorX) * world.tileSize
-                        character.pixelY = CGFloat(corridorY) * world.tileSize
+                        // No seat available — place in CENTER of target room (not corridor)
+                        if let room = world.rooms.first(where: { $0.id == targetZone }) {
+                            let centerX = room.gridX + room.width / 2
+                            let centerY = room.gridY + room.height / 2
+                            character.gridX = centerX
+                            character.gridY = centerY
+                            character.pixelX = CGFloat(centerX) * world.tileSize
+                            character.pixelY = CGFloat(centerY) * world.tileSize
+                        }
                         character.state = .idle
                     }
                 }
 
                 world.characters[idx] = character
             } else {
-                // New character - find a safe spawn point in the corridor
-                // Use the target room's center X on the corridor row for a clear spawn
-                let targetRoom = world.rooms.first(where: { $0.id == targetZone })
-                let spawnX = targetRoom.map { $0.gridX + $0.width / 2 } ?? 25
-                let spawnY = 15  // corridor row (guaranteed no walls)
-
-                // Verify spawn point is walkable, fall back to center corridor
-                let safeSpawnX: Int
-                if spawnX > 0 && spawnX < world.cols - 1
-                    && !world.wallTiles[spawnY][spawnX]
-                    && world.furnitureTiles[spawnY][spawnX] == nil {
-                    safeSpawnX = spawnX
-                } else {
-                    safeSpawnX = 25  // absolute fallback: center corridor
-                }
-
-                var character = AgentCharacter(
-                    id: name,
-                    agentType: member.agentType,
-                    gridX: safeSpawnX,
-                    gridY: spawnY
-                )
-                character.activity = currentAction
-                character.level = gameData.level
-                character.title = gameData.title
-                character.emote = emote
-                character.toolDescription = classified.toolDescription
-                character.visualActivity = classified.visualActivity
-
-                // Find seat in target zone
+                // Bug 2 fix: New character — TELEPORT directly to seat (no pathfinding on spawn)
                 if let seatIdx = world.availableSeat(in: targetZone) {
                     world.deskSeats[seatIdx].occupiedBy = name
                     let seat = world.deskSeats[seatIdx]
-                    character.targetX = seat.gridX
-                    character.targetY = seat.gridY
 
-                    let path = PathFinder.findPath(
-                        from: (safeSpawnX, spawnY),
-                        to: (seat.gridX, seat.gridY),
-                        walls: world.wallTiles,
-                        furniture: world.furnitureTiles
+                    var character = AgentCharacter(
+                        id: name,
+                        agentType: member.agentType,
+                        gridX: seat.gridX,
+                        gridY: seat.gridY
                     )
+                    character.pixelX = CGFloat(seat.gridX) * world.tileSize
+                    character.pixelY = CGFloat(seat.gridY) * world.tileSize
+                    character.state = .sittingAtDesk
+                    character.direction = seat.facingDirection
+                    character.activity = currentAction
+                    character.level = gameData.level
+                    character.title = gameData.title
+                    character.emote = emote
+                    character.toolDescription = classified.toolDescription
+                    character.visualActivity = classified.visualActivity
 
-                    if !path.isEmpty {
-                        character.path = path
-                        character.state = .walking
-                    } else {
-                        // Teleport directly to seat if pathfinding fails
-                        character.gridX = seat.gridX
-                        character.gridY = seat.gridY
-                        character.pixelX = CGFloat(seat.gridX) * world.tileSize
-                        character.pixelY = CGFloat(seat.gridY) * world.tileSize
-                        character.state = .sittingAtDesk
-                        character.direction = seat.facingDirection
-                    }
+                    world.characters.append(character)
                 } else {
-                    // No seat available - stay in corridor (agent is visible)
-                    character.state = .idle
-                }
+                    // No seat available — spawn in CENTER of target room
+                    let room = world.rooms.first(where: { $0.id == targetZone })
+                    let centerX = room.map { $0.gridX + $0.width / 2 } ?? 25
+                    let centerY = room.map { $0.gridY + $0.height / 2 } ?? 15
 
-                world.characters.append(character)
+                    var character = AgentCharacter(
+                        id: name,
+                        agentType: member.agentType,
+                        gridX: centerX,
+                        gridY: centerY
+                    )
+                    character.pixelX = CGFloat(centerX) * world.tileSize
+                    character.pixelY = CGFloat(centerY) * world.tileSize
+                    character.state = .idle
+                    character.activity = currentAction
+                    character.level = gameData.level
+                    character.title = gameData.title
+                    character.emote = emote
+                    character.toolDescription = classified.toolDescription
+                    character.visualActivity = classified.visualActivity
+
+                    world.characters.append(character)
+                }
             }
         }
 

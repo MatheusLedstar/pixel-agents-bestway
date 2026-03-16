@@ -78,8 +78,8 @@ class OfficeWorld {
     var deskSeats: [DeskSeat] = []
     var characters: [AgentCharacter] = []
 
-    var cameraOffset: CGPoint = .zero
-    var cameraZoom: CGFloat = 1.0
+    var cameraOffset: CGPoint = CGPoint(x: 0, y: 0)
+    var cameraZoom: CGFloat = 0.55
 
     let rooms: [OfficeRoom]
 
@@ -269,10 +269,10 @@ class OfficeWorld {
             }
 
         case .lounge:
-            // Sofa at top
+            // Sofa at top (3 tiles wide, not 5)
             let sofaY = y0 + 2
             let midX = x0 + innerW / 2
-            for dx in -2...2 {
+            for dx in -1...1 {
                 if isValid(sofaY, midX + dx) { furnitureTiles[sofaY][midX + dx] = .sofa }
             }
             // Coffee table center
@@ -289,8 +289,8 @@ class OfficeWorld {
                 if isValid(seatY, midX + dx) { furnitureTiles[seatY][midX + dx] = .chair }
                 deskSeats.append(DeskSeat(gridX: midX + dx, gridY: seatY, facingDirection: .up, roomId: room.id))
             }
-            // Sofa seats
-            for dx in stride(from: -2, through: 2, by: 2) {
+            // Sofa seats (matches 3-tile sofa)
+            for dx in [-1, 1] {
                 deskSeats.append(DeskSeat(gridX: midX + dx, gridY: sofaY, facingDirection: .down, roomId: room.id))
             }
 
