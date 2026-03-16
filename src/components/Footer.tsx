@@ -15,6 +15,7 @@ const KEYBINDINGS: Record<ViewType, KeyBinding[]> = {
   dashboard: [
     { key: '↑↓', label: 'Navigate' },
     { key: '↵', label: 'Select' },
+    { key: 'h', label: 'Toggle completed' },
     { key: 'c', label: 'Cross-Team' },
     { key: 'u', label: 'Usage' },
     { key: 'q', label: 'Quit' },
@@ -23,6 +24,7 @@ const KEYBINDINGS: Record<ViewType, KeyBinding[]> = {
     { key: 'Esc', label: 'Back' },
     { key: 'm', label: 'Messages' },
     { key: 't', label: 'Tasks' },
+    { key: 'g', label: 'Game Map' },
     { key: 'c', label: 'Cross-Team' },
     { key: 'u', label: 'Usage' },
     { key: '↵', label: 'Agent' },
@@ -50,6 +52,10 @@ const KEYBINDINGS: Record<ViewType, KeyBinding[]> = {
   'cross-team': [
     { key: 'Esc', label: 'Back' },
     { key: '↑↓', label: 'Scroll' },
+    { key: 'q', label: 'Quit' },
+  ],
+  'game-map': [
+    { key: 'Esc', label: 'Back' },
     { key: 'q', label: 'Quit' },
   ],
 };

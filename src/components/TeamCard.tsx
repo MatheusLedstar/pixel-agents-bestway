@@ -22,11 +22,13 @@ interface TeamCardProps {
 export default function TeamCard({ team, tasks, isSelected, tokens, session, spinnerFrame, activityData }: TeamCardProps) {
   const completedTasks = tasks.filter((t) => t.status === 'completed').length;
   const activeTasks = tasks.filter((t) => t.status === 'in_progress').length;
+  const isDone = team.status === 'completed';
+  const isIdle = team.status === 'idle';
 
   return (
     <Box
       borderStyle={isSelected ? 'bold' : 'single'}
-      borderColor={isSelected ? 'cyan' : 'gray'}
+      borderColor={isDone ? 'gray' : isSelected ? 'cyan' : 'gray'}
       paddingX={1}
       flexDirection="column"
       width="100%"
@@ -34,24 +36,26 @@ export default function TeamCard({ team, tasks, isSelected, tokens, session, spi
       {/* Team header */}
       <Box justifyContent="space-between">
         <Box gap={1}>
-          <Text bold color={isSelected ? 'cyan' : 'white'}>
+          <Text bold color={isDone ? 'gray' : isSelected ? 'cyan' : 'white'} dimColor={isDone}>
             {team.name}
           </Text>
+          {isDone && <Text color="green" bold>[DONE]</Text>}
+          {isIdle && <Text color="yellow" bold>[IDLE]</Text>}
           {team.description && (
             <Text dimColor>· {team.description}</Text>
           )}
         </Box>
         <Box gap={2}>
-          <Text dimColor>
-            {SECTION_ICONS.agents} <Text color="white">{team.members.length}</Text>
+          <Text dimColor={isDone}>
+            {SECTION_ICONS.agents} <Text color={isDone ? 'gray' : 'white'}>{team.members.length}</Text>
           </Text>
-          <Text dimColor>
-            {SECTION_ICONS.tasks} <Text color="white">{tasks.length}</Text>
+          <Text dimColor={isDone}>
+            {SECTION_ICONS.tasks} <Text color={isDone ? 'gray' : 'white'}>{tasks.length}</Text>
             {activeTasks > 0 && <Text color="yellow"> ({activeTasks} active)</Text>}
           </Text>
           {tokens && tokens.totalTokens > 0 && (
-            <Text dimColor>
-              {SECTION_ICONS.tokens} <Text color="yellow">{formatTokens(tokens.totalTokens, tokens.isReal)}</Text>
+            <Text dimColor={isDone}>
+              {SECTION_ICONS.tokens} <Text color={isDone ? 'gray' : 'yellow'}>{formatTokens(tokens.totalTokens, tokens.isReal)}</Text>
             </Text>
           )}
         </Box>
@@ -69,7 +73,7 @@ export default function TeamCard({ team, tasks, isSelected, tokens, session, spi
 
       {/* Separator */}
       <Box marginTop={0}>
-        <Text dimColor>╠{'──'.repeat(8)}╣</Text>
+        <Text dimColor>{'╠' + '──'.repeat(8) + '╣'}</Text>
       </Box>
 
       {/* Agent list with live activity */}

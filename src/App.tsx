@@ -16,6 +16,7 @@ import AgentDetailView from './views/AgentDetailView.js';
 import UsageView from './views/UsageView.js';
 import CrossTeamView from './views/CrossTeamView.js';
 import CrossTeamCallPanel from './components/CrossTeamCallPanel.js';
+import GameMapView from './game/GameMapView.js';
 import { useUsageData } from './hooks/useUsageData.js';
 import { useCrossTeamData } from './hooks/useCrossTeamData.js';
 
@@ -100,6 +101,8 @@ export default function App({ filterTeam }: AppProps) {
   const handleBack = useCallback(() => {
     if (currentView === 'usage' || currentView === 'cross-team') {
       setCurrentView(prevView);
+    } else if (currentView === 'game-map') {
+      setCurrentView('team-detail');
     } else if (currentView === 'agent-detail') {
       setSelectedAgent(null);
       setCurrentView('team-detail');
@@ -143,7 +146,10 @@ export default function App({ filterTeam }: AppProps) {
     }
 
     if (currentView === 'dashboard') {
-      if (key.upArrow) {
+      if (input === 'g' && filteredTeams[selectedIndex]) {
+        setSelectedTeam(filteredTeams[selectedIndex].name);
+        setCurrentView('game-map');
+      } else if (key.upArrow) {
         setSelectedIndex((prev) => Math.max(0, prev - 1));
       } else if (key.downArrow) {
         setSelectedIndex((prev) => Math.min(filteredTeams.length - 1, prev + 1));
@@ -151,7 +157,9 @@ export default function App({ filterTeam }: AppProps) {
     }
 
     if (currentView === 'team-detail') {
-      if (input === 'm') {
+      if (input === 'g') {
+        setCurrentView('game-map');
+      } else if (input === 'm') {
         setCurrentView('messages');
       } else if (input === 't') {
         setCurrentView('task-board');
@@ -284,6 +292,22 @@ export default function App({ filterTeam }: AppProps) {
           <CrossTeamView
             crossTeam={crossTeam}
             spinnerFrame={spinnerFrame}
+          />
+        );
+
+      case 'game-map':
+        if (!selectedTeamObj) {
+          handleBack();
+          return null;
+        }
+        return (
+          <GameMapView
+            team={selectedTeamObj}
+            tasks={selectedTeamTasks}
+            messages={selectedTeamMessages}
+            session={allSessions.get(selectedTeamObj.name)}
+            spinnerFrame={spinnerFrame}
+            termSize={termSize}
           />
         );
 

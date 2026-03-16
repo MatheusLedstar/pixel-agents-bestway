@@ -7,12 +7,23 @@ export interface Agent {
   isActive?: boolean;
 }
 
+export type TeamStatus = 'active' | 'idle' | 'completed' | 'stale';
+
+export interface TeamFreshness {
+  latestActivityMs: number;
+  hasActiveTasks: boolean;
+  allTasksCompleted: boolean;
+  totalTasks: number;
+}
+
 export interface Team {
   name: string;
   description?: string;
   createdAt?: number;
   leadAgentId?: string;
   members: Agent[];
+  status?: TeamStatus;
+  lastActivity?: number;
 }
 
 export type TaskStatus = 'pending' | 'in_progress' | 'completed';
@@ -38,7 +49,7 @@ export interface Message {
   summary?: string;
 }
 
-export type ViewType = 'dashboard' | 'team-detail' | 'task-board' | 'messages' | 'agent-detail' | 'usage' | 'cross-team';
+export type ViewType = 'dashboard' | 'team-detail' | 'task-board' | 'messages' | 'agent-detail' | 'usage' | 'cross-team' | 'game-map';
 
 // === Cross-Team Types (A2A-inspired) ===
 

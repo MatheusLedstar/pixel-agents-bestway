@@ -1,4 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { unlink, readdir as readdirAsync } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { homedir } from 'node:os';
 import { FileWatcher } from '../core/watcher.js';
 import { loadAllTeams } from '../core/teamParser.js';
 import { loadAllTeamsTasks } from '../core/taskParser.js';
@@ -8,6 +12,8 @@ import { registerTeam } from '../core/crossTeamParser.js';
 import type { Team, Task, Message, TeamTokens, TeamCard } from '../core/types.js';
 import type { TeamSessionData } from '../core/sessionParser.js';
 import { SPINNER_FRAMES } from '../utils/icons.js';
+
+const CROSS_TEAM_REGISTRY_DIR = join(homedir(), '.claude', 'cross-team', 'registry');
 
 // Fallback estimation when JSONL not available
 const TOKENS_PER_MESSAGE: Record<string, number> = {
@@ -73,7 +79,6 @@ export function useGlobalData(filterTeam?: string): GlobalData {
       if (filterTeam) {
         loadedTeams = loadedTeams.filter((t) => t.name === filterTeam);
       }
-      setTeams(loadedTeams);
 
       const names = loadedTeams.map((t) => t.name);
 
@@ -83,6 +88,18 @@ export function useGlobalData(filterTeam?: string): GlobalData {
         loadAllTeamsSessions(names),
       ]);
 
+      // Refine team status using loaded tasks data
+      for (const team of loadedTeams) {
+        const teamTasks = tasksMap.get(team.name) ?? [];
+        if (teamTasks.length > 0) {
+          const hasInProgress = teamTasks.some((t) => t.status === 'in_progress');
+          if (hasInProgress && team.status !== 'active') {
+            team.status = 'active';
+          }
+        }
+      }
+
+      setTeams(loadedTeams);
       setAllTasks(tasksMap);
       setAllMessages(msgsMap);
       setAllSessions(sessionsMap);
@@ -100,7 +117,8 @@ export function useGlobalData(filterTeam?: string): GlobalData {
       }
       setAllTokens(tokensMap);
 
-      // Auto-register teams in cross-team registry (throttled to every 30s — W3)
+      // Auto-register teams in cross-team registry (throttled to every 30s - W3)
+      // Also clean up stale registry entries
       const now = Date.now();
       if (now - lastRegistryUpdate.current > 30_000) {
         lastRegistryUpdate.current = now;
@@ -117,11 +135,30 @@ export function useGlobalData(filterTeam?: string): GlobalData {
               in_progress: teamTasks.filter((t) => t.status === 'in_progress').length,
               completed: teamTasks.filter((t) => t.status === 'completed').length,
             },
-            status: 'active',
+            status: team.status === 'completed' ? 'completed' : team.status === 'idle' ? 'idle' : 'active',
             registeredAt: team.createdAt ?? Date.now(),
             lastHeartbeat: Date.now(),
           };
           registerTeam(card).catch(() => {});
+        }
+
+        // Cleanup: try to remove registry files for stale teams
+        // (stale teams are already filtered out by loadAllTeams, so we clean the registry too)
+        try {
+          if (existsSync(CROSS_TEAM_REGISTRY_DIR)) {
+            const registryFiles = await readdirAsync(CROSS_TEAM_REGISTRY_DIR);
+            const activeTeamNames = new Set(loadedTeams.map((t) => t.name));
+            for (const file of registryFiles) {
+              if (!file.endsWith('.json')) continue;
+              const teamName = file.replace('.json', '');
+              if (!activeTeamNames.has(teamName)) {
+                const filePath = join(CROSS_TEAM_REGISTRY_DIR, file);
+                await unlink(filePath).catch(() => {});
+              }
+            }
+          }
+        } catch {
+          // Cleanup is best-effort
         }
       }
 

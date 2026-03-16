@@ -13,6 +13,8 @@ export type ActivityState =
   | 'messaging'
   | 'testing'
   | 'celebrating'
+  | 'deploying'
+  | 'debugging'
   | 'error';
 
 export interface ActivityVisual {
@@ -75,6 +77,26 @@ export function mapActivity(activity: AgentActivity | undefined): ActivityVisual
       icon: '⟐',
       label: target,
       monitorFrames: ['▓▱▱▱▱▱▱▱', '▱▓▱▱▱▱▱▱', '▱▱▓▱▱▱▱▱', '▱▱▱▓▱▱▱▱', '▱▱▱▱▓▱▱▱', '▱▱▱▱▱▓▱▱', '▱▱▱▱▱▱▓▱', '▱▱▱▱▱▱▱▓'],
+      labelColor: 'yellowBright',
+    };
+  }
+
+  if (/deploy|publish/i.test(lastAction) && !/git push/i.test(lastAction)) {
+    return {
+      state: 'deploying',
+      icon: '▶',
+      label: 'DEPLOYING',
+      monitorFrames: ['▰▱▱▱▰▰▰▱', '▱▰▱▰▰▱▱▰', '▱▱▰▰▱▱▰▰', '▰▰▰▱▱▰▰▱'],
+      labelColor: 'redBright',
+    };
+  }
+
+  if (/debug|breakpoint|inspect/i.test(lastAction)) {
+    return {
+      state: 'debugging',
+      icon: '▶',
+      label: 'DEBUGGING',
+      monitorFrames: ['▓░▓░▓░▓░', '░▓░▓░▓░▓'],
       labelColor: 'yellowBright',
     };
   }

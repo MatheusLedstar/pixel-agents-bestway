@@ -25,6 +25,7 @@ const VIEW_LABELS: Record<ViewType, string> = {
   'agent-detail': 'Agent Detail',
   usage: 'Usage',
   'cross-team': 'Cross-Team',
+  'game-map': 'Game Map',
 };
 
 export default function Header({

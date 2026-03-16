@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Box, Text, useInput } from 'ink';
 import type { Team, Task, Message, TeamTokens } from '../core/types.js';
 import type { TeamSessionData } from '../core/sessionParser.js';
@@ -36,6 +36,13 @@ export default function DashboardView({
   teamActivityData,
   activityEvents,
 }: DashboardViewProps) {
+  const [showCompleted, setShowCompleted] = useState(false);
+
+  const visibleTeams = useMemo(() => {
+    if (showCompleted) return teams;
+    return teams.filter((t) => t.status !== 'completed');
+  }, [teams, showCompleted]);
+
   const latestMessages = useMemo(() => {
     const allMsgs: Message[] = [];
     for (const msgs of allMessages.values()) {
@@ -45,9 +52,16 @@ export default function DashboardView({
     return filterMessages(allMsgs).slice(0, 8);
   }, [allMessages]);
 
+  const completedCount = useMemo(() => {
+    return teams.filter((t) => t.status === 'completed').length;
+  }, [teams]);
+
   useInput((input, key) => {
-    if (key.return && teams[selectedIndex]) {
-      onSelectTeam(teams[selectedIndex].name);
+    if (key.return && visibleTeams[selectedIndex]) {
+      onSelectTeam(visibleTeams[selectedIndex].name);
+    }
+    if (input === 'h') {
+      setShowCompleted((prev) => !prev);
     }
   });
 
@@ -58,11 +72,14 @@ export default function DashboardView({
         <Box gap={1}>
           <Text color="cyan">{SECTION_ICONS.teams}</Text>
           <Text bold color="cyan">Teams</Text>
-          {teams.length > 0 && <Text dimColor>({teams.length})</Text>}
+          {visibleTeams.length > 0 && <Text dimColor>({visibleTeams.length})</Text>}
+          {!showCompleted && completedCount > 0 && (
+            <Text dimColor> +{completedCount} completed</Text>
+          )}
         </Box>
 
         <Box flexDirection="column" marginTop={1}>
-          {teams.map((team, idx) => (
+          {visibleTeams.map((team, idx) => (
             <TeamCard
               key={team.name}
               team={team}
@@ -74,7 +91,7 @@ export default function DashboardView({
               activityData={teamActivityData?.get(team.name)}
             />
           ))}
-          {teams.length === 0 && (
+          {visibleTeams.length === 0 && (
             <Box paddingX={1} paddingY={1}>
               <Text dimColor>No active teams. Waiting for agent activity...</Text>
             </Box>
