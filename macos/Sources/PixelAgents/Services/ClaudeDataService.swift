@@ -108,7 +108,7 @@ final class ClaudeDataService {
             teams = loadedTeams.sorted { ($0.createdAt ?? .distantPast) > ($1.createdAt ?? .distantPast) }
             lastError = nil
 
-            // Quick-scan task directories for all teams
+            // Quick-scan task directories for all teams (needed before freshness check)
             teamTaskCounts = [:]
             for team in teams {
                 guard let taskDir = teamTasksPath(team.name),
@@ -132,6 +132,10 @@ final class ClaudeDataService {
                 }
                 teamTaskCounts[team.name] = (pending, inProgress, completed)
             }
+
+            // Filter out stale teams (ghost teams fix)
+            let statuses = teamStatuses
+            teams = teams.filter { statuses[$0.name] != .stale }
         } catch {
             lastError = "Failed to load teams: \(error.localizedDescription)"
         }
@@ -451,6 +455,116 @@ final class ClaudeDataService {
         }
     }
 
+    // MARK: - Team Freshness & Status
+
+    /// Compute freshness data for a team by checking file mtimes and task statuses
+    func getTeamFreshness(teamName: String) -> TeamFreshness? {
+        var latestDate = Date.distantPast
+
+        // Check config.json mtime
+        if let configPath = teamConfigPath(teamName) {
+            if let attrs = try? fileManager.attributesOfItem(atPath: configPath),
+               let mtime = attrs[.modificationDate] as? Date {
+                if mtime > latestDate { latestDate = mtime }
+            }
+        }
+
+        // Check most recent inbox mtime
+        if let inboxDir = teamInboxesPath(teamName),
+           let inboxFiles = try? fileManager.contentsOfDirectory(atPath: inboxDir) {
+            for file in inboxFiles where file.hasSuffix(".json") {
+                guard Self.sanitizeName(file) != nil else { continue }
+                let path = "\(inboxDir)/\(file)"
+                if let attrs = try? fileManager.attributesOfItem(atPath: path),
+                   let mtime = attrs[.modificationDate] as? Date {
+                    if mtime > latestDate { latestDate = mtime }
+                }
+            }
+        }
+
+        // Check task statuses
+        var hasActiveTasks = false
+        var allCompleted = false
+        var totalTasks = 0
+
+        if let counts = teamTaskCounts[teamName] {
+            totalTasks = counts.pending + counts.inProgress + counts.completed
+            hasActiveTasks = counts.pending > 0 || counts.inProgress > 0
+            allCompleted = totalTasks > 0 && counts.pending == 0 && counts.inProgress == 0
+        }
+
+        // Check task file mtimes
+        if let taskDir = teamTasksPath(teamName),
+           let taskFiles = try? fileManager.contentsOfDirectory(atPath: taskDir) {
+            for file in taskFiles where file.hasSuffix(".json") {
+                guard Self.sanitizeName(file) != nil else { continue }
+                let path = "\(taskDir)/\(file)"
+                if let attrs = try? fileManager.attributesOfItem(atPath: path),
+                   let mtime = attrs[.modificationDate] as? Date {
+                    if mtime > latestDate { latestDate = mtime }
+                }
+            }
+        }
+
+        // If no files found at all, use creation date
+        if latestDate == .distantPast {
+            if let team = teams.first(where: { $0.name == teamName }),
+               let created = team.createdAt {
+                latestDate = created
+            } else {
+                return nil
+            }
+        }
+
+        return TeamFreshness(
+            latestActivity: latestDate,
+            hasActiveTasks: hasActiveTasks,
+            allTasksCompleted: allCompleted,
+            totalTasks: totalTasks
+        )
+    }
+
+    /// Determine lifecycle status from freshness data
+    func getTeamStatus(freshness: TeamFreshness) -> TeamLifecycleStatus {
+        let age = Date().timeIntervalSince(freshness.latestActivity)
+
+        // Active tasks always means active
+        if freshness.hasActiveTasks {
+            return .active
+        }
+
+        // Recent activity means active
+        if age < TeamStatusThresholds.activeWindow {
+            return .active
+        }
+
+        // All tasks completed and grace period passed
+        if freshness.allTasksCompleted && age > TeamStatusThresholds.completedGrace {
+            return .completed
+        }
+
+        // Very old = stale
+        if age > TeamStatusThresholds.staleAge {
+            return .stale
+        }
+
+        // Otherwise idle
+        return .idle
+    }
+
+    /// Computed statuses for all teams
+    var teamStatuses: [String: TeamLifecycleStatus] {
+        var result: [String: TeamLifecycleStatus] = [:]
+        for team in teams {
+            if let freshness = getTeamFreshness(teamName: team.name) {
+                result[team.name] = getTeamStatus(freshness: freshness)
+            } else {
+                result[team.name] = .stale
+            }
+        }
+        return result
+    }
+
     // MARK: - Task Stats
 
     var taskStats: (pending: Int, inProgress: Int, completed: Int) {
@@ -471,22 +585,12 @@ final class ClaudeDataService {
 
     // MARK: - Clear Inactive Teams
 
-    /// Remove inactive team directories from disk (old teams with no pending/in-progress tasks)
+    /// Remove completed and stale team directories from disk
     func clearCompletedTeams() {
-        let sixHoursAgo = Date().addingTimeInterval(-6 * 3600)
+        let statuses = teamStatuses
         let inactiveNames = teams.filter { team in
-            // Recently created with active tasks = keep
-            if let created = team.createdAt, created > sixHoursAgo {
-                if let counts = teamTaskCounts[team.name] {
-                    return counts.pending == 0 && counts.inProgress == 0 && counts.completed > 0
-                }
-                return false
-            }
-            // Old team: inactive if no pending/in-progress
-            if let counts = teamTaskCounts[team.name] {
-                return counts.pending == 0 && counts.inProgress == 0
-            }
-            return true // old with no task data = inactive
+            let status = statuses[team.name] ?? .stale
+            return status == .completed || status == .stale
         }.map(\.name)
 
         for name in inactiveNames {

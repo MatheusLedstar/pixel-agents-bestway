@@ -24,6 +24,11 @@ enum ActivityType: String, Codable, Equatable, Hashable, CaseIterable, Sendable 
     case writing
     case thinking
     case messaging
+    case searching
+    case testing
+    case running
+    case deploying
+    case debugging
     case idle
     case done
     case error

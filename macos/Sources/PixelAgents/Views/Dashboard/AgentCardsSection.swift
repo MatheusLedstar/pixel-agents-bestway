@@ -93,6 +93,11 @@ struct AgentCard: View {
         case .thinking: PixelTheme.yellow
         case .reading: PixelTheme.blue
         case .messaging: PixelTheme.purple
+        case .searching: PixelTheme.blue
+        case .testing: PixelTheme.yellow
+        case .running: PixelTheme.green
+        case .deploying: PixelTheme.accentOrange
+        case .debugging: PixelTheme.red
         case .idle: Color.white.opacity(0.38)
         case .done: PixelTheme.green
         case .error: PixelTheme.red
@@ -105,6 +110,11 @@ struct AgentCard: View {
         case .thinking: "Thinking"
         case .reading: "Reading"
         case .messaging: "Messaging"
+        case .searching: "Searching"
+        case .testing: "Testing"
+        case .running: "Running"
+        case .deploying: "Deploying"
+        case .debugging: "Debugging"
         case .idle: "Idle"
         case .done: "Done"
         case .error: "Error"

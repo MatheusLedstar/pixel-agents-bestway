@@ -7,40 +7,39 @@ struct TeamsSidebar: View {
     @Binding var selectedTeamName: String?
     @State private var showCompleted = false
 
-    /// A team is considered "active" if it was created recently (<6h) or has pending/in-progress tasks
+    /// Computed team lifecycle statuses
+    private var statuses: [String: TeamLifecycleStatus] {
+        dataService.teamStatuses
+    }
+
+    /// Active teams: .active or .idle status
     private var activeTeams: [TeamConfig] {
-        let sixHoursAgo = Date().addingTimeInterval(-6 * 3600)
-        return dataService.teams.filter { team in
-            // Recently created teams are always active
-            if let created = team.createdAt, created > sixHoursAgo {
-                return true
-            }
-            // Teams with pending or in-progress tasks are active
-            if let counts = dataService.teamTaskCounts[team.name] {
-                return counts.pending > 0 || counts.inProgress > 0
-            }
-            // No task data AND old = not active
-            return false
+        dataService.teams.filter { team in
+            let status = statuses[team.name] ?? .stale
+            return status == .active || status == .idle
         }
     }
 
-    /// Inactive teams: old or all tasks completed
+    /// Inactive teams: .completed status (stale are already filtered from loadTeams)
     private var inactiveTeams: [TeamConfig] {
-        let sixHoursAgo = Date().addingTimeInterval(-6 * 3600)
-        return dataService.teams.filter { team in
-            // Recently created = not inactive
-            if let created = team.createdAt, created > sixHoursAgo {
-                if let counts = dataService.teamTaskCounts[team.name] {
-                    return counts.pending == 0 && counts.inProgress == 0 && counts.completed > 0
-                }
-                return false
-            }
-            // Old team with no pending/in-progress
-            if let counts = dataService.teamTaskCounts[team.name] {
-                return counts.pending == 0 && counts.inProgress == 0
-            }
-            // Old team with no task data = inactive
-            return true
+        dataService.teams.filter { team in
+            let status = statuses[team.name] ?? .stale
+            return status == .completed
+        }
+    }
+
+    /// Get status badge for a team
+    private func teamStatusBadge(_ team: TeamConfig) -> (text: String, color: Color) {
+        let status = statuses[team.name] ?? .stale
+        switch status {
+        case .active:
+            return ("ACTIVE", PixelTheme.green)
+        case .idle:
+            return ("IDLE", PixelTheme.yellow)
+        case .completed:
+            return ("DONE", PixelTheme.green)
+        case .stale:
+            return ("STALE", PixelTheme.textMuted)
         }
     }
 
@@ -130,7 +129,7 @@ struct TeamsSidebar: View {
                             }
                         } label: {
                             HStack {
-                                Text("INACTIVE")
+                                Text("COMPLETED")
                                     .font(.system(size: 9, weight: .semibold))
                                     .tracking(1.5)
                                     .foregroundStyle(PixelTheme.textMuted)

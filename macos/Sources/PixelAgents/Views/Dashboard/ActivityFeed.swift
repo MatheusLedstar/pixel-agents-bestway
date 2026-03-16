@@ -139,6 +139,11 @@ private struct ActivityRow: View {
         case .thinking: return PixelTheme.yellow
         case .reading: return PixelTheme.blue
         case .messaging: return PixelTheme.purple
+        case .searching: return PixelTheme.blue
+        case .testing: return PixelTheme.yellow
+        case .running: return PixelTheme.green
+        case .deploying: return PixelTheme.accentOrange
+        case .debugging: return PixelTheme.red
         case .done: return PixelTheme.green
         case .error: return PixelTheme.red
         case .idle: return Color.white.opacity(0.38)
@@ -151,6 +156,11 @@ private struct ActivityRow: View {
         case .thinking: return "THINK"
         case .reading: return "READ"
         case .messaging: return "MSG"
+        case .searching: return "SEARCH"
+        case .testing: return "TEST"
+        case .running: return "RUN"
+        case .deploying: return "DEPLOY"
+        case .debugging: return "DEBUG"
         case .done: return "DONE"
         case .error: return "ERROR"
         case .idle: return "IDLE"
