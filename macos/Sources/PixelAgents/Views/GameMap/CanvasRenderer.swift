@@ -422,6 +422,21 @@ struct CanvasRenderer {
             .foregroundColor(levelColor(character.level))
         ctx.draw(levelText, at: CGPoint(x: centerX, y: lvlY), anchor: .center)
 
+        // --- Tool description label (below character) ---
+        if !character.toolDescription.isEmpty && character.toolDescription != "idle" {
+            let descStr = character.toolDescription
+            let descY = y + 36
+            let descWidth = max(CGFloat(descStr.count) * 5.5 + 12, 50)
+            let descBg = CGRect(x: centerX - descWidth / 2, y: descY - 6, width: descWidth, height: 12)
+            let descBgPath = RoundedRectangle(cornerRadius: 3).path(in: descBg)
+            ctx.fill(descBgPath, with: .color(.black.opacity(0.6)))
+
+            let descText = Text(descStr)
+                .font(.system(size: 6.5, weight: .medium, design: .monospaced))
+                .foregroundColor(.white.opacity(0.8))
+            ctx.draw(descText, at: CGPoint(x: centerX, y: descY), anchor: .center)
+        }
+
         // --- Emote bubble (top-right, floating with bob) ---
         if let emote = character.emote {
             let bobOffset = sin(Double(frameCount) * 0.12) * 2.5
@@ -429,8 +444,8 @@ struct CanvasRenderer {
             let emoteY = y - 36 + bobOffset
             // White bubble with shadow
             let bubbleRect = CGRect(x: emoteX - 10, y: emoteY - 10, width: 20, height: 20)
-            let shadowRect = bubbleRect.offsetBy(dx: 1, dy: 1)
-            ctx.fill(Path(ellipseIn: shadowRect), with: .color(.black.opacity(0.15)))
+            let shadowRect2 = bubbleRect.offsetBy(dx: 1, dy: 1)
+            ctx.fill(Path(ellipseIn: shadowRect2), with: .color(.black.opacity(0.15)))
             ctx.fill(Path(ellipseIn: bubbleRect), with: .color(.white.opacity(0.95)))
             ctx.stroke(Path(ellipseIn: bubbleRect), with: .color(.gray.opacity(0.3)), lineWidth: 0.5)
             let emoteText = Text(emote).font(.system(size: 11))

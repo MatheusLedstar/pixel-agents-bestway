@@ -19,6 +19,8 @@ struct AgentCharacter: Identifiable {
     var level: Int = 1
     var title: String = "Recruit"
     var emote: String? = nil
+    var toolDescription: String = ""
+    var visualActivity: VisualActivity = .idling
 
     var frameTimer: Int = 0
     let walkSpeed: CGFloat = 2.0

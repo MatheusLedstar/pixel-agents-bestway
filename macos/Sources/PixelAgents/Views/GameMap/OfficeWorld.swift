@@ -51,15 +51,15 @@ struct OfficeRoom {
 
     static let defaultLayout: [OfficeRoom] = [
         // Top row (y=1..13)
-        OfficeRoom(id: .planning,  name: "PLANNING",   gridX: 1,  gridY: 1,  width: 11, height: 13, doorSide: .down, accentColor: .purple, ledColor: Color(hex: 0xA78BFA)),
-        OfficeRoom(id: .coding,    name: "CODING LAB",  gridX: 13, gridY: 1,  width: 13, height: 13, doorSide: .down, accentColor: .green,  ledColor: Color(hex: 0x34D399)),
-        OfficeRoom(id: .testing,   name: "TESTING",    gridX: 27, gridY: 1,  width: 11, height: 13, doorSide: .down, accentColor: .yellow, ledColor: Color(hex: 0xFBBF24)),
-        OfficeRoom(id: .deploying, name: "DEPLOY",     gridX: 39, gridY: 1,  width: 10, height: 13, doorSide: .down, accentColor: .orange, ledColor: Color(hex: 0xFB923C)),
+        OfficeRoom(id: .planning,  name: "PLANNING ROOM",    gridX: 1,  gridY: 1,  width: 11, height: 13, doorSide: .down, accentColor: .purple, ledColor: Color(hex: 0xA78BFA)),
+        OfficeRoom(id: .coding,    name: "CODING LAB",       gridX: 13, gridY: 1,  width: 13, height: 13, doorSide: .down, accentColor: .green,  ledColor: Color(hex: 0x34D399)),
+        OfficeRoom(id: .testing,   name: "TEST LAB",         gridX: 27, gridY: 1,  width: 11, height: 13, doorSide: .down, accentColor: .yellow, ledColor: Color(hex: 0xFBBF24)),
+        OfficeRoom(id: .deploying, name: "DEPLOY CENTER",    gridX: 39, gridY: 1,  width: 10, height: 13, doorSide: .down, accentColor: .orange, ledColor: Color(hex: 0xFB923C)),
         // Bottom row (y=18..30) — corridor at y=14-17
-        OfficeRoom(id: .comms,     name: "COMMS",      gridX: 1,  gridY: 18, width: 11, height: 13, doorSide: .up,   accentColor: .blue,   ledColor: Color(hex: 0x60A5FA)),
-        OfficeRoom(id: .lounge,    name: "LOUNGE",     gridX: 13, gridY: 18, width: 13, height: 13, doorSide: .up,   accentColor: .gray,   ledColor: Color(hex: 0x9CA3AF)),
-        OfficeRoom(id: .library,   name: "LIBRARY",    gridX: 27, gridY: 18, width: 11, height: 13, doorSide: .up,   accentColor: .cyan,   ledColor: Color(hex: 0x22D3EE)),
-        OfficeRoom(id: .workshop,  name: "WORKSHOP",   gridX: 39, gridY: 18, width: 10, height: 13, doorSide: .up,   accentColor: .pink,   ledColor: Color(hex: 0xF472B6)),
+        OfficeRoom(id: .comms,     name: "COMMS HUB",        gridX: 1,  gridY: 18, width: 11, height: 13, doorSide: .up,   accentColor: .blue,   ledColor: Color(hex: 0x60A5FA)),
+        OfficeRoom(id: .lounge,    name: "LOUNGE",           gridX: 13, gridY: 18, width: 13, height: 13, doorSide: .up,   accentColor: .gray,   ledColor: Color(hex: 0x9CA3AF)),
+        OfficeRoom(id: .library,   name: "LIBRARY",          gridX: 27, gridY: 18, width: 11, height: 13, doorSide: .up,   accentColor: .cyan,   ledColor: Color(hex: 0x22D3EE)),
+        OfficeRoom(id: .workshop,  name: "DEBUG WORKSHOP",   gridX: 39, gridY: 18, width: 10, height: 13, doorSide: .up,   accentColor: .pink,   ledColor: Color(hex: 0xF472B6)),
     ]
 }
 
