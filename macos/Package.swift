@@ -11,7 +11,8 @@ let package = Package(
     targets: [
         .executableTarget(
             name: "PixelAgents",
-            path: "Sources/PixelAgents"
+            path: "Sources/PixelAgents",
+            resources: [.copy("Resources")]
         ),
         .testTarget(
             name: "PixelAgentsTests",
