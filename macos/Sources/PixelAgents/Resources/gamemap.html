@@ -324,12 +324,12 @@ function drawFurniture(type, px, py) {
     switch(type) {
     case 'desk':
         img=imgCache[DESK_FRONT];
-        if(img) ctx.drawImage(img, 0,0,48,32, px-TILE, py-TILE/2, TILE*3, TILE*2);
+        if(img) ctx.drawImage(img, 0,0,48,32, px-TILE/2, py, TILE*2, TILE);
         else { ctx.fillStyle='#6B4C3B'; ctx.fillRect(px,py,TILE,TILE); }
         break;
     case 'monitor':
         img=imgCache[PC_FRAMES[Math.floor(frameCount/20)%3]];
-        if(img) ctx.drawImage(img, px, py-TILE, TILE, TILE*2);
+        if(img) ctx.drawImage(img, px, py-TILE/2, TILE, TILE*1.5);
         else { ctx.fillStyle='#1E40AF'; ctx.fillRect(px+2,py+2,TILE-4,TILE-4); }
         break;
     case 'chair_front':
@@ -374,7 +374,7 @@ function drawFurniture(type, px, py) {
         break;
     case 'table':
         img=imgCache[TABLE_FRONT];
-        if(img) ctx.drawImage(img, 0,0,48,64, px-TILE, py-TILE*1.5, TILE*3, TILE*4);
+        if(img) ctx.drawImage(img, 0,0,48,64, px-TILE/4, py-TILE/4, TILE*1.5, TILE*1.5);
         else { ctx.fillStyle='#78350F'; ctx.fillRect(px,py,TILE,TILE); }
         break;
     case 'cactus':
