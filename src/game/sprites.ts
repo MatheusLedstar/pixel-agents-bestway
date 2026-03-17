@@ -6,7 +6,7 @@ import type { PixelGrid } from './PixelCanvas.js';
 import type { ActivityState } from '../map/activityMapper.js';
 
 // ──────────────────────────────────────────────────────────────
-// Color palettes per agent type
+// Color palettes per agent type — diverse skin tones & styles
 // ──────────────────────────────────────────────────────────────
 
 export interface AgentPalette {
@@ -18,94 +18,103 @@ export interface AgentPalette {
 }
 
 export const AGENT_PALETTES: Record<string, AgentPalette> = {
+  // Developer roles
   'csharp-developer':      { skin: '#FFD5B4', hair: '#4A2C0A', shirt: '#9B59B6', pants: '#2C3E50', accent: '#8E44AD' },
-  'swift-developer':       { skin: '#FFD5B4', hair: '#D4A017', shirt: '#F97316', pants: '#2C3E50', accent: '#EA580C' },
+  'swift-developer':       { skin: '#C68642', hair: '#2C1A0A', shirt: '#F97316', pants: '#3B1F0A', accent: '#EA580C' },
   'js-developer':          { skin: '#FFD5B4', hair: '#2C3E50', shirt: '#F1C40F', pants: '#2C3E50', accent: '#F39C12' },
-  'sql-server-expert':     { skin: '#FFD5B4', hair: '#1A1A2E', shirt: '#3498DB', pants: '#2C3E50', accent: '#2980B9' },
-  'security-expert':       { skin: '#FFD5B4', hair: '#1A1A2E', shirt: '#E74C3C', pants: '#2C3E50', accent: '#C0392B' },
-  'tester-qa':             { skin: '#FFD5B4', hair: '#4A2C0A', shirt: '#2ECC71', pants: '#2C3E50', accent: '#27AE60' },
-  'devops':                { skin: '#FFD5B4', hair: '#7F8C8D', shirt: '#95A5A6', pants: '#2C3E50', accent: '#BDC3C7' },
-  'meta-orchestrator':     { skin: '#FFD5B4', hair: '#D4A017', shirt: '#F1C40F', pants: '#2C3E50', accent: '#FFD700' },
-  'blazor-architect':      { skin: '#FFD5B4', hair: '#4A2C0A', shirt: '#6C3483', pants: '#2C3E50', accent: '#A569BD' },
-  'api-designer':          { skin: '#FFD5B4', hair: '#1A1A2E', shirt: '#2E86C1', pants: '#2C3E50', accent: '#5DADE2' },
+  'ts-developer':          { skin: '#F1C27D', hair: '#1A1A1A', shirt: '#3498DB', pants: '#2C3E50', accent: '#2980B9' },
+  'python-developer':      { skin: '#8D5524', hair: '#1A0A00', shirt: '#27AE60', pants: '#1A2E1A', accent: '#2ECC71' },
+  'rust-developer':        { skin: '#FFD5B4', hair: '#B5451B', shirt: '#D35400', pants: '#2C3E50', accent: '#E67E22' },
+  'go-developer':          { skin: '#F0C891', hair: '#3D2B1F', shirt: '#00ADD8', pants: '#1A3A4A', accent: '#00B4D8' },
+  'java-developer':        { skin: '#FFD5B4', hair: '#1A1A1A', shirt: '#E74C3C', pants: '#2C2C2C', accent: '#C0392B' },
+  'kotlin-developer':      { skin: '#F1C27D', hair: '#2C3E50', shirt: '#7F8C8D', pants: '#2C3E50', accent: '#E74C3C' },
+  'sql-server-expert':     { skin: '#FFDBB4', hair: '#1A1A2E', shirt: '#3498DB', pants: '#2C3E50', accent: '#2980B9' },
   'winforms-developer':    { skin: '#FFD5B4', hair: '#4A2C0A', shirt: '#884EA0', pants: '#2C3E50', accent: '#7D3C98' },
-  'performance-optimizer': { skin: '#FFD5B4', hair: '#2C3E50', shirt: '#F39C12', pants: '#2C3E50', accent: '#E67E22' },
-  'kotlin-developer':      { skin: '#FFD5B4', hair: '#2C3E50', shirt: '#7F8C8D', pants: '#2C3E50', accent: '#E74C3C' },
-  'qa-reviewer':           { skin: '#FFD5B4', hair: '#4A2C0A', shirt: '#1ABC9C', pants: '#2C3E50', accent: '#16A085' },
-  'ux-designer':           { skin: '#FFD5B4', hair: '#D4A017', shirt: '#E91E63', pants: '#2C3E50', accent: '#F06292' },
-  'tech-lead-gestor':      { skin: '#FFD5B4', hair: '#2C3E50', shirt: '#2C3E50', pants: '#34495E', accent: '#F1C40F' },
-  default:                 { skin: '#FFD5B4', hair: '#2C3E50', shirt: '#1ABC9C', pants: '#2C3E50', accent: '#16A085' },
+  'blazor-architect':      { skin: '#F0C891', hair: '#4A2C0A', shirt: '#6C3483', pants: '#2C3E50', accent: '#A569BD' },
+  'api-designer':          { skin: '#8D5524', hair: '#1A0800', shirt: '#2E86C1', pants: '#1A2C4A', accent: '#5DADE2' },
+  'performance-optimizer': { skin: '#C68642', hair: '#2C3E50', shirt: '#F39C12', pants: '#2C1A00', accent: '#E67E22' },
+
+  // Specialized roles
+  'security-expert':       { skin: '#FFD5B4', hair: '#1A1A1A', shirt: '#E74C3C', pants: '#1A1A1A', accent: '#C0392B' },
+  'tester-qa':             { skin: '#F1C27D', hair: '#8B6914', shirt: '#2ECC71', pants: '#1A3A1A', accent: '#27AE60' },
+  'qa-reviewer':           { skin: '#FFDBB4', hair: '#4A2C0A', shirt: '#1ABC9C', pants: '#2C3E50', accent: '#16A085' },
+  'devops':                { skin: '#C68642', hair: '#7F8C8D', shirt: '#95A5A6', pants: '#2C3E50', accent: '#BDC3C7' },
+  'ux-designer':           { skin: '#8D5524', hair: '#D4A017', shirt: '#E91E63', pants: '#2C2C2C', accent: '#F06292' },
+  'tech-lead-gestor':      { skin: '#F1C27D', hair: '#2C3E50', shirt: '#2C3E50', pants: '#34495E', accent: '#F1C40F' },
+  'meta-orchestrator':     { skin: '#FFDBB4', hair: '#D4A017', shirt: '#F1C40F', pants: '#2C3E50', accent: '#FFD700' },
+  'architect':             { skin: '#FFD5B4', hair: '#1A1A1A', shirt: '#2C3E50', pants: '#1A1A1A', accent: '#3498DB' },
+  'data-scientist':        { skin: '#C68642', hair: '#1A0800', shirt: '#9B59B6', pants: '#2C1A3A', accent: '#8E44AD' },
+  'ml-engineer':           { skin: '#F1C27D', hair: '#2C1A0A', shirt: '#1ABC9C', pants: '#1A2A2A', accent: '#16A085' },
+
+  // Generic fallback
+  default: { skin: '#FFD5B4', hair: '#2C3E50', shirt: '#1ABC9C', pants: '#2C3E50', accent: '#16A085' },
 };
 
 // ──────────────────────────────────────────────────────────────
-// Transparent shorthand
+// Common color shorthands
 // ──────────────────────────────────────────────────────────────
 const _: null = null;
-
-// ──────────────────────────────────────────────────────────────
-// Prop colors (not from palette)
-// ──────────────────────────────────────────────────────────────
-const W = '#FFFFFF'; // white (eyes, highlights)
-const K = '#1A1A1A'; // black (outlines, pupils)
-const BR = '#8B4513'; // brown (book, desk, objects)
-const GR = '#808080'; // gray (smoke, metal)
-const LG = '#C0C0C0'; // light gray
-const YL = '#FFD700'; // yellow (sparks, stars, confetti)
-const RD = '#FF0000'; // red (error X, fire)
-const OG = '#FF6600'; // orange (flames)
-const GN = '#00CC00'; // green (test tube, checkmarks)
-const CY = '#00CCCC'; // cyan (lens, glow)
-const BL = '#3498DB'; // blue (screen glow)
-const MG = '#FF00FF'; // magenta (confetti)
-const DG = '#333333'; // dark gray (keyboard)
-
-// ──────────────────────────────────────────────────────────────
-// Sprite builder — generates sprites using palette colors
-// ──────────────────────────────────────────────────────────────
+const W = '#FFFFFF';
+const K = '#1A1A1A';
+const BR = '#8B4513';
+const GR = '#808080';
+const LG = '#C0C0C0';
+const YL = '#FFD700';
+const RD = '#FF0000';
+const OG = '#FF6600';
+const GN = '#00CC00';
+const CY = '#00CCCC';
+const BL = '#3498DB';
+const MG = '#FF00FF';
+const DG = '#333333';
 
 type SpriteTemplate = (p: AgentPalette) => PixelGrid;
 
-// --- IDLE: sitting, eyes closed (lines), cup beside ---
-const idleSpriteA: SpriteTemplate = (p) => [
-  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],      // row 0: hair top
-  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _], // row 1: hair full
-  [_, p.hair, p.skin, p.skin, p.skin, p.skin, p.hair, _], // row 2: face, closed eyes (skin = closed)
-  [_, _, p.skin, p.skin, p.skin, p.skin, _, _],       // row 3: chin
-  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],   // row 4: shirt top
-  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _], // row 5: shirt body
-  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, BR], // row 6: arms + cup
-  [_, _, p.pants, p.pants, p.pants, p.pants, _, BR],   // row 7: lap + cup
-  [_, _, p.pants, p.pants, p.pants, p.pants, _, _],    // row 8: legs
-  [_, p.pants, p.pants, _, _, p.pants, p.pants, _],    // row 9: legs spread (sitting)
-  [_, p.pants, p.pants, _, _, p.pants, p.pants, _],    // row 10: feet
-  [_, K, K, _, _, K, K, _],                            // row 11: shoes
-];
+// ──────────────────────────────────────────────────────────────
+// Activity sprites (existing, enhanced with more detail)
+// ──────────────────────────────────────────────────────────────
 
-const idleSpriteB: SpriteTemplate = (p) => [
+// IDLE: sitting with coffee cup, relaxed pose
+const idleSpriteA: SpriteTemplate = (p) => [
   [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
-  [_, p.hair, p.skin, p.skin, p.skin, p.skin, p.hair, _], // still closed eyes
+  [_, p.hair, p.skin, p.skin, p.skin, p.skin, p.hair, _],
   [_, _, p.skin, p.skin, p.skin, p.skin, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
-  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, _], // no cup (picked up)
-  [_, _, p.pants, p.pants, p.pants, p.pants, BR, _],   // cup in hand
+  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, BR],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, BR],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
   [_, p.pants, p.pants, _, _, p.pants, p.pants, _],
   [_, p.pants, p.pants, _, _, p.pants, p.pants, _],
   [_, K, K, _, _, K, K, _],
 ];
 
-// --- THINKING: hand on chin, thought bubble with ? above ---
-const thinkingSpriteA: SpriteTemplate = (p) => [
-  [_, _, _, _, _, _, CY, _],                           // row 0: small bubble dot
-  [_, _, _, _, _, CY, W, CY],                          // row 1: thought bubble ?
-  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],        // row 2: hair top
+const idleSpriteB: SpriteTemplate = (p) => [
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
-  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],        // row 4: face, eyes open looking up
-  [_, _, p.skin, p.skin, p.skin, p.skin, _, _],         // row 5: chin with hand
+  [_, p.hair, p.skin, p.skin, p.skin, p.skin, p.hair, _],
+  [_, _, p.skin, p.skin, p.skin, p.skin, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
-  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _], // row 7: hand on chin
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
+  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, _],
+  [_, _, p.pants, p.pants, p.pants, p.pants, BR, _],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
+  [_, p.pants, p.pants, _, _, p.pants, p.pants, _],
+  [_, p.pants, p.pants, _, _, p.pants, p.pants, _],
+  [_, K, K, _, _, K, K, _],
+];
+
+// THINKING: hand on chin, animated thought bubble
+const thinkingSpriteA: SpriteTemplate = (p) => [
+  [_, _, _, _, _, _, CY, _],
+  [_, _, _, _, _, CY, W, CY],
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
+  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
+  [_, _, p.skin, p.skin, p.skin, p.skin, _, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
   [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, _],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
   [_, _, p.pants, _, _, p.pants, _, _],
@@ -113,31 +122,31 @@ const thinkingSpriteA: SpriteTemplate = (p) => [
 ];
 
 const thinkingSpriteB: SpriteTemplate = (p) => [
-  [_, _, _, _, _, CY, W, CY],                          // row 0: thought bubble with ?
-  [_, _, _, _, _, _, CY, _],                            // row 1: bubble tail
+  [_, _, _, _, _, CY, W, CY],
+  [_, _, _, _, _, _, CY, _],
   [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
-  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],        // eyes looking right
+  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
   [_, _, p.skin, p.skin, p.skin, p.skin, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
-  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, _], // hand other side
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, _],
   [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, _],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
   [_, _, p.pants, _, _, p.pants, _, _],
   [_, _, K, _, _, K, _, _],
 ];
 
-// --- READING: book in front, eyes looking down ---
+// READING: book in front, focused gaze
 const readingSpriteA: SpriteTemplate = (p) => [
   [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
-  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],        // eyes open, looking down
-  [_, _, p.skin, K, p.skin, K, _, _],                   // pupils down
+  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
+  [_, _, p.skin, K, p.skin, K, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
-  [_, p.skin, BR, BR, BR, BR, p.skin, _],               // holding book (brown rectangle)
-  [_, _, BR, W, W, BR, _, _],                            // book pages open
-  [_, _, BR, BR, BR, BR, _, _],                          // book bottom
+  [_, p.skin, BR, BR, BR, BR, p.skin, _],
+  [_, _, BR, W, W, BR, _, _],
+  [_, _, BR, BR, BR, BR, _, _],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
   [_, _, p.pants, _, _, p.pants, _, _],
   [_, _, K, _, _, K, _, _],
@@ -147,28 +156,28 @@ const readingSpriteB: SpriteTemplate = (p) => [
   [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
   [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
-  [_, _, p.skin, K, p.skin, K, _, _],                   // eyes still down
+  [_, _, p.skin, K, p.skin, K, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
   [_, p.skin, BR, BR, BR, BR, p.skin, _],
-  [_, _, BR, BR, W, BR, _, _],                           // page turning
+  [_, _, BR, BR, W, BR, _, _],
   [_, _, BR, BR, BR, BR, _, _],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
   [_, _, p.pants, _, _, p.pants, _, _],
   [_, _, K, _, _, K, _, _],
 ];
 
-// --- WRITING: keyboard in front, hands extended, code on screen ---
+// WRITING: keyboard in front, typing animation
 const writingSpriteA: SpriteTemplate = (p) => [
   [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
-  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],         // focused eyes
+  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
   [_, _, p.skin, K, p.skin, K, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
-  [p.skin, p.skin, DG, DG, DG, DG, p.skin, p.skin],     // hands on keyboard
-  [_, _, DG, DG, DG, DG, _, _],                          // keyboard
-  [_, BL, GN, BL, _, GN, BL, _],                         // screen with code lines
+  [p.skin, p.skin, DG, DG, DG, DG, p.skin, p.skin],
+  [_, _, DG, DG, DG, DG, _, _],
+  [_, BL, GN, BL, _, GN, BL, _],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
   [_, _, p.pants, _, _, p.pants, _, _],
   [_, _, K, _, _, K, _, _],
@@ -181,26 +190,26 @@ const writingSpriteB: SpriteTemplate = (p) => [
   [_, _, p.skin, K, p.skin, K, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
-  [_, p.skin, DG, DG, DG, DG, p.skin, _],                // one hand typing
-  [p.skin, _, DG, DG, DG, DG, _, _],                     // hand moved
-  [_, GN, BL, _, GN, BL, GN, _],                         // more code lines
+  [_, p.skin, DG, DG, DG, DG, p.skin, _],
+  [p.skin, _, DG, DG, DG, DG, _, _],
+  [_, GN, BL, _, GN, BL, GN, _],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
   [_, _, p.pants, _, _, p.pants, _, _],
   [_, _, K, _, _, K, _, _],
 ];
 
-// --- SEARCHING: magnifying glass in right hand, eyes looking sideways ---
+// SEARCHING: magnifying glass, eyes moving
 const searchingSpriteA: SpriteTemplate = (p) => [
   [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
-  [_, p.hair, p.skin, _, p.skin, W, p.hair, _],          // eyes looking right
+  [_, p.hair, p.skin, _, p.skin, W, p.hair, _],
   [_, _, p.skin, _, p.skin, K, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
   [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, _],
-  [_, _, p.shirt, p.shirt, p.shirt, p.skin, CY, CY],     // hand + lens circle
-  [_, _, _, _, _, _, CY, CY],                             // lens bottom
-  [_, _, p.pants, p.pants, p.pants, p.pants, BR, _],      // handle
+  [_, _, p.shirt, p.shirt, p.shirt, p.skin, CY, CY],
+  [_, _, _, _, _, _, CY, CY],
+  [_, _, p.pants, p.pants, p.pants, p.pants, BR, _],
   [_, _, p.pants, _, _, p.pants, _, _],
   [_, _, K, _, _, K, _, _],
 ];
@@ -208,42 +217,42 @@ const searchingSpriteA: SpriteTemplate = (p) => [
 const searchingSpriteB: SpriteTemplate = (p) => [
   [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
-  [_, p.hair, W, p.skin, W, p.skin, p.hair, _],          // eyes looking left
+  [_, p.hair, W, p.skin, W, p.skin, p.hair, _],
   [_, _, K, p.skin, K, p.skin, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
   [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, _],
-  [CY, CY, p.skin, p.shirt, p.shirt, p.shirt, _, _],     // lens on left side
+  [CY, CY, p.skin, p.shirt, p.shirt, p.shirt, _, _],
   [CY, CY, _, _, _, _, _, _],
   [_, BR, p.pants, p.pants, p.pants, p.pants, _, _],
   [_, _, p.pants, _, _, p.pants, _, _],
   [_, _, K, _, _, K, _, _],
 ];
 
-// --- TESTING: test tube (green rectangle) in hand, sparks ---
+// TESTING: test tube + sparks
 const testingSpriteA: SpriteTemplate = (p) => [
-  [_, _, p.hair, p.hair, p.hair, p.hair, _, YL],         // spark
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, YL],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
   [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
   [_, _, p.skin, K, p.skin, K, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
-  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, GN, _], // holding tube
-  [_, _, p.shirt, p.shirt, _, p.skin, GN, YL],            // tube + spark
-  [_, _, _, _, _, _, GN, _],                               // tube bottom
+  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, GN, _],
+  [_, _, p.shirt, p.shirt, _, p.skin, GN, YL],
+  [_, _, _, _, _, _, GN, _],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
   [_, _, p.pants, _, _, p.pants, _, _],
   [_, _, K, _, _, K, _, _],
 ];
 
 const testingSpriteB: SpriteTemplate = (p) => [
-  [_, _, p.hair, p.hair, p.hair, p.hair, YL, _],         // spark moved
+  [_, _, p.hair, p.hair, p.hair, p.hair, YL, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, YL],
   [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
   [_, _, p.skin, K, p.skin, K, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
-  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, GN, YL], // sparks
+  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, GN, YL],
   [_, _, p.shirt, p.shirt, _, p.skin, GN, _],
   [_, _, _, _, _, _, GN, _],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
@@ -251,15 +260,15 @@ const testingSpriteB: SpriteTemplate = (p) => [
   [_, _, K, _, _, K, _, _],
 ];
 
-// --- RUNNING: gear spinning beside, terminal open ---
+// RUNNING: gear spinning beside
 const runningSpriteA: SpriteTemplate = (p) => [
   [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
   [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
   [_, _, p.skin, K, p.skin, K, _, _],
-  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, GR],     // gear top
-  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, GR, LG],  // gear body
-  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, _, GR],     // gear bottom
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, GR],
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, GR, LG],
+  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, _, GR],
   [_, _, p.shirt, p.shirt, p.shirt, p.skin, _, _],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
   [_, _, p.pants, _, _, p.pants, _, _],
@@ -272,7 +281,7 @@ const runningSpriteB: SpriteTemplate = (p) => [
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
   [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
   [_, _, p.skin, K, p.skin, K, _, _],
-  [GR, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],     // gear left
+  [GR, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [LG, GR, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
   [GR, _, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, _],
   [_, _, p.skin, p.shirt, p.shirt, p.shirt, _, _],
@@ -282,16 +291,16 @@ const runningSpriteB: SpriteTemplate = (p) => [
   [_, _, K, _, _, K, _, _],
 ];
 
-// --- MESSAGING: speech balloon above, mouth open ---
+// MESSAGING: speech balloon above
 const messagingSpriteA: SpriteTemplate = (p) => [
-  [_, W, W, W, W, W, W, _],                              // balloon top
-  [_, W, K, K, K, W, _, _],                              // text in balloon
-  [_, W, W, W, W, _, _, _],                              // balloon bottom
-  [_, _, _, W, _, _, _, _],                               // balloon tail
+  [_, W, W, W, W, W, W, _],
+  [_, W, K, K, K, W, _, _],
+  [_, W, W, W, W, _, _, _],
+  [_, _, _, W, _, _, _, _],
   [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
-  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],          // eyes open
-  [_, _, p.skin, K, p.skin, K, _, _],                    // mouth open (dark)
+  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
+  [_, _, p.skin, K, p.skin, K, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
   [_, _, p.pants, _, _, p.pants, _, _],
@@ -299,32 +308,32 @@ const messagingSpriteA: SpriteTemplate = (p) => [
 ];
 
 const messagingSpriteB: SpriteTemplate = (p) => [
-  [_, _, W, W, W, W, W, _],                              // balloon shifted
+  [_, _, W, W, W, W, W, _],
   [_, _, W, K, K, K, W, _],
   [_, _, _, W, W, W, _, _],
-  [_, _, _, _, W, _, _, _],                               // tail
+  [_, _, _, _, W, _, _, _],
   [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
   [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
-  [_, _, p.skin, p.skin, p.skin, p.skin, _, _],           // mouth closed
+  [_, _, p.skin, p.skin, p.skin, p.skin, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
   [_, _, p.pants, _, _, p.pants, _, _],
   [_, _, K, _, _, K, _, _],
 ];
 
-// --- DEPLOYING: rocket beside, flames below ---
+// DEPLOYING: rocket beside
 const deployingSpriteA: SpriteTemplate = (p) => [
-  [_, _, p.hair, p.hair, p.hair, p.hair, _, W],          // rocket nose
-  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, LG], // rocket body
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, W],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, LG],
   [_, p.hair, p.skin, W, p.skin, W, p.hair, LG],
-  [_, _, p.skin, K, p.skin, K, _, LG],                   // rocket body
+  [_, _, p.skin, K, p.skin, K, _, LG],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, LG],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, LG],
-  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, RD], // rocket fin + flame
-  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, OG],     // flame
-  [_, _, p.pants, p.pants, p.pants, p.pants, _, RD],     // flame
-  [_, _, p.pants, _, _, p.pants, _, OG],                  // flame glow
+  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, RD],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, OG],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, RD],
+  [_, _, p.pants, _, _, p.pants, _, OG],
   [_, _, p.pants, _, _, p.pants, _, _],
   [_, _, K, _, _, K, _, _],
 ];
@@ -336,15 +345,15 @@ const deployingSpriteB: SpriteTemplate = (p) => [
   [_, _, p.skin, K, p.skin, K, _, LG],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, LG],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, LG],
-  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, OG], // alternate flame
+  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, OG],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, RD],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, OG],
-  [_, _, p.pants, _, _, p.pants, _, YL],                  // bright flame
+  [_, _, p.pants, _, _, p.pants, _, YL],
   [_, _, p.pants, _, _, p.pants, _, _],
   [_, _, K, _, _, K, _, _],
 ];
 
-// --- DEBUGGING: wrench in hand + magnifier, bug being squished ---
+// DEBUGGING: wrench + magnifier
 const debuggingSpriteA: SpriteTemplate = (p) => [
   [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
@@ -352,11 +361,11 @@ const debuggingSpriteA: SpriteTemplate = (p) => [
   [_, _, p.skin, K, p.skin, K, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
-  [GR, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, CY], // wrench + lens
+  [GR, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, CY],
   [GR, _, p.shirt, p.shirt, p.shirt, _, _, CY],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
   [_, _, p.pants, _, _, p.pants, _, _],
-  [_, RD, p.pants, _, _, p.pants, _, _],                   // bug pixel
+  [_, RD, p.pants, _, _, p.pants, _, _],
   [_, _, K, _, _, K, _, _],
 ];
 
@@ -367,22 +376,22 @@ const debuggingSpriteB: SpriteTemplate = (p) => [
   [_, _, p.skin, K, p.skin, K, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
-  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, GR, CY], // wrench right + lens
+  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, GR, CY],
   [_, _, p.shirt, p.shirt, p.shirt, _, GR, CY],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
   [_, _, p.pants, _, _, p.pants, _, _],
-  [_, _, p.pants, _, RD, p.pants, _, _],                   // bug moved
-  [_, _, K, _, YL, K, _, _],                               // squish spark
+  [_, _, p.pants, _, RD, p.pants, _, _],
+  [_, _, K, _, YL, K, _, _],
 ];
 
-// --- CELEBRATING: arms raised, confetti, stars ---
+// CELEBRATING: arms raised, confetti, star eyes
 const celebratingSpriteA: SpriteTemplate = (p) => [
-  [YL, _, _, _, _, _, _, MG],                              // confetti
+  [YL, _, _, _, _, _, _, MG],
   [_, MG, p.hair, p.hair, p.hair, p.hair, YL, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
-  [_, p.hair, p.skin, YL, p.skin, YL, p.hair, _],         // star eyes
-  [_, _, p.skin, p.skin, p.skin, p.skin, _, _],            // big smile
-  [p.skin, _, p.shirt, p.shirt, p.shirt, p.shirt, _, p.skin], // arms up
+  [_, p.hair, p.skin, YL, p.skin, YL, p.hair, _],
+  [_, _, p.skin, p.skin, p.skin, p.skin, _, _],
+  [p.skin, _, p.shirt, p.shirt, p.shirt, p.shirt, _, p.skin],
   [p.skin, _, p.shirt, p.shirt, p.shirt, p.shirt, _, p.skin],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
@@ -392,12 +401,12 @@ const celebratingSpriteA: SpriteTemplate = (p) => [
 ];
 
 const celebratingSpriteB: SpriteTemplate = (p) => [
-  [_, MG, _, YL, _, GN, _, CY],                           // more confetti
+  [_, MG, _, YL, _, GN, _, CY],
   [CY, _, p.hair, p.hair, p.hair, p.hair, _, YL],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
-  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],           // open eyes
+  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
   [_, _, p.skin, p.skin, p.skin, p.skin, _, _],
-  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, _], // arms wide
+  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, _],
   [p.skin, _, p.shirt, p.shirt, p.shirt, p.shirt, _, p.skin],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
@@ -406,14 +415,14 @@ const celebratingSpriteB: SpriteTemplate = (p) => [
   [_, K, _, _, _, _, K, _],
 ];
 
-// --- ERROR: big red X, gray smoke, sad face ---
+// ERROR: big red X, sad face
 const errorSpriteA: SpriteTemplate = (p) => [
-  [_, _, RD, _, _, RD, _, _],                              // big X top
-  [_, _, _, RD, RD, _, _, _],                              // X cross
-  [_, _, p.hair, p.hair, p.hair, p.hair, _, GR],           // smoke
+  [_, _, RD, _, _, RD, _, _],
+  [_, _, _, RD, RD, _, _, _],
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, GR],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
-  [_, p.hair, p.skin, W, p.skin, W, p.hair, GR],          // sad eyes (X)
-  [_, _, p.skin, p.skin, p.skin, p.skin, _, _],            // frown
+  [_, p.hair, p.skin, W, p.skin, W, p.hair, GR],
+  [_, _, p.skin, p.skin, p.skin, p.skin, _, _],
   [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
   [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
   [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, _],
@@ -423,9 +432,9 @@ const errorSpriteA: SpriteTemplate = (p) => [
 ];
 
 const errorSpriteB: SpriteTemplate = (p) => [
-  [_, RD, _, _, _, _, RD, _],                              // X shifted
+  [_, RD, _, _, _, _, RD, _],
   [_, _, RD, _, _, RD, _, _],
-  [_, _, p.hair, p.hair, p.hair, p.hair, GR, _],           // smoke shifted
+  [_, _, p.hair, p.hair, p.hair, p.hair, GR, _],
   [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, GR],
   [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
   [_, _, p.skin, p.skin, p.skin, p.skin, _, _],
@@ -438,7 +447,73 @@ const errorSpriteB: SpriteTemplate = (p) => [
 ];
 
 // ──────────────────────────────────────────────────────────────
-// Sprite registry: map ActivityState to frames
+// WALKING sprites — used during zone transitions
+// Walking LEFT (moving left on screen)
+// ──────────────────────────────────────────────────────────────
+
+const walkLeftSpriteA: SpriteTemplate = (p) => [
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
+  [_, p.hair, p.skin, W, p.skin, p.skin, p.hair, _],
+  [_, _, p.skin, K, p.skin, p.skin, _, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
+  [p.skin, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, _, _],   // arms swinging forward
+  [_, _, p.shirt, p.shirt, p.shirt, p.skin, _, _],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
+  [p.pants, _, _, p.pants, p.pants, _, _, _],                    // stride: left foot forward
+  [p.pants, _, _, _, p.pants, _, _, _],
+  [K, _, _, _, K, _, _, _],
+];
+
+const walkLeftSpriteB: SpriteTemplate = (p) => [
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
+  [_, p.hair, p.skin, p.skin, W, p.skin, p.hair, _],
+  [_, _, p.skin, p.skin, K, p.skin, _, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, p.skin],  // arms swinging backward
+  [_, _, p.skin, p.shirt, p.shirt, p.shirt, _, _],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
+  [_, _, _, _, p.pants, _, _, p.pants],                          // stride: right foot forward
+  [_, _, _, _, p.pants, _, _, p.pants],
+  [_, _, _, _, K, _, _, K],
+];
+
+// Walking RIGHT (moving right on screen)
+const walkRightSpriteA: SpriteTemplate = (p) => [
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
+  [_, p.hair, p.skin, p.skin, W, p.skin, p.hair, _],
+  [_, _, p.skin, p.skin, K, p.skin, _, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, p.skin],  // arms swinging
+  [_, _, p.shirt, p.shirt, p.shirt, p.skin, _, _],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
+  [_, _, _, p.pants, p.pants, _, _, p.pants],                    // stride
+  [_, _, _, p.pants, _, _, _, p.pants],
+  [_, _, _, K, _, _, _, K],
+];
+
+const walkRightSpriteB: SpriteTemplate = (p) => [
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
+  [_, p.hair, p.skin, W, p.skin, p.skin, p.hair, _],
+  [_, _, p.skin, K, p.skin, p.skin, _, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
+  [p.skin, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, _, _],   // opposite arm swing
+  [_, _, p.skin, p.shirt, p.shirt, p.shirt, _, _],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
+  [p.pants, _, _, _, p.pants, p.pants, _, _],                    // opposite stride
+  [p.pants, _, _, _, p.pants, _, _, _],
+  [K, _, _, _, K, _, _, _],
+];
+
+// ──────────────────────────────────────────────────────────────
+// Sprite registry
 // ──────────────────────────────────────────────────────────────
 
 const SPRITE_TEMPLATES: Record<string, SpriteTemplate[]> = {
@@ -454,23 +529,17 @@ const SPRITE_TEMPLATES: Record<string, SpriteTemplate[]> = {
   debugging:   [debuggingSpriteA, debuggingSpriteB],
   celebrating: [celebratingSpriteA, celebratingSpriteB],
   error:       [errorSpriteA, errorSpriteB],
+  // Walking animations
+  walk_left:   [walkLeftSpriteA, walkLeftSpriteB],
+  walk_right:  [walkRightSpriteA, walkRightSpriteB],
 };
 
 // ──────────────────────────────────────────────────────────────
 // Public API
 // ──────────────────────────────────────────────────────────────
 
-/**
- * Get the pixel grid for an agent sprite given their current activity state,
- * agent type (for palette selection), and animation frame number.
- *
- * @param state - the agent's current ActivityState
- * @param agentType - the agent type string (used to select color palette)
- * @param frame - animation frame counter (alternates between sprite variants)
- * @returns a 12x8 PixelGrid
- */
 export function getSprite(
-  state: ActivityState,
+  state: ActivityState | 'walk_left' | 'walk_right',
   agentType: string,
   frame: number,
 ): PixelGrid {
@@ -481,9 +550,6 @@ export function getSprite(
   return template(palette);
 }
 
-/**
- * Get the palette for a given agent type.
- */
 export function getAgentPalette(agentType: string): AgentPalette {
   return AGENT_PALETTES[agentType] ?? AGENT_PALETTES['default']!;
 }

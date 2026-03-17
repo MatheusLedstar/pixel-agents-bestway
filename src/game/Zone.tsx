@@ -1,10 +1,12 @@
-// Renders a single zone on the game map with its background and agents
+// Renders a single zone on the game map with atmosphere, background and agents
 
 import React from 'react';
 import { Box, Text } from 'ink';
 import type { ZoneId, AgentGameData } from './types.js';
+import { ZONE_COLORS, ZONE_DISPLAY_NAMES, ZONE_ICONS } from './types.js';
 import type { ActivityState } from '../map/activityMapper.js';
 import { generateZoneBackground } from './tiles.js';
+import { ZONE_ATMOSPHERE, ZONE_ATMOSPHERE_COLORS } from './tiles.js';
 import { renderPixelGrid } from './PixelCanvas.js';
 import GameCharacter from './GameCharacter.js';
 
@@ -12,7 +14,10 @@ export interface ZoneAgentInfo {
   name: string;
   type: string;
   state: ActivityState;
+  activityLabel?: string;
   gameData: AgentGameData;
+  isWalking?: boolean;
+  walkDirection?: 'left' | 'right';
 }
 
 export interface ZoneProps {
@@ -23,28 +28,19 @@ export interface ZoneProps {
   width: number;
   height: number;
   isSelected?: boolean;
+  selectedAgentIndex?: number;
 }
 
-const ZONE_COLORS: Record<ZoneId, string> = {
-  planning: 'cyanBright',
-  coding: 'greenBright',
-  testing: 'yellowBright',
-  deploying: 'redBright',
-  comms: 'magentaBright',
-  lounge: 'gray',
-  library: 'blueBright',
-  workshop: 'yellow',
-};
-
-const ZONE_DISPLAY_NAMES: Record<ZoneId, string> = {
-  planning: 'PLANNING ROOM',
-  coding: 'CODING LAB',
-  testing: 'TEST ARENA',
-  deploying: 'LAUNCH PAD',
-  comms: 'COMMS CENTER',
-  lounge: 'LOUNGE',
-  library: 'LIBRARY',
-  workshop: 'WORKSHOP',
+// Zone-specific corner decorations
+const ZONE_CORNERS: Record<ZoneId, string> = {
+  planning:  '📋',
+  coding:    '💻',
+  testing:   '🧪',
+  deploying: '🚀',
+  comms:     '📡',
+  lounge:    '☕',
+  library:   '📚',
+  workshop:  '🔧',
 };
 
 export default function Zone({
@@ -55,27 +51,38 @@ export default function Zone({
   width,
   height,
   isSelected = false,
+  selectedAgentIndex = -1,
 }: ZoneProps) {
   const color = ZONE_COLORS[zoneId] ?? 'white';
+  const atmosphereColor = ZONE_ATMOSPHERE_COLORS[zoneId] ?? 'gray';
   const displayName = zoneName || ZONE_DISPLAY_NAMES[zoneId] || zoneId.toUpperCase();
+  const icon = ZONE_ICONS[zoneId] ?? '◈';
+  const cornerIcon = ZONE_CORNERS[zoneId] ?? '';
 
-  // Inner dimensions (accounting for border)
   const innerWidth = Math.max(4, width - 2);
-  const innerHeight = Math.max(2, height - 3); // border top/bottom + header
+  const innerHeight = Math.max(2, height - 3);
 
-  // Generate background tile art
-  // Only render background if there's enough room and we have space beyond agents
-  const bgPixelHeight = Math.max(2, Math.min(4, innerHeight - 1)) * 2; // pixel rows (half-block doubles)
-  const bgPixelWidth = Math.max(4, innerWidth);
-  const bgGrid = generateZoneBackground(zoneId, bgPixelWidth, bgPixelHeight);
-  const bgLines = renderPixelGrid(bgGrid);
+  // Generate atmosphere lines (2 lines of animated ASCII)
+  const atmosphereFn = ZONE_ATMOSPHERE[zoneId];
+  const atmosphereLines = atmosphereFn
+    ? atmosphereFn(innerWidth, spinnerFrame)
+    : ['', ''];
 
-  // Determine if compact mode (not enough space for full sprites)
-  const compact = innerWidth < 20 || innerHeight < 8;
+  // Pixel background (only if we have extra height)
+  const showPixelBg = innerHeight >= 10 && innerWidth >= 12;
+  const bgPixelHeight = 4;
+  const bgPixelWidth = Math.min(innerWidth, 12);
+  const bgGrid = showPixelBg ? generateZoneBackground(zoneId, bgPixelWidth, bgPixelHeight) : null;
+  const bgLines = bgGrid ? renderPixelGrid(bgGrid) : [];
 
-  // Truncate header to fit
-  const headerText = displayName.length > innerWidth
-    ? displayName.slice(0, innerWidth - 1) + '\u2026'
+  // Compact mode when zone is too small
+  const compact = innerWidth < 18 || innerHeight < 14;
+
+  // Truncate header to fit (leave room for icon + agent count)
+  const countBadge = agents.length > 0 ? ` [${agents.length}]` : '';
+  const headerMaxLen = innerWidth - countBadge.length - 2;
+  const headerText = displayName.length > headerMaxLen
+    ? displayName.slice(0, headerMaxLen - 1) + '…'
     : displayName;
 
   return (
@@ -83,39 +90,61 @@ export default function Zone({
       flexDirection="column"
       width={width}
       height={height}
-      borderStyle="single"
+      borderStyle={isSelected ? 'double' : 'single'}
       borderColor={isSelected ? 'white' : color}
     >
-      {/* Zone header */}
-      <Box justifyContent="center">
-        <Text color={color} bold>{headerText}</Text>
+      {/* Zone header with name + agent count */}
+      <Box justifyContent="space-between">
+        <Box gap={1}>
+          <Text color={color} bold>{headerText}</Text>
+          {agents.length > 0 && (
+            <Text color="white" dimColor>{countBadge}</Text>
+          )}
+        </Box>
+        <Text dimColor>{cornerIcon || icon}</Text>
       </Box>
 
-      {/* Background tile (1-2 lines) */}
-      {bgLines.length > 0 && (
-        <Box flexDirection="column">
-          {bgLines.slice(0, 2).map((line, i) => (
-            <Text key={`bg-${i}`}>{line}</Text>
-          ))}
-        </Box>
-      )}
+      {/* Atmosphere / background pattern */}
+      <Box flexDirection="column">
+        {atmosphereLines.slice(0, 2).map((line, i) => (
+          <Text key={`atm-${i}`} color={atmosphereColor} dimColor>
+            {line.length > innerWidth ? line.slice(0, innerWidth) : line}
+          </Text>
+        ))}
+      </Box>
 
-      {/* Agents or empty message */}
+      {/* Pixel background tile (if room) */}
+      {showPixelBg && bgLines.slice(0, 2).map((line, i) => (
+        <Text key={`bg-${i}`} dimColor>{line}</Text>
+      ))}
+
+      {/* Agents or empty state */}
       {agents.length === 0 ? (
-        <Box justifyContent="center" flexGrow={1}>
-          <Text dimColor>empty</Text>
+        <Box justifyContent="center" flexGrow={1} alignItems="center">
+          <Text dimColor>─ empty ─</Text>
         </Box>
       ) : (
-        <Box flexDirection="row" flexWrap="wrap" justifyContent="center" gap={1} flexGrow={1}>
-          {agents.map((agent) => (
+        <Box
+          flexDirection="row"
+          flexWrap="wrap"
+          justifyContent="center"
+          gap={1}
+          flexGrow={1}
+          alignItems="flex-start"
+        >
+          {agents.map((agent, idx) => (
             <GameCharacter
               key={agent.name}
               agentName={agent.name}
               agentType={agent.type}
               activityState={agent.state}
+              activityLabel={agent.activityLabel}
               gameData={agent.gameData}
               spinnerFrame={spinnerFrame}
               compact={compact}
+              isSelected={isSelected && idx === selectedAgentIndex}
+              isWalking={agent.isWalking}
+              walkDirection={agent.walkDirection}
             />
           ))}
         </Box>

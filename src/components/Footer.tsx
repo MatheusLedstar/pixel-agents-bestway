@@ -56,6 +56,8 @@ const KEYBINDINGS: Record<ViewType, KeyBinding[]> = {
   ],
   'game-map': [
     { key: 'Esc', label: 'Back' },
+    { key: '←→', label: 'Zone' },
+    { key: '↑↓', label: 'Agent' },
     { key: 'q', label: 'Quit' },
   ],
 };
