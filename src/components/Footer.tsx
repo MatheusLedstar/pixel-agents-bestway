@@ -56,6 +56,11 @@ const KEYBINDINGS: Record<ViewType, KeyBinding[]> = {
   ],
   'game-map': [
     { key: 'Esc', label: 'Back' },
+    { key: '←→↑↓', label: 'Navigate' },
+    { key: '↵', label: 'Inspect' },
+    { key: 'Tab', label: 'Next Agent' },
+    { key: 'm', label: 'Mini-Map' },
+    { key: 'f', label: 'Fullscreen' },
     { key: 'q', label: 'Quit' },
   ],
 };
