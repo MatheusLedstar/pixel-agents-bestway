@@ -38,16 +38,14 @@ struct MainContentView: View {
 
             if showGameMap {
                 // Game Map view
-                ScrollView {
-                    GameMapView(
-                        team: team,
-                        activities: dataService.activities,
-                        tasks: dataService.tasks,
-                        messages: dataService.messages,
-                        allMembers: dataService.allMembers
-                    )
-                    .padding(24)
-                }
+                GameMapView(
+                    team: team,
+                    activities: dataService.activities,
+                    tasks: dataService.tasks,
+                    messages: dataService.messages,
+                    allMembers: dataService.allMembers
+                )
+                .padding(24)
             } else {
                 // Content without outer scroll - each section scrolls independently
                 VStack(spacing: 16) {
