@@ -123,7 +123,7 @@ function placeFurniture(room) {
         const cs=Math.floor(iw/4), rs=Math.floor(ih/3);
         for(let col=0;col<3;col++) for(let row=0;row<2;row++) {
             const cx=x0+cs*(col+1), cy=y0+rs*(row+1);
-            furnitureMap[cy-1][cx]='monitor'; furnitureMap[cy][cx]='desk';
+            furnitureMap[cy][cx]='workstation';
             furnitureMap[cy+1][cx]='chair_back';
             seats.push({x:cx,y:cy+1,dir:'up',room:room.id});
         }
@@ -156,7 +156,7 @@ function placeFurniture(room) {
         const cs=Math.floor(iw/3);
         for(let col=0;col<2;col++) for(let row=0;row<2;row++) {
             const cx=x0+cs*(col+1), cy=y0+3+row*4;
-            furnitureMap[cy][cx]='desk'; furnitureMap[cy-1][cx]='monitor';
+            furnitureMap[cy][cx]='workstation';
             furnitureMap[cy+1][cx]='chair_back';
             seats.push({x:cx,y:cy+1,dir:'up',room:room.id});
         }
@@ -166,7 +166,7 @@ function placeFurniture(room) {
         const cs=Math.floor(iw/3), rs=Math.floor(ih/3);
         for(let col=0;col<2;col++) for(let row=0;row<2;row++) {
             const cx=x0+cs*(col+1), cy=y0+rs*(row+1);
-            furnitureMap[cy][cx]='desk'; furnitureMap[cy-1][cx]='monitor';
+            furnitureMap[cy][cx]='workstation';
             furnitureMap[cy+1][cx]='chair_back';
             seats.push({x:cx,y:cy+1,dir:'up',room:room.id});
         }
@@ -329,9 +329,60 @@ function drawFurniture(type, px, py) {
         break;
     case 'monitor':
         img=imgCache[PC_FRAMES[Math.floor(frameCount/20)%3]];
-        if(img) ctx.drawImage(img, px, py-TILE/2, TILE, TILE*1.5);
-        else { ctx.fillStyle='#1E40AF'; ctx.fillRect(px+2,py+2,TILE-4,TILE-4); }
+        if(img) ctx.drawImage(img, px+2, py+TILE*0.4, TILE-4, TILE);
+        else { ctx.fillStyle='#1E40AF'; ctx.fillRect(px+2,py+TILE*0.4,TILE-4,TILE); }
         break;
+    case 'workstation': {
+        // === DESK (bottom 60% of tile) ===
+        const dkY=py+TILE*0.4, dkH=TILE*0.6;
+        // Desk top surface (3D effect)
+        ctx.fillStyle='#8B6914';
+        ctx.fillRect(px-3, dkY, TILE+6, 2);
+        // Desk front face
+        ctx.fillStyle='#6B4C3B';
+        ctx.fillRect(px-3, dkY+2, TILE+6, dkH-2);
+        // Desk highlight
+        ctx.fillStyle='#9B7924';
+        ctx.fillRect(px-2, dkY, TILE+4, 1);
+        // Desk legs
+        ctx.fillStyle='#4A3728';
+        ctx.fillRect(px-2, dkY+dkH-1, 2, 3);
+        ctx.fillRect(px+TILE, dkY+dkH-1, 2, 3);
+
+        // === MACBOOK (on desk surface, upper portion) ===
+        const lx=px+1, ly=dkY-TILE*0.7;
+        const lw=TILE-2, lh=TILE*0.7;
+        // Screen bezel (dark gray aluminum)
+        ctx.fillStyle='#2A2A30';
+        ctx.beginPath(); ctx.roundRect(lx, ly, lw, lh, 1.5); ctx.fill();
+        // Screen display (active — with slight glow)
+        const screenPad=1.5;
+        const pulse=0.85+0.15*Math.sin(frameCount*0.04);
+        ctx.fillStyle=`rgba(30,100,200,${pulse})`;
+        ctx.fillRect(lx+screenPad, ly+screenPad, lw-screenPad*2, lh-screenPad*2-1);
+        // Code lines on screen
+        ctx.globalAlpha=0.6;
+        for(let i=0;i<3;i++) {
+            const lineW=3+((frameCount+i*7)%4)*1.5;
+            ctx.fillStyle=i===1?'#34D399':'#60A5FA';
+            ctx.fillRect(lx+3, ly+3+i*2.5, lineW, 1);
+        }
+        ctx.globalAlpha=1;
+        // Screen glow on desk
+        ctx.globalAlpha=0.06;
+        ctx.fillStyle='#60A5FA';
+        ctx.fillRect(px-2, dkY-1, TILE+4, 3);
+        ctx.globalAlpha=1;
+        // Laptop hinge (thin line between screen and desk)
+        ctx.fillStyle='#555';
+        ctx.fillRect(lx+1, dkY-1, lw-2, 1.5);
+        // Keyboard/base (thin slab on desk surface)
+        ctx.fillStyle='#C0C0C8';
+        ctx.fillRect(lx+1, dkY, lw-2, 2);
+        ctx.fillStyle='#A0A0A8';
+        ctx.fillRect(lx+2, dkY+0.5, lw-4, 0.5);
+        break;
+    }
     case 'chair_front':
         img=imgCache[CHAIR_FRONT];
         if(img) ctx.drawImage(img, px, py, TILE, TILE);
