@@ -98,6 +98,27 @@ export function renderPixelGrid(pixels: PixelGrid, bgColor?: string): string[] {
 }
 
 /**
+ * Scale a PixelGrid by a given integer factor.
+ * scale=2 → each pixel becomes 2×2 pixels (2 wide terminal chars, 1 terminal row).
+ * scale=3 → each pixel becomes 3 wide terminal chars.
+ */
+export function scalePixelGrid(grid: PixelGrid, scaleX: number, scaleY: number = 1): PixelGrid {
+  const result: PixelGrid = [];
+  for (const row of grid) {
+    for (let ry = 0; ry < scaleY; ry++) {
+      const scaled: (string | null)[] = [];
+      for (const pixel of row) {
+        for (let rx = 0; rx < scaleX; rx++) {
+          scaled.push(pixel);
+        }
+      }
+      result.push(scaled);
+    }
+  }
+  return result;
+}
+
+/**
  * React/Ink component that renders a PixelGrid using half-block ANSI characters.
  */
 export default function PixelCanvas({ pixels, bgColor }: PixelCanvasProps) {

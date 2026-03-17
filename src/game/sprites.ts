@@ -513,33 +513,176 @@ const walkRightSpriteB: SpriteTemplate = (p) => [
 ];
 
 // ──────────────────────────────────────────────────────────────
+// WALKING UP — moving toward top of screen (away from viewer)
+// ──────────────────────────────────────────────────────────────
+
+const walkUpSpriteA: SpriteTemplate = (p) => [
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],  // back of head
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
+  [p.skin, _, p.shirt, p.shirt, p.shirt, p.shirt, _, p.skin],  // arms at sides
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
+  [_, _, p.pants, _, _, _, p.pants, _],                        // legs walking
+  [_, p.pants, _, _, _, _, _, p.pants],
+  [_, K, _, _, _, _, _, K],
+];
+
+const walkUpSpriteB: SpriteTemplate = (p) => [
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
+  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, _],  // arms at sides (other frame)
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
+  [_, p.pants, _, _, _, _, p.pants, _],                        // legs walking (opposite)
+  [_, _, p.pants, _, _, p.pants, _, _],
+  [_, _, K, _, _, K, _, _],
+];
+
+// ──────────────────────────────────────────────────────────────
+// WALKING DOWN — moving toward bottom of screen (toward viewer)
+// ──────────────────────────────────────────────────────────────
+
+const walkDownSpriteA: SpriteTemplate = (p) => [
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
+  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],               // facing viewer
+  [_, _, p.skin, K, p.skin, K, _, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
+  [p.skin, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, p.skin], // arms out
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
+  [_, _, p.pants, _, _, _, p.pants, _],
+  [_, p.pants, _, _, _, _, _, p.pants],
+  [K, _, _, _, _, _, _, K],
+];
+
+const walkDownSpriteB: SpriteTemplate = (p) => [
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
+  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
+  [_, _, p.skin, K, p.skin, K, _, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
+  [_, p.skin, p.shirt, p.shirt, p.shirt, p.shirt, p.skin, _],  // arms in
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
+  [_, p.pants, _, _, _, _, p.pants, _],
+  [_, _, p.pants, _, _, p.pants, _, _],
+  [_, _, K, _, _, K, _, _],
+];
+
+// ──────────────────────────────────────────────────────────────
+// SITTING AT DESK — special idle pose (at computer)
+// ──────────────────────────────────────────────────────────────
+
+const sittingSpriteA: SpriteTemplate = (p) => [
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
+  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
+  [_, _, p.skin, K, p.skin, K, _, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, BL],  // monitor glow
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, BL, GN],
+  [_, DG, DG, DG, DG, DG, _, BL],                    // keyboard
+  [_, _, DG, DG, DG, DG, _, _],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
+  [_, p.pants, p.pants, _, _, p.pants, p.pants, _],
+  [_, p.pants, p.pants, _, _, p.pants, p.pants, _],
+  [_, K, K, _, _, K, K, _],
+];
+
+const sittingSpriteB: SpriteTemplate = (p) => [
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
+  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
+  [_, _, p.skin, K, p.skin, K, _, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, GN, BL],  // monitor different color
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, BL, GN],
+  [p.skin, DG, DG, DG, DG, DG, p.skin, BL],            // both hands typing
+  [_, _, DG, DG, DG, DG, _, _],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
+  [_, p.pants, p.pants, _, _, p.pants, p.pants, _],
+  [_, p.pants, p.pants, _, _, p.pants, p.pants, _],
+  [_, K, K, _, _, K, K, _],
+];
+
+// ──────────────────────────────────────────────────────────────
+// PHONE CALL pose — for messaging/comms
+// ──────────────────────────────────────────────────────────────
+
+const phoneSpriteA: SpriteTemplate = (p) => [
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
+  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
+  [_, _, p.skin, K, p.skin, p.skin, DG, _],  // phone at ear
+  [_, _, p.shirt, p.shirt, p.shirt, DG, DG, _],
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
+  [_, p.skin, p.shirt, p.shirt, p.shirt, p.skin, _, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
+  [_, _, p.pants, _, _, p.pants, _, _],
+  [_, _, p.pants, _, _, p.pants, _, _],
+  [_, _, K, _, _, K, _, _],
+];
+
+const phoneSpriteB: SpriteTemplate = (p) => [
+  [_, _, p.hair, p.hair, p.hair, p.hair, _, _],
+  [_, p.hair, p.hair, p.hair, p.hair, p.hair, p.hair, _],
+  [_, p.hair, p.skin, W, p.skin, W, p.hair, _],
+  [_, _, p.skin, K, p.skin, p.skin, DG, _],
+  [_, _, p.shirt, p.shirt, DG, DG, DG, _],  // hand moved
+  [_, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, p.shirt, _],
+  [_, p.skin, p.shirt, p.shirt, p.shirt, p.skin, _, _],
+  [_, _, p.shirt, p.shirt, p.shirt, p.shirt, _, _],
+  [_, _, p.pants, p.pants, p.pants, p.pants, _, _],
+  [_, _, p.pants, _, _, p.pants, _, _],
+  [_, _, p.pants, _, _, p.pants, _, _],
+  [_, _, K, _, _, K, _, _],
+];
+
+// ──────────────────────────────────────────────────────────────
 // Sprite registry
 // ──────────────────────────────────────────────────────────────
 
 const SPRITE_TEMPLATES: Record<string, SpriteTemplate[]> = {
-  idle:        [idleSpriteA, idleSpriteB],
+  idle:        [sittingSpriteA, sittingSpriteB],   // idle = sitting at desk
   thinking:    [thinkingSpriteA, thinkingSpriteB],
   reading:     [readingSpriteA, readingSpriteB],
   writing:     [writingSpriteA, writingSpriteB],
   searching:   [searchingSpriteA, searchingSpriteB],
   testing:     [testingSpriteA, testingSpriteB],
   running:     [runningSpriteA, runningSpriteB],
-  messaging:   [messagingSpriteA, messagingSpriteB],
+  messaging:   [phoneSpriteA, phoneSpriteB],        // messaging = phone call pose
   deploying:   [deployingSpriteA, deployingSpriteB],
   debugging:   [debuggingSpriteA, debuggingSpriteB],
   celebrating: [celebratingSpriteA, celebratingSpriteB],
   error:       [errorSpriteA, errorSpriteB],
-  // Walking animations
-  walk_left:   [walkLeftSpriteA, walkLeftSpriteB],
-  walk_right:  [walkRightSpriteA, walkRightSpriteB],
+  // Walking animations (4 directions)
+  walk_left:   [walkLeftSpriteA, walkLeftSpriteB, walkLeftSpriteA, walkLeftSpriteB],
+  walk_right:  [walkRightSpriteA, walkRightSpriteB, walkRightSpriteA, walkRightSpriteB],
+  walk_up:     [walkUpSpriteA, walkUpSpriteB, walkUpSpriteA, walkUpSpriteB],
+  walk_down:   [walkDownSpriteA, walkDownSpriteB, walkDownSpriteA, walkDownSpriteB],
+  // Special poses
+  sitting:     [sittingSpriteA, sittingSpriteB],
+  phone:       [phoneSpriteA, phoneSpriteB],
 };
 
 // ──────────────────────────────────────────────────────────────
 // Public API
 // ──────────────────────────────────────────────────────────────
 
+export type SpriteState = ActivityState | 'walk_left' | 'walk_right' | 'walk_up' | 'walk_down' | 'sitting' | 'phone';
+
 export function getSprite(
-  state: ActivityState | 'walk_left' | 'walk_right',
+  state: SpriteState,
   agentType: string,
   frame: number,
 ): PixelGrid {
