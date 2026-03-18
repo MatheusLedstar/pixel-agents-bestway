@@ -1,35 +1,79 @@
-// Speech bubble component displayed above agent sprites
-// Shows the current activity/action with animated dots for thinking
+/**
+ * SpeechBubble — animated speech bubbles above agent sprites.
+ *
+ * Each activity state gets a distinct visual treatment:
+ *  - thinking:    round thought bubble (○ ○ ○ ...) with ? or lightbulb
+ *  - writing:     sharp-cornered code block (< writing: file.ts >)
+ *  - error:       jagged/red alert bubble (!! ERROR !!)
+ *  - celebrating: sparkles and stars  (★ DONE ★)
+ *  - idle:        minimal dots or blank (sitting at desk)
+ *  - others:      clean rounded box with activity icon + truncated label
+ *
+ * Design based on classic game speech bubbles from official pixel art sources.
+ */
 
 import React from 'react';
 import { Box, Text } from 'ink';
 import type { ActivityState } from '../map/activityMapper.js';
 
-export interface SpeechBubbleProps {
-  activityState: ActivityState;
-  label: string;
-  spinnerFrame: number;
-  maxWidth?: number;
-  isSelected?: boolean;
+// ──────────────────────────────────────────────────────────────
+// State display config
+// ──────────────────────────────────────────────────────────────
+
+interface StateConfig {
+  icon:    string;
+  color:   string;
+  style:   'round' | 'sharp' | 'thought' | 'alert' | 'star' | 'none';
+  prefix?: string;
+  suffix?: string;
 }
 
-// Activity state → short display text + color
-const STATE_DISPLAY: Record<ActivityState, { text: string; color: string; icon: string }> = {
-  idle:        { text: 'idle',      color: 'gray',          icon: '·' },
-  thinking:    { text: 'thinking',  color: 'cyanBright',    icon: '?' },
-  reading:     { text: 'reading',   color: 'cyan',          icon: '▶' },
-  writing:     { text: 'writing',   color: 'magentaBright', icon: '✎' },
-  searching:   { text: 'searching', color: 'yellowBright',  icon: '⌕' },
-  running:     { text: 'running',   color: 'greenBright',   icon: '▷' },
-  testing:     { text: 'testing',   color: 'yellow',        icon: '⚗' },
-  messaging:   { text: 'messaging', color: 'cyanBright',    icon: '⟫' },
-  deploying:   { text: 'deploy',    color: 'redBright',     icon: '▲' },
-  debugging:   { text: 'debug',     color: 'yellow',        icon: '⚙' },
-  celebrating: { text: 'done!',     color: 'yellowBright',  icon: '★' },
-  error:       { text: 'error',     color: 'red',           icon: '✗' },
+const STATE_CONFIG: Record<ActivityState, StateConfig> = {
+  idle:        { icon: '·',  color: 'gray',          style: 'none'    },
+  thinking:    { icon: '?',  color: 'cyanBright',    style: 'thought' },
+  reading:     { icon: '▶',  color: 'blueBright',    style: 'round',  prefix: '📖 ' },
+  writing:     { icon: '✎',  color: 'magentaBright', style: 'sharp',  prefix: '< ', suffix: ' >' },
+  searching:   { icon: '⌕',  color: 'yellowBright',  style: 'round',  prefix: '🔍 ' },
+  running:     { icon: '▷',  color: 'greenBright',   style: 'sharp',  prefix: '$ ' },
+  testing:     { icon: '⚗',  color: 'yellow',        style: 'round',  prefix: '🧪 ' },
+  messaging:   { icon: '☎',  color: 'cyanBright',    style: 'round',  prefix: '📞 ' },
+  deploying:   { icon: '▲',  color: 'redBright',     style: 'alert',  prefix: '🚀 ' },
+  debugging:   { icon: '⚙',  color: 'yellow',        style: 'sharp',  prefix: '🐛 ' },
+  celebrating: { icon: '★',  color: 'yellowBright',  style: 'star'   },
+  error:       { icon: '✗',  color: 'red',           style: 'alert',  prefix: '!! ', suffix: ' !!' },
 };
 
-const THINKING_DOTS = ['   ', '.  ', '.. ', '...'];
+// Thought bubble dots animation (thinking state)
+const THOUGHT_DOTS = [
+  '○ ○ ○',
+  '● ○ ○',
+  '○ ● ○',
+  '○ ○ ●',
+];
+
+// Celebrating sparkles animation
+const STAR_FRAMES = [
+  '★ ✦ ★',
+  '✦ ★ ✦',
+  '★ ✧ ★',
+  '✧ ★ ✦',
+];
+
+// ──────────────────────────────────────────────────────────────
+// Props
+// ──────────────────────────────────────────────────────────────
+
+export interface SpeechBubbleProps {
+  activityState: ActivityState;
+  label:         string;
+  spinnerFrame:  number;
+  maxWidth?:     number;
+  isSelected?:   boolean;
+}
+
+// ──────────────────────────────────────────────────────────────
+// Component
+// ──────────────────────────────────────────────────────────────
 
 export default function SpeechBubble({
   activityState,
@@ -38,59 +82,105 @@ export default function SpeechBubble({
   maxWidth = 14,
   isSelected = false,
 }: SpeechBubbleProps) {
-  const display = STATE_DISPLAY[activityState] ?? STATE_DISPLAY['idle']!;
-  const isThinking = activityState === 'thinking';
-  const isIdle = activityState === 'idle';
+  const cfg = STATE_CONFIG[activityState] ?? STATE_CONFIG['idle']!;
 
-  if (isIdle && !isSelected) {
-    // Show a minimal dotted line for idle agents
+  // Idle: minimal display
+  if (cfg.style === 'none' && !isSelected) {
     return (
-      <Box flexDirection="column" alignItems="center" width={maxWidth}>
-        <Text dimColor>{'·'.repeat(Math.min(6, maxWidth))}</Text>
+      <Box width={maxWidth} justifyContent="center">
+        <Text dimColor>{'·····'}</Text>
       </Box>
     );
   }
 
-  // Animated dots for thinking
-  const dots = isThinking
-    ? THINKING_DOTS[Math.floor(spinnerFrame / 5) % 4] ?? '   '
-    : '';
+  const frame4 = Math.floor(spinnerFrame / 4) % 4;
+  const frame8 = Math.floor(spinnerFrame / 2) % 8;
 
-  // Format the content text
-  let content = '';
-  if (label && label.length > 0 && label !== 'idle') {
-    // Truncate label to fit
-    const maxLabelLen = maxWidth - 4;
-    content = label.length > maxLabelLen ? label.slice(0, maxLabelLen - 1) + '…' : label;
-  } else {
-    content = display.text + dots;
+  // ── THOUGHT BUBBLE (thinking) ──────────────────────────────
+  if (cfg.style === 'thought') {
+    const dots = THOUGHT_DOTS[frame4] ?? '○ ○ ○';
+    const lightbulb = frame8 < 4 ? '💡' : '?';
+    return (
+      <Box flexDirection="column" alignItems="center" width={maxWidth}>
+        <Text color="cyanBright">{dots}</Text>
+        <Text color={isSelected ? 'white' : 'cyanBright'} bold={isSelected}>
+          {lightbulb}
+        </Text>
+      </Box>
+    );
   }
 
-  const bubbleInner = `${display.icon} ${content}`;
-  const bubbleWidth = Math.min(maxWidth - 2, Math.max(6, bubbleInner.length + 2));
-  const padded = bubbleInner.length < bubbleWidth - 2
-    ? bubbleInner + ' '.repeat(bubbleWidth - 2 - bubbleInner.length)
-    : bubbleInner.slice(0, bubbleWidth - 2);
+  // ── STAR BURST (celebrating) ───────────────────────────────
+  if (cfg.style === 'star') {
+    const stars = STAR_FRAMES[frame4] ?? '★ ✦ ★';
+    return (
+      <Box flexDirection="column" alignItems="center" width={maxWidth}>
+        <Text color="yellowBright" bold>{stars}</Text>
+        <Text color="yellowBright">DONE!</Text>
+      </Box>
+    );
+  }
 
-  const topBorder = '╭' + '─'.repeat(bubbleWidth) + '╮';
-  const midLine   = '│' + padded + '│';
-  const botBorder = '╰' + '─'.repeat(Math.floor(bubbleWidth / 2)) + '╮';
-  const tail      = ' '.repeat(Math.floor(bubbleWidth / 2) + 1) + '│';
+  // ── Format content text ───────────────────────────────────
+  const rawLabel = label && label.length > 0 ? label : cfg.icon + ' ' + activityState;
+
+  // Use prefix/suffix for speech bubble style
+  const fullText = (cfg.prefix ?? '') + (rawLabel.length > 0 ? rawLabel : activityState) + (cfg.suffix ?? '');
+
+  // Truncate to fit
+  const innerMax = Math.max(4, maxWidth - 4); // 4 = 2 border + 2 padding
+  const truncated = fullText.length > innerMax
+    ? fullText.slice(0, innerMax - 1) + '…'
+    : fullText;
+
+  const contentLen = truncated.length;
+  const padded = truncated.padEnd(contentLen);
+
+  // ── ALERT BUBBLE (error, deploying) ───────────────────────
+  if (cfg.style === 'alert') {
+    const blinkColor = spinnerFrame % 4 < 2 ? cfg.color : 'white';
+    const top    = '╔' + '═'.repeat(contentLen + 2) + '╗';
+    const mid    = '║ ' + padded + ' ║';
+    const bot    = '╚' + '═'.repeat(contentLen + 2) + '╝';
+    const tail   = ' '.repeat(Math.floor((contentLen + 4) / 2) - 1) + '▼';
+    return (
+      <Box flexDirection="column" alignItems="center" width={maxWidth}>
+        <Text color={isSelected ? 'white' : blinkColor} bold>{top}</Text>
+        <Text color={isSelected ? 'white' : cfg.color}>{mid}</Text>
+        <Text color={isSelected ? 'white' : blinkColor}>{bot}</Text>
+        <Text color={isSelected ? 'white' : cfg.color} dimColor>{tail}</Text>
+      </Box>
+    );
+  }
+
+  // ── CODE BLOCK (writing, running, debugging) ───────────────
+  if (cfg.style === 'sharp') {
+    const top    = '┌' + '─'.repeat(contentLen + 2) + '┐';
+    const mid    = '│ ' + padded + ' │';
+    const bot    = '└' + '─'.repeat(Math.floor((contentLen + 2) / 2)) + '┘';
+    const tail   = ' '.repeat(Math.floor((contentLen + 4) / 2) - 1) + '│';
+    return (
+      <Box flexDirection="column" alignItems="center" width={maxWidth}>
+        <Text color={isSelected ? 'white' : cfg.color} bold={isSelected}>{top}</Text>
+        <Text color={isSelected ? 'white' : cfg.color}>{mid}</Text>
+        <Text color={isSelected ? 'white' : cfg.color} dimColor>{bot}</Text>
+        <Text color={isSelected ? 'white' : cfg.color} dimColor>{tail}</Text>
+      </Box>
+    );
+  }
+
+  // ── ROUND BUBBLE (default: reading, searching, testing, etc.) ──
+  const top    = '╭' + '─'.repeat(contentLen + 2) + '╮';
+  const mid    = '│ ' + padded + ' │';
+  const bot    = '╰' + '─'.repeat(Math.floor((contentLen + 2) / 2)) + '╮';
+  const tail   = ' '.repeat(Math.floor((contentLen + 4) / 2) - 1) + '│';
 
   return (
     <Box flexDirection="column" alignItems="center" width={maxWidth}>
-      <Text color={isSelected ? 'white' : display.color} bold={isSelected}>
-        {topBorder}
-      </Text>
-      <Text color={isSelected ? 'white' : display.color}>
-        {midLine}
-      </Text>
-      <Text color={isSelected ? 'white' : display.color} dimColor>
-        {botBorder}
-      </Text>
-      <Text color={isSelected ? 'white' : display.color} dimColor>
-        {tail}
-      </Text>
+      <Text color={isSelected ? 'white' : cfg.color} bold={isSelected}>{top}</Text>
+      <Text color={isSelected ? 'white' : cfg.color}>{mid}</Text>
+      <Text color={isSelected ? 'white' : cfg.color} dimColor>{bot}</Text>
+      <Text color={isSelected ? 'white' : cfg.color} dimColor>{tail}</Text>
     </Box>
   );
 }
