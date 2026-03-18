@@ -300,8 +300,8 @@ final class ClaudeDataService {
             teamCreatedAt: team.createdAt
         )
 
-        // If sessionEntries have no token data, use ccusage data
-        if baseTelemetry.totalTokens == 0 && tokenUsage.totalTokens > 0 {
+        // Always prefer ccusage data for tokens/cost when available (more accurate)
+        if tokenUsage.totalTokens > 0 {
             telemetry = TeamTelemetry(
                 duration: baseTelemetry.duration,
                 estimatedCost: tokenUsage.totalCost,
@@ -440,8 +440,13 @@ final class ClaudeDataService {
     private func startTokenPolling() {
         tokenPollTask?.cancel()
         tokenPollTask = Task { [weak self] in
-            // Fetch immediately on start
-            if let self { self.tokenUsage = await self.tokenTracker.fetchDailyUsage() }
+            // Fetch immediately on start and update telemetry right away
+            if let self {
+                self.tokenUsage = await self.tokenTracker.fetchDailyUsage()
+                if let team = self.selectedTeam {
+                    self.computeTelemetry(for: team)
+                }
+            }
             while !Task.isCancelled {
                 try? await Task.sleep(for: .seconds(60))
                 guard !Task.isCancelled else { break }
