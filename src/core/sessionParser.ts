@@ -159,10 +159,18 @@ function toolUseToAction(block: RawContentBlock): string {
   }
 }
 
-/** Read all lines from a JSONL file, filtering out blanks. */
+/** Max lines to read from very large JSONL files. */
+const MAX_JSONL_LINES = 10_000;
+
+/** Read all lines from a JSONL file, filtering out blanks. Caps at MAX_JSONL_LINES (tail). */
 async function readJsonlLines(filePath: string): Promise<string[]> {
   const raw = await readFile(filePath, 'utf-8');
-  return raw.split('\n').filter((l) => l.trim().length > 0);
+  const lines = raw.split('\n').filter((l) => l.trim().length > 0);
+  // For very large sessions, keep only the most recent lines
+  if (lines.length > MAX_JSONL_LINES) {
+    return lines.slice(-MAX_JSONL_LINES);
+  }
+  return lines;
 }
 
 // ──────────────────────────────────────────────────────────────
@@ -352,10 +360,9 @@ async function parseAgentActivity(filePath: string, agentName: string): Promise<
 
 /**
  * Try to build a mapping of agentId (hash) → member name by reading the lead JSONL.
- * Strategy:
- *  1. Find Task/Agent tool_use blocks in the lead JSONL that have a `name` field.
- *  2. Find the matching tool_result that contains "name: <member-name>".
- *  3. Then look for progress events with matching agentId hashes.
+ * Single-pass strategy:
+ *  1. For 'assistant' lines: collect Task/Agent tool_use blocks with name + prompt.
+ *  2. For 'progress' lines: correlate agentId hashes via prompt similarity.
  *
  * This is best-effort; unmapped agentIds fall back to a shortened hash display name.
  */
@@ -370,86 +377,72 @@ async function buildAgentNameMap(
   try {
     const lines = await readJsonlLines(leadFilePath);
 
-    // Pass 1: collect Task tool_use blocks that target this team
-    const taskToolIds = new Map<string, string>(); // tool_use_id → member name
+    // Collected in a single pass
+    const taskPrompts = new Map<string, string>(); // member name → prompt start (first 200 chars)
+    const pendingProgress: Array<{ hashAgentId: string; promptStart: string }> = [];
+
     for (const line of lines) {
       try {
         const obj = JSON.parse(line) as Record<string, unknown>;
-        if (obj['type'] !== 'assistant') continue;
-        const message = obj['message'] as Record<string, unknown> | undefined;
-        const content = (message?.['content'] as RawContentBlock[] | undefined) ?? [];
-        for (const block of content) {
-          if (block.type !== 'tool_use') continue;
-          if (block.name !== 'Task' && block.name !== 'Agent') continue;
-          const input = (block.input ?? {}) as Record<string, unknown>;
-          const memberName = String(input['name'] ?? '');
-          const targetTeam = String(input['team_name'] ?? '');
-          if (memberName && targetTeam === teamName) {
-            const blockId = (block as unknown as Record<string, unknown>)['id'];
-            if (typeof blockId === 'string') {
-              taskToolIds.set(blockId, memberName);
+        const lineType = obj['type'];
+
+        if (lineType === 'assistant') {
+          const message = obj['message'] as Record<string, unknown> | undefined;
+          const content = (message?.['content'] as RawContentBlock[] | undefined) ?? [];
+          for (const block of content) {
+            if (block.type !== 'tool_use') continue;
+            if (block.name !== 'Task' && block.name !== 'Agent') continue;
+            const input = (block.input ?? {}) as Record<string, unknown>;
+            const memberName = String(input['name'] ?? '');
+            const targetTeam = String(input['team_name'] ?? '');
+            const prompt = String(input['prompt'] ?? '').slice(0, 200);
+            if (memberName && targetTeam === teamName && prompt) {
+              taskPrompts.set(memberName, prompt);
             }
           }
-        }
-      } catch {
-        // skip
-      }
-    }
+        } else if (lineType === 'progress') {
+          const data = (obj['data'] ?? {}) as Record<string, unknown>;
+          const hashAgentId = String(data['agentId'] ?? '');
+          if (!hashAgentId || mapping.has(hashAgentId)) continue;
 
-    // Pass 2: find tool_results that mention "agent_id: <name>@<team>" and store name
-    // We build memberName → confirmed name set (won't give us hash though)
-    // This pass doesn't help us get the hash – kept for completeness / future use.
+          const promptInProgress = String(data['prompt'] ?? '').slice(0, 200);
+          if (!promptInProgress) continue;
 
-    // Pass 3: look at progress events which carry hash agentId
-    // We correlate by matching the prompt text of the progress event with the Task prompt
-    const taskPrompts = new Map<string, string>(); // member name → prompt start
-    for (const line of lines) {
-      try {
-        const obj = JSON.parse(line) as Record<string, unknown>;
-        if (obj['type'] !== 'assistant') continue;
-        const message = obj['message'] as Record<string, unknown> | undefined;
-        const content = (message?.['content'] as RawContentBlock[] | undefined) ?? [];
-        for (const block of content) {
-          if (block.type !== 'tool_use') continue;
-          if (block.name !== 'Task' && block.name !== 'Agent') continue;
-          const input = (block.input ?? {}) as Record<string, unknown>;
-          const memberName = String(input['name'] ?? '');
-          const targetTeam = String(input['team_name'] ?? '');
-          const prompt = String(input['prompt'] ?? '').slice(0, 200);
-          if (memberName && targetTeam === teamName && prompt) {
-            taskPrompts.set(memberName, prompt);
+          // Try to match immediately against prompts collected so far
+          let matched = false;
+          for (const [memberName, taskPrompt] of taskPrompts) {
+            if (
+              promptInProgress.length > 20 &&
+              taskPrompt.length > 20 &&
+              promptInProgress.slice(0, 80) === taskPrompt.slice(0, 80)
+            ) {
+              mapping.set(hashAgentId, memberName);
+              matched = true;
+              break;
+            }
+          }
+          // If not matched yet (progress arrived before the Task tool_use), queue for later
+          if (!matched) {
+            pendingProgress.push({ hashAgentId, promptStart: promptInProgress });
           }
         }
       } catch {
-        // skip
+        // skip malformed line
       }
     }
 
-    // Pass 4: for each progress event, match by prompt similarity
-    for (const line of lines) {
-      try {
-        const obj = JSON.parse(line) as Record<string, unknown>;
-        if (obj['type'] !== 'progress') continue;
-        const data = (obj['data'] ?? {}) as Record<string, unknown>;
-        const hashAgentId = String(data['agentId'] ?? '');
-        if (!hashAgentId || mapping.has(hashAgentId)) continue;
-
-        const promptInProgress = String(data['prompt'] ?? '').slice(0, 200);
-        if (!promptInProgress) continue;
-
-        // Find the member whose Task prompt matches this progress prompt
-        for (const [memberName, taskPrompt] of taskPrompts) {
-          if (
-            promptInProgress.length > 20 &&
-            taskPrompt.length > 20 &&
-            promptInProgress.slice(0, 80) === taskPrompt.slice(0, 80)
-          ) {
-            mapping.set(hashAgentId, memberName);
-            break;
-          }
+    // Resolve any pending progress events against final taskPrompts
+    for (const { hashAgentId, promptStart } of pendingProgress) {
+      if (mapping.has(hashAgentId)) continue;
+      for (const [memberName, taskPrompt] of taskPrompts) {
+        if (
+          promptStart.length > 20 &&
+          taskPrompt.length > 20 &&
+          promptStart.slice(0, 80) === taskPrompt.slice(0, 80)
+        ) {
+          mapping.set(hashAgentId, memberName);
+          break;
         }
-      } catch {
-        // skip
       }
     }
   } catch {

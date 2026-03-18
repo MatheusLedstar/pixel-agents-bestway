@@ -20,40 +20,7 @@ enum GameMapHTML {
             return html
         }
 
-        // Try loading from the source tree (development mode)
-        let possiblePaths = [
-            // Relative to executable
-            URL(fileURLWithPath: CommandLine.arguments[0])
-                .deletingLastPathComponent()
-                .appendingPathComponent("Resources/gamemap.html"),
-            // Source tree location
-            URL(fileURLWithPath: #filePath)
-                .deletingLastPathComponent()
-                .deletingLastPathComponent()
-                .deletingLastPathComponent()
-                .appendingPathComponent("Resources/gamemap.html"),
-        ]
-
-        for path in possiblePaths {
-            if let html = try? String(contentsOf: path, encoding: .utf8) {
-                return html
-            }
-        }
-
-        // Fallback: try home directory
-        let home = FileManager.default.homeDirectoryForCurrentUser
-        let fallbackPaths = [
-            home.appendingPathComponent(".pixel-agents/gamemap.html"),
-            URL(fileURLWithPath: "/tmp/pixel-agents-macos-work/macos/Sources/PixelAgents/Resources/gamemap.html"),
-        ]
-
-        for path in fallbackPaths {
-            if let html = try? String(contentsOf: path, encoding: .utf8) {
-                return html
-            }
-        }
-
-        // Last resort: minimal error HTML
+        // Fallback: minimal error HTML
         return """
         <!DOCTYPE html>
         <html><body style="background:#1a1a2e;color:#F97316;font-family:monospace;display:flex;align-items:center;justify-content:center;height:100vh">

@@ -13,9 +13,10 @@ final class CTOSummaryService {
     private let claudePath: String
 
     init() {
+        let home = FileManager.default.homeDirectoryForCurrentUser.path
         let candidates = [
             "/opt/homebrew/bin/claude",
-            "/Users/matheus.venancio/.local/bin/claude",
+            "\(home)/.local/bin/claude",
             "/usr/local/bin/claude"
         ]
         self.claudePath = candidates.first { FileManager.default.fileExists(atPath: $0) } ?? "claude"
@@ -151,18 +152,18 @@ final class CTOSummaryService {
             }
             DispatchQueue.global().asyncAfter(deadline: .now() + 90, execute: timeoutWork)
 
-            let data = outPipe.fileHandleForReading.readDataToEndOfFile()
-            process.waitUntilExit()
-            timeoutWork.cancel()
+            process.terminationHandler = { _ in
+                let data = outPipe.fileHandleForReading.readDataToEndOfFile()
 
-            guard process.terminationStatus == 0,
-                  let output = String(data: data, encoding: .utf8),
-                  !output.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-                continuation.resume(returning: nil)
-                return
+                guard process.terminationStatus == 0,
+                      let output = String(data: data, encoding: .utf8),
+                      !output.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+
+                continuation.resume(returning: output.trimmingCharacters(in: .whitespacesAndNewlines))
             }
-
-            continuation.resume(returning: output.trimmingCharacters(in: .whitespacesAndNewlines))
         }
     }
 

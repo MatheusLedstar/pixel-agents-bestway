@@ -6,7 +6,9 @@ struct ActivityFeed: View {
     let entries: [SessionEntry]
     let messages: [InboxMessage]
 
-    private var feedItems: [FeedItem] {
+    @State private var feedItems: [FeedItem] = []
+
+    private func computeFeedItems() -> [FeedItem] {
         var items: [FeedItem] = []
 
         // Add session entries
@@ -80,6 +82,9 @@ struct ActivityFeed: View {
             .background(Color.white.opacity(0.016))
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
+        .onAppear { feedItems = computeFeedItems() }
+        .onChange(of: entries.count) { _, _ in feedItems = computeFeedItems() }
+        .onChange(of: messages.count) { _, _ in feedItems = computeFeedItems() }
     }
 
     // MARK: - Helpers

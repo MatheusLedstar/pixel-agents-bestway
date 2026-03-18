@@ -74,12 +74,12 @@ struct SessionEntry: Codable, Identifiable, Equatable, Sendable {
         self.tokensUsed = tokensUsed
     }
 
-    private static let isoFormatter: ISO8601DateFormatter = {
+    private nonisolated(unsafe) static let isoFormatter: ISO8601DateFormatter = {
         let f = ISO8601DateFormatter()
         return f
     }()
 
-    private static let isoFractionalFormatter: ISO8601DateFormatter = {
+    private nonisolated(unsafe) static let isoFractionalFormatter: ISO8601DateFormatter = {
         let f = ISO8601DateFormatter()
         f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         return f

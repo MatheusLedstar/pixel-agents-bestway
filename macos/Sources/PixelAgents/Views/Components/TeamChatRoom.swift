@@ -244,6 +244,7 @@ struct SummaryLoadingAnimation: View {
     @State private var rotation: Double = 0
     @State private var pulse: Bool = false
     @State private var dotIndex: Int = 0
+    @State private var phaseTimer: Timer?
 
     private let orbitColors: [Color] = [
         PixelTheme.accentOrange,
@@ -327,11 +328,17 @@ struct SummaryLoadingAnimation: View {
                 pulse = true
             }
             // Cycle through phases
-            Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true) { _ in
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    dotIndex += 1
+            phaseTimer = Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true) { [self] _ in
+                Task { @MainActor in
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        dotIndex += 1
+                    }
                 }
             }
+        }
+        .onDisappear {
+            phaseTimer?.invalidate()
+            phaseTimer = nil
         }
     }
 }

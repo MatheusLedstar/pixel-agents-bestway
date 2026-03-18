@@ -142,10 +142,10 @@ export function useGlobalData(filterTeam?: string): GlobalData {
     watcher.watchAll();
     void refreshAll();
 
-    // Fallback polling every 3s
+    // Fallback polling every 15s (chokidar is the primary watcher)
     const dataInterval = setInterval(() => {
       void refreshAll();
-    }, 3000);
+    }, 15_000);
 
     // Global animation timer (200ms = ~5fps, smooth without flickering)
     const spinnerInterval = setInterval(() => {

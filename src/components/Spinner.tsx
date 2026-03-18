@@ -11,7 +11,7 @@ interface SpinnerProps {
 export default function Spinner({ label, color = 'cyan', frame }: SpinnerProps) {
   return (
     <Box gap={1}>
-      <Text color={color}>{SPINNER_FRAMES[frame]}</Text>
+      <Text color={color}>{SPINNER_FRAMES[frame % SPINNER_FRAMES.length]}</Text>
       {label && <Text>{label}</Text>}
     </Box>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Box, useApp, useInput } from 'ink';
 import type { ViewType, TeamSessionData } from './core/types.js';
 import { useGlobalData } from './hooks/useGlobalData.js';
@@ -197,6 +197,15 @@ export default function App({ filterTeam }: AppProps) {
   const selectedTeamObj = filteredTeams.find((t) => t.name === selectedTeam);
   const selectedAgentObj = selectedTeamObj?.members.find((a) => a.name === selectedAgent);
 
+  // Navigate back when the selected entity no longer exists (avoid setState during render)
+  useEffect(() => {
+    if (currentView === 'team-detail' && !selectedTeamObj) {
+      handleBack();
+    } else if (currentView === 'agent-detail' && !selectedAgentObj) {
+      handleBack();
+    }
+  }, [currentView, selectedTeamObj, selectedAgentObj, handleBack]);
+
   const renderView = () => {
     switch (currentView) {
       case 'dashboard':
@@ -216,10 +225,7 @@ export default function App({ filterTeam }: AppProps) {
         );
 
       case 'team-detail':
-        if (!selectedTeamObj) {
-          handleBack();
-          return null;
-        }
+        if (!selectedTeamObj) return null;
         return (
           <>
             <CrossTeamCallPanel
@@ -256,10 +262,7 @@ export default function App({ filterTeam }: AppProps) {
         );
 
       case 'agent-detail':
-        if (!selectedAgentObj) {
-          handleBack();
-          return null;
-        }
+        if (!selectedAgentObj) return null;
         return (
           <AgentDetailView
             agent={selectedAgentObj}

@@ -25,7 +25,7 @@ struct WebGameMapView: NSViewRepresentable {
         let tmpDir = FileManager.default.temporaryDirectory
         let htmlFile = tmpDir.appendingPathComponent("pixel-agents-gamemap.html")
         try? htmlContent.write(to: htmlFile, atomically: true, encoding: .utf8)
-        webView.loadFileURL(htmlFile, allowingReadAccessTo: tmpDir)
+        webView.loadFileURL(htmlFile, allowingReadAccessTo: htmlFile)
 
         context.coordinator.webView = webView
         return webView
