@@ -16,10 +16,10 @@ struct TeamHeader: View {
                 // Left: Team name + subtitle
                 VStack(alignment: .leading, spacing: 2) {
                     Text(team.name)
-                        .font(.inter(20, weight: .bold))
+                        .font(.inter(23, weight: .bold))
                         .foregroundStyle(PixelTheme.textPrimary)
                     Text(subtitle)
-                        .font(.inter(12, weight: .regular))
+                        .font(.inter(14, weight: .regular))
                         .foregroundStyle(PixelTheme.textSecondary)
                 }
 

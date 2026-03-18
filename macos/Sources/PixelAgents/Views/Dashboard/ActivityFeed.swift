@@ -41,7 +41,7 @@ struct ActivityFeed: View {
             // Header
             HStack(spacing: 8) {
                 Text("Activity Feed")
-                    .font(.inter(14, weight: .semibold))
+                    .font(.inter(16, weight: .semibold))
                     .foregroundStyle(PixelTheme.textPrimary)
 
                 // LIVE badge
@@ -176,30 +176,30 @@ private struct ActivityRow: View {
         HStack(spacing: 10) {
             // Timestamp
             Text(Self.timeFormatter.string(from: item.timestamp))
-                .font(.jetBrainsMono(9, weight: .regular))
+                .font(.jetBrainsMono(11, weight: .regular))
                 .foregroundStyle(PixelTheme.textMuted)
-                .frame(width: 52, alignment: .leading)
+                .frame(width: 60, alignment: .leading)
 
             // Action badge
             Text(badgeText)
-                .font(.jetBrainsMono(8, weight: .bold))
+                .font(.jetBrainsMono(10, weight: .bold))
                 .foregroundStyle(badgeColor)
                 .padding(.vertical, 2)
                 .padding(.horizontal, 6)
                 .background(badgeColor.opacity(0.18))
                 .clipShape(RoundedRectangle(cornerRadius: 4))
-                .frame(width: 52)
+                .frame(width: 60)
 
             // Agent name
             Text(item.agentName)
-                .font(.jetBrainsMono(10, weight: .semibold))
+                .font(.jetBrainsMono(12, weight: .semibold))
                 .foregroundStyle(PixelTheme.accentOrange)
-                .frame(width: 90, alignment: .leading)
+                .frame(width: 100, alignment: .leading)
                 .lineLimit(1)
 
             // Message
             Text(item.message)
-                .font(.inter(10, weight: .regular))
+                .font(.inter(12, weight: .regular))
                 .foregroundStyle(PixelTheme.textSecondary)
                 .lineLimit(1)
 

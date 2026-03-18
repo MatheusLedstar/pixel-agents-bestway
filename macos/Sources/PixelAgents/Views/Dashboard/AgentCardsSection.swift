@@ -24,11 +24,11 @@ struct AgentCardsSection: View {
             // Header
             HStack(spacing: 8) {
                 Text("Active Agents")
-                    .font(.inter(14, weight: .semibold))
+                    .font(.inter(16, weight: .semibold))
                     .foregroundStyle(PixelTheme.textPrimary)
 
                 Text("\(activeCount) active")
-                    .font(.inter(10, weight: .semibold))
+                    .font(.inter(12, weight: .semibold))
                     .foregroundStyle(.white)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
@@ -157,18 +157,29 @@ struct AgentCard: View {
         HStack(spacing: 10) {
             PixelAvatar(
                 agentName: member.name,
-                size: 36,
+                size: 40,
                 isActive: activity.currentAction != .idle && activity.currentAction != .done
             )
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(member.name)
-                    .font(.jetBrainsMono(13, weight: .bold))
+                    .font(.jetBrainsMono(14, weight: .bold))
                     .foregroundStyle(PixelTheme.textPrimary)
                     .lineLimit(1)
-                Text(member.agentType ?? "agent")
-                    .font(.inter(10, weight: .regular))
-                    .foregroundStyle(PixelTheme.textMuted)
+                HStack(spacing: 5) {
+                    Text(member.agentType ?? "agent")
+                        .font(.inter(11, weight: .medium))
+                        .foregroundStyle(PixelTheme.textSecondary)
+                    if let model = member.model {
+                        Text(formatModel(model))
+                            .font(.jetBrainsMono(10, weight: .bold))
+                            .foregroundStyle(PixelTheme.accentOrange)
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 1)
+                            .background(PixelTheme.accentOrange.opacity(0.12))
+                            .clipShape(Capsule())
+                    }
+                }
             }
 
             Spacer()
@@ -182,27 +193,27 @@ struct AgentCard: View {
     private var activityBox: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text("Current Task")
-                .font(.system(size: 9, weight: .semibold))
+                .font(.system(size: 10, weight: .semibold))
                 .foregroundStyle(PixelTheme.textMuted)
 
             if let task = currentTask {
                 Text(task.subject)
-                    .font(.jetBrainsMono(11, weight: .medium))
+                    .font(.jetBrainsMono(12, weight: .medium))
                     .foregroundStyle(PixelTheme.textSecondary)
                     .lineLimit(2)
             } else {
                 Text("No active task")
-                    .font(.jetBrainsMono(11, weight: .medium))
+                    .font(.jetBrainsMono(12, weight: .medium))
                     .foregroundStyle(PixelTheme.textMuted)
             }
 
             if let file = activity.currentFile {
                 HStack(spacing: 4) {
                     Image(systemName: "doc.text")
-                        .font(.system(size: 8))
+                        .font(.system(size: 9))
                         .foregroundStyle(PixelTheme.textMuted)
                     Text((file as NSString).lastPathComponent)
-                        .font(.jetBrainsMono(9, weight: .regular))
+                        .font(.jetBrainsMono(10, weight: .regular))
                         .foregroundStyle(PixelTheme.textMuted)
                         .lineLimit(1)
                 }
@@ -281,7 +292,7 @@ struct AgentCard: View {
         VStack(spacing: 6) {
             HStack {
                 Text("\(activity.tasksCompleted)/\(activity.tasksTotal) tasks")
-                    .font(.jetBrainsMono(10, weight: .medium))
+                    .font(.jetBrainsMono(11, weight: .medium))
                     .foregroundStyle(PixelTheme.textSecondary)
 
                 Text("·")
@@ -290,12 +301,12 @@ struct AgentCard: View {
                 if activity.hasLineData {
                     HStack(spacing: 2) {
                         Text("+\(activity.totalLinesAdded)")
-                            .font(.jetBrainsMono(10, weight: .medium))
+                            .font(.jetBrainsMono(11, weight: .medium))
                             .foregroundStyle(PixelTheme.green)
                         Text("/")
                             .foregroundStyle(PixelTheme.textMuted)
                         Text("-\(activity.totalLinesDeleted)")
-                            .font(.jetBrainsMono(10, weight: .medium))
+                            .font(.jetBrainsMono(11, weight: .medium))
                             .foregroundStyle(PixelTheme.red)
                     }
                 }
@@ -304,7 +315,7 @@ struct AgentCard: View {
 
                 if activity.tokensUsed > 0 {
                     Text(formatTokens(activity.tokensUsed) + " tokens")
-                        .font(.jetBrainsMono(10, weight: .bold))
+                        .font(.jetBrainsMono(11, weight: .bold))
                         .foregroundStyle(PixelTheme.accentOrange)
                 }
             }
@@ -318,6 +329,14 @@ struct AgentCard: View {
                 )
             )
         }
+    }
+
+    private func formatModel(_ model: String) -> String {
+        let m = model.lowercased()
+        if m.contains("opus") { return "Opus" }
+        if m.contains("sonnet") { return "Sonnet" }
+        if m.contains("haiku") { return "Haiku" }
+        return String(model.prefix(10))
     }
 
     private func formatTokens(_ count: Int) -> String {

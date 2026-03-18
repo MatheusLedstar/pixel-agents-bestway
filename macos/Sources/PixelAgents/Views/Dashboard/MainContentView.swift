@@ -78,6 +78,7 @@ struct MainContentView: View {
                             tasks: dataService.tasks,
                             telemetry: dataService.telemetry,
                             teamName: team.name,
+                            members: dataService.allMembers,
                             onlineCount: dataService.activeAgentCount,
                             isMaximized: $isChatMaximized
                         )
