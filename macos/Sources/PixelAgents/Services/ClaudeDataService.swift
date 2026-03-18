@@ -442,9 +442,12 @@ final class ClaudeDataService {
         tokenPollTask = Task { [weak self] in
             // Fetch immediately on start and update telemetry right away
             if let self {
-                self.tokenUsage = await self.tokenTracker.fetchDailyUsage()
-                if let team = self.selectedTeam {
-                    self.computeTelemetry(for: team)
+                let initial = await self.tokenTracker.fetchDailyUsage()
+                if initial.totalTokens > 0 {
+                    self.tokenUsage = initial
+                    if let team = self.selectedTeam {
+                        self.computeTelemetry(for: team)
+                    }
                 }
             }
             while !Task.isCancelled {
@@ -452,9 +455,12 @@ final class ClaudeDataService {
                 guard !Task.isCancelled else { break }
                 guard let self else { break }
                 let usage = await self.tokenTracker.fetchDailyUsage()
-                self.tokenUsage = usage
-                if let team = self.selectedTeam {
-                    self.computeTelemetry(for: team)
+                // Only overwrite if we got real data — prevents clearing values on transient failures
+                if usage.totalTokens > 0 {
+                    self.tokenUsage = usage
+                    if let team = self.selectedTeam {
+                        self.computeTelemetry(for: team)
+                    }
                 }
             }
         }
