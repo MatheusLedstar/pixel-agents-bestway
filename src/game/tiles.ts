@@ -1,75 +1,124 @@
-// Zone tile patterns — each tile is a 4x4 pixel pattern that repeats across the zone floor
-// Also provides zone-specific ASCII decoration props for rendering
+/**
+ * Zone tile patterns — each tile is a 4x4 pixel pattern that repeats across the zone floor.
+ *
+ * Colors derived from PICO-8 palette + Endesga 32 for professional visual coherence:
+ *  - PICO-8 dark blue  #1D2B53  (planning blueprint)
+ *  - PICO-8 dark green #008751  (coding terminal)
+ *  - Endesga orange    #D77643  (deploying launchpad)
+ *  - PICO-8 dark pur   #7E2553  (comms transmission)
+ *  - Endesga brown     #AB5236  (lounge warm wood)
+ *  - PICO-8 dark grey  #5F574F  (workshop metal)
+ */
 
 import type { PixelGrid } from './PixelCanvas.js';
 
+// PICO-8 palette references
+const P8_DKBLUE  = '#1D2B53';
+const P8_DKGRN   = '#008751';
+const P8_DKPUR   = '#7E2553';
+const P8_BROWN   = '#AB5236';
+const P8_DKGRAY  = '#5F574F';
+
+// Derived shades (darkened / lightened from PICO-8 base)
+const PLAN_D  = '#0D1828'; // planning dark  (blueprint shadow)
+const PLAN_B  = P8_DKBLUE;  // planning base
+const PLAN_L  = '#2A3D7A'; // planning light (blueprint line)
+
+const CODE_D  = '#051505'; // coding very dark
+const CODE_B  = '#0A2010'; // coding dark green base
+const CODE_L  = '#1A4020'; // coding light (matrix strip)
+
+const TEST_D  = '#1A1500'; // testing dark amber
+const TEST_B  = '#2A2208'; // testing base (lab floor)
+const TEST_L  = '#3D3310'; // testing light checker
+
+const DPLY_D  = '#1A0A00'; // deploy very dark
+const DPLY_B  = '#3A1E08'; // deploy base (metal)
+const DPLY_L  = '#6B3A18'; // deploy light (hot metal)
+
+const COMM_D  = '#1A0515'; // comms dark
+const COMM_B  = P8_DKPUR;  // comms base (transmission purple)
+const COMM_L  = '#B03A7A'; // comms light (signal pulse)
+
+const LNGE_D  = '#2A1508'; // lounge dark wood
+const LNGE_B  = '#6B3015'; // lounge base (warm planks)
+const LNGE_L  = '#9B5530'; // lounge light (wood grain)
+
+const LIBR_D  = '#0A0A18'; // library very dark
+const LIBR_B  = '#1A1A3A'; // library base (bookshelf)
+const LIBR_L  = '#2A2A5A'; // library light (spine)
+
+const SHOP_D  = '#1A1A1A'; // workshop dark (grating)
+const SHOP_B  = P8_DKGRAY; // workshop base (steel)
+const SHOP_L  = '#7A7A7A'; // workshop light (highlight)
+
 // ──────────────────────────────────────────────────────────────
-// Floor tile patterns (4x4, tiled to fill zone background)
+// Floor tile patterns (4x4)
 // ──────────────────────────────────────────────────────────────
 
 export const ZONE_TILES: Record<string, PixelGrid> = {
-  // Planning zone: blue grid lines (blueprint paper)
+  // Planning: blueprint grid — lines at edges, lighter in center
   planning: [
-    ['#1A3050', '#2A4A6B', '#2A4A6B', '#1A3050'],
-    ['#2A4A6B', '#4A7A9B', '#3B5E80', '#2A4A6B'],
-    ['#2A4A6B', '#3B5E80', '#4A7A9B', '#2A4A6B'],
-    ['#1A3050', '#2A4A6B', '#2A4A6B', '#1A3050'],
+    [PLAN_D,  PLAN_L,  PLAN_L,  PLAN_D ],
+    [PLAN_L,  PLAN_B,  PLAN_B,  PLAN_L ],
+    [PLAN_L,  PLAN_B,  PLAN_B,  PLAN_L ],
+    [PLAN_D,  PLAN_L,  PLAN_L,  PLAN_D ],
   ],
 
-  // Coding zone: matrix-rain dark green
+  // Coding: matrix rain — vertical stripes of dark/light green
   coding: [
-    ['#051005', '#0A1A0A', '#051005', '#0D2B0D'],
-    ['#0D2B0D', '#051005', '#1A3A1A', '#0A1A0A'],
-    ['#0A1A0A', '#1A3A1A', '#051005', '#0D2B0D'],
-    ['#0D2B0D', '#0A1A0A', '#0D2B0D', '#051005'],
+    [CODE_D,  CODE_L,  CODE_D,  CODE_L ],
+    [CODE_B,  CODE_D,  CODE_L,  CODE_B ],
+    [CODE_L,  CODE_B,  CODE_D,  CODE_D ],
+    [CODE_D,  CODE_L,  CODE_B,  CODE_L ],
   ],
 
-  // Testing zone: amber lab checker
+  // Testing: amber checker (lab floor tiles)
   testing: [
-    ['#2D2510', '#3D3520', '#2D2510', '#3D3520'],
-    ['#3D3520', '#2D2510', '#4A4028', '#2D2510'],
-    ['#2D2510', '#4A4028', '#2D2510', '#3D3520'],
-    ['#3D3520', '#2D2510', '#3D3520', '#2D2510'],
+    [TEST_D,  TEST_B,  TEST_D,  TEST_B ],
+    [TEST_B,  TEST_L,  TEST_B,  TEST_L ],
+    [TEST_D,  TEST_B,  TEST_D,  TEST_B ],
+    [TEST_B,  TEST_D,  TEST_B,  TEST_D ],
   ],
 
-  // Deploying zone: metallic launchpad
+  // Deploying: hot metal launchpad rivets
   deploying: [
-    ['#3A2820', '#5A4030', '#5A4030', '#3A2820'],
-    ['#5A4030', '#7D5040', '#6B5040', '#5A4030'],
-    ['#5A4030', '#6B5040', '#7D5040', '#5A4030'],
-    ['#3A2820', '#5A4030', '#5A4030', '#3A2820'],
+    [DPLY_D,  DPLY_D,  DPLY_D,  DPLY_D ],
+    [DPLY_D,  DPLY_L,  DPLY_B,  DPLY_D ],  // rivet highlight
+    [DPLY_D,  DPLY_B,  DPLY_L,  DPLY_D ],
+    [DPLY_D,  DPLY_D,  DPLY_D,  DPLY_D ],
   ],
 
-  // Comms zone: cyan data waves
+  // Comms: transmission wave pattern (purple pulses)
   comms: [
-    ['#051525', '#0A2A3A', '#0D3A4A', '#0A2A3A'],
-    ['#0A2A3A', '#1A4A5A', '#0D3A4A', '#051525'],
-    ['#0D3A4A', '#0A2A3A', '#051525', '#0A2A3A'],
-    ['#0A2A3A', '#051525', '#0A2A3A', '#1A4A5A'],
+    [COMM_D,  COMM_L,  COMM_D,  COMM_D ],
+    [COMM_L,  COMM_B,  COMM_L,  COMM_D ],
+    [COMM_D,  COMM_L,  COMM_D,  COMM_L ],
+    [COMM_D,  COMM_D,  COMM_L,  COMM_D ],
   ],
 
-  // Lounge zone: warm wood planks
+  // Lounge: warm wood grain planks (horizontal stripes)
   lounge: [
-    ['#4A2A15', '#5A3A20', '#6B4A30', '#5A3A20'],
-    ['#5A3A20', '#7D5A40', '#6B4A30', '#5A3A20'],
-    ['#6B4A30', '#5A3A20', '#4A2A15', '#6B4A30'],
-    ['#5A3A20', '#6B4A30', '#5A3A20', '#4A2A15'],
+    [LNGE_L,  LNGE_L,  LNGE_L,  LNGE_L ],
+    [LNGE_B,  LNGE_D,  LNGE_B,  LNGE_B ],
+    [LNGE_L,  LNGE_L,  LNGE_L,  LNGE_D ],
+    [LNGE_B,  LNGE_B,  LNGE_D,  LNGE_B ],
   ],
 
-  // Library zone: dark bookshelf rows
+  // Library: bookshelf spines (alternating thin columns)
   library: [
-    ['#0D0D25', '#1A1A3A', '#2A2A4A', '#1A1A3A'],
-    ['#1A1A3A', '#0D0D25', '#1A1A3A', '#2A2A4A'],
-    ['#0D0D25', '#2A2A4A', '#1A1A3A', '#0D0D25'],
-    ['#2A2A4A', '#1A1A3A', '#0D0D25', '#3A3A5A'],
+    [LIBR_D,  LIBR_L,  LIBR_B,  LIBR_L ],
+    [LIBR_B,  LIBR_L,  LIBR_D,  LIBR_L ],
+    [LIBR_D,  LIBR_L,  LIBR_B,  LIBR_L ],
+    [LIBR_B,  LIBR_D,  LIBR_D,  LIBR_L ],
   ],
 
-  // Workshop zone: gray metal grating
+  // Workshop: metal floor grating (diamond plate)
   workshop: [
-    ['#252525', '#3A3A3A', '#252525', '#3A3A3A'],
-    ['#3A3A3A', '#252525', '#4A4A4A', '#252525'],
-    ['#252525', '#4A4A4A', '#252525', '#3A3A3A'],
-    ['#3A3A3A', '#252525', '#3A3A3A', '#252525'],
+    [SHOP_L,  SHOP_D,  SHOP_L,  SHOP_D ],
+    [SHOP_D,  SHOP_B,  SHOP_D,  SHOP_B ],
+    [SHOP_L,  SHOP_D,  SHOP_L,  SHOP_D ],
+    [SHOP_D,  SHOP_L,  SHOP_D,  SHOP_L ],
   ],
 };
 
