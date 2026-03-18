@@ -201,6 +201,7 @@ struct CTOSummarySheet: View {
     let service: CTOSummaryService
     let teamName: String
     @Binding var isPresented: Bool
+    @State private var renderedSummary: AttributedString?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -305,10 +306,7 @@ struct CTOSummarySheet: View {
                     .padding(.top, 60)
                 } else {
                     VStack(alignment: .leading, spacing: 0) {
-                        if let attributed = try? AttributedString(
-                            markdown: service.summary,
-                            options: .init(interpretedSyntax: .full)
-                        ) {
+                        if let attributed = renderedSummary {
                             Text(attributed)
                                 .font(.inter(12, weight: .regular))
                                 .foregroundStyle(PixelTheme.textSecondary)
@@ -328,6 +326,15 @@ struct CTOSummarySheet: View {
         }
         .frame(width: 700, height: 600)
         .background(PixelTheme.bgCard)
+        // Parse markdown off the main thread when summary changes
+        .task(id: service.summary) {
+            guard !service.summary.isEmpty, !service.isGenerating else { return }
+            let text = service.summary
+            let result = await Task.detached(priority: .userInitiated) {
+                try? AttributedString(markdown: text, options: .init(interpretedSyntax: .full))
+            }.value
+            renderedSummary = result
+        }
     }
 
     // MARK: - Open in Browser

@@ -109,9 +109,17 @@ final class CTOSummaryService {
         isGenerating = false
     }
 
+    // Thread-safe buffer for accumulating pipe output (Swift 6 Sendable compliance)
+    private final class OutputBuffer: @unchecked Sendable {
+        private let lock = NSLock()
+        private var data = Data()
+        func append(_ chunk: Data) { lock.withLock { data.append(chunk) } }
+        func flush(_ chunk: Data) { lock.withLock { data.append(chunk) } }
+        var result: Data { lock.withLock { data } }
+    }
+
     /// Run claude via /bin/sh with temp file for reliable stdin handling
     private func runClaude(prompt: String) async -> String? {
-        // Write prompt to temp file (avoids stdin pipe issues with Node.js)
         let tmpFile = NSTemporaryDirectory() + "cto-prompt-\(UUID().uuidString).txt"
         guard FileManager.default.createFile(atPath: tmpFile, contents: prompt.data(using: .utf8)) else {
             return nil
@@ -121,7 +129,6 @@ final class CTOSummaryService {
         return await withCheckedContinuation { continuation in
             let process = Process()
             process.executableURL = URL(fileURLWithPath: "/bin/sh")
-            // Use shell redirection: cat file | claude -p
             let escapedClaude = claudePath.replacingOccurrences(of: "'", with: "'\\''")
             let escapedTmp = tmpFile.replacingOccurrences(of: "'", with: "'\\''")
             process.arguments = [
@@ -129,15 +136,28 @@ final class CTOSummaryService {
                 "unset CLAUDECODE CLAUDE_CODE; cat '\(escapedTmp)' | '\(escapedClaude)' -p --model sonnet"
             ]
 
-            // Minimal clean environment with PATH
             var env = ProcessInfo.processInfo.environment
             env.removeValue(forKey: "CLAUDECODE")
             env.removeValue(forKey: "CLAUDE_CODE")
             process.environment = env
 
             let outPipe = Pipe()
+            let errPipe = Pipe()
+            let buffer = OutputBuffer()
+
+            // Drain stdout continuously — prevents pipe buffer (64KB) from filling
+            // and blocking the Claude process when generating long summaries
+            outPipe.fileHandleForReading.readabilityHandler = { handle in
+                let chunk = handle.availableData
+                if !chunk.isEmpty { buffer.append(chunk) }
+            }
+            // Drain stderr so Claude's status messages never block the process
+            errPipe.fileHandleForReading.readabilityHandler = { handle in
+                _ = handle.availableData
+            }
+
             process.standardOutput = outPipe
-            process.standardError = Pipe()
+            process.standardError = errPipe
 
             do {
                 try process.run()
@@ -146,23 +166,28 @@ final class CTOSummaryService {
                 return
             }
 
-            // Timeout: 90 seconds
-            let timeoutWork = DispatchWorkItem {
-                if process.isRunning { process.terminate() }
-            }
-            DispatchQueue.global().asyncAfter(deadline: .now() + 90, execute: timeoutWork)
+            // Wrap DispatchWorkItem for Swift 6 Sendable capture
+            final class WorkItemBox: @unchecked Sendable { let item: DispatchWorkItem; init(_ i: DispatchWorkItem) { item = i } }
+            let timeoutItem = DispatchWorkItem { if process.isRunning { process.terminate() } }
+            let timeoutBox = WorkItemBox(timeoutItem)
+            DispatchQueue.global().asyncAfter(deadline: .now() + 90, execute: timeoutItem)
 
             process.terminationHandler = { _ in
-                let data = outPipe.fileHandleForReading.readDataToEndOfFile()
+                timeoutBox.item.cancel()
+                // Stop handlers before final read to avoid double-appending
+                outPipe.fileHandleForReading.readabilityHandler = nil
+                errPipe.fileHandleForReading.readabilityHandler = nil
+                // Flush any remaining bytes the handler may have missed
+                let tail = outPipe.fileHandleForReading.readDataToEndOfFile()
+                if !tail.isEmpty { buffer.flush(tail) }
 
-                guard process.terminationStatus == 0,
-                      let output = String(data: data, encoding: .utf8),
-                      !output.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                guard process.terminationStatus == 0 else {
                     continuation.resume(returning: nil)
                     return
                 }
-
-                continuation.resume(returning: output.trimmingCharacters(in: .whitespacesAndNewlines))
+                let output = String(data: buffer.result, encoding: .utf8)?
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                continuation.resume(returning: output?.isEmpty == false ? output : nil)
             }
         }
     }
