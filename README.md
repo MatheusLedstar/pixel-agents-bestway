@@ -55,3 +55,5 @@ Watches `~/.claude/teams/` and `~/.claude/tasks/` directories for changes using 
 - TypeScript + Ink 5 (React for terminals)
 - chokidar (file watching)
 - tsup (build)
+
+<!-- verificado em 2026-09-01 -->
